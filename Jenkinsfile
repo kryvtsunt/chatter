@@ -1,34 +1,26 @@
 pipeline {
-   environment {
-     jobBaseName = "${env.JOB_NAME}".split('/').first()
-   }
-  agent any
-  
-  stages {
+ environment {
+   jobBaseName = "${env.JOB_NAME}".split('/').first()
+ }
+ agent any
+
+ stages {
    stage('Build') {
      steps {
-       echo "Building"
-       sh 'mvn -f Project_src/pom.xml compile'
+       echo "Building Chatter"
+       sh 'mvn -f Project_src/Chatter/pom.xml compile'
+       echo "Building Prattle"
+       sh 'mvn -f Project_src/Prattle/pom.xml compile'
      }
    }
-   stage('Test'){
-     steps {
-       echo "Testing"
-       sh 'mvn -f Project_src/pom.xml test'
-     }
-   }
-   
+
    stage('SonarQube') {
     steps {
       withSonarQubeEnv('SonarQube') {
-        sh 'mvn -f Project_src/pom.xml clean install'
-        sh 'mvn -f Project_src/pom.xml sonar:sonar -Dsonar.projectKey=${jobBaseName} -Dsonar.projectName=${jobBaseName}'
+        sh 'mvn -f Project_src/Prattle/pom.xml clean install'
+        sh 'mvn -f Project_src/Prattle/pom.xml sonar:sonar -Dsonar.projectKey=${jobBaseName} -Dsonar.projectName=${jobBaseName}'
       }
-    }
-  }
-  
-  stage('Quality') {
-    steps {
+
       sh 'sleep 30'
       timeout(time: 10, unit: 'SECONDS') {
        retry(5) {
