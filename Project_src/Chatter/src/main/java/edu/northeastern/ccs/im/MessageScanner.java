@@ -8,20 +8,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * This class is based upon the design of the java.util.Scanner class, but
  * handles instances of {@link Message} received over an {@link IMConnection}.
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public class MessageScanner implements MessageListener, Iterator<Message> {
-	
+
 	/** Singleton. */
 	private static MessageScanner instance;
-	
+
 	/**
 	 * Factory method for creating instances that will handle instances of Message
 	 * received over an IMConnection.
@@ -32,7 +32,7 @@ public class MessageScanner implements MessageListener, Iterator<Message> {
 		}
 		return instance;
 	}
-	
+
 
 	/** Worklist to which this thread adds any input strings. */
 	private Queue<Message> messages;
@@ -48,7 +48,7 @@ public class MessageScanner implements MessageListener, Iterator<Message> {
 	/**
 	 * Returns true if there is another {@link Message} received from the IM
 	 * server to return.
-	 * 
+	 *
 	 * @return True if and only if this instance of the class has another
 	 *         {@code Message} available. Unlike an {@link Iterator}, it is
 	 *         possible for this method to return true after it has returned
@@ -60,7 +60,7 @@ public class MessageScanner implements MessageListener, Iterator<Message> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see edu.kings.im.MessageListener#messagesReceived(java.util.Iterator)
 	 */
 	@Override
@@ -73,7 +73,7 @@ public class MessageScanner implements MessageListener, Iterator<Message> {
 
 	/**
 	 * Get the next Message instance that was received from the IMConection.
-	 * 
+	 *
 	 * @return Next message that was received the from the IM server.
 	 */
 	public Message next() {
@@ -82,7 +82,7 @@ public class MessageScanner implements MessageListener, Iterator<Message> {
 		}
 		return messages.remove();
 	}
-	
+
 	/**
 	 * This method is not implemented (it will always throw an
 	 * {@link UnsupportedOperationException}), but is required because it is

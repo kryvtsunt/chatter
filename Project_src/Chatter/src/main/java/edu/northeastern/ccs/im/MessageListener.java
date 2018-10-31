@@ -8,13 +8,13 @@ import java.util.Iterator;
  * an IM server to this user. Classes interested in receiving these events
  * should implement this interface and register with an IMConnection instance's
  * addMessageListener method.
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public interface MessageListener extends EventListener {
@@ -24,7 +24,7 @@ public interface MessageListener extends EventListener {
 	 * over all of the messages received from the IM server since the last time
 	 * this event occurred. {@code it} may refer to a different instance of
 	 * {@code Iterator} each time this event is raised.
-	 * 
+	 *
 	 * @param it
 	 *            {@code Iterator} that will retrieve the 1 or more
 	 *            {@link MessageImpl}s received since the last time the listener

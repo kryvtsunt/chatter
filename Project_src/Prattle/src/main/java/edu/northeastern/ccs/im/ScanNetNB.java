@@ -25,6 +25,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * @version 1.3
  */
 public class ScanNetNB {
+
 	private static final int BUFFER_SIZE = 64 * 1024;
 
 	private static final int DECIMAL_RADIX = 10;

@@ -16,13 +16,13 @@ import java.util.List;
  * non-blocking I/O classes. Instances of this class must be constructed before
  * it is used to drive the input and output of non-blocking network traffic
  * classes.
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public final class SocketNB {
@@ -59,7 +59,7 @@ public final class SocketNB {
 	/**
 	 * Creates a new network connection that connects to the specified port
 	 * number on the named host.
-	 * 
+	 *
 	 * @param host
 	 *            Hostname of the computer to which we are connecting
 	 * @param port
@@ -80,7 +80,7 @@ public final class SocketNB {
 	 * Once a SocketNB has been closed, it is not available for further
 	 * networking use (i.e. can't be reconnected or rebound). A new SocketNB
 	 * needs to be created.
-	 * 
+	 *
 	 * @throws IOException
 	 *             Exception thrown when an I/O error occurs closing this
 	 *             socket.
@@ -92,7 +92,7 @@ public final class SocketNB {
 
 	/**
 	 * Read in a new argument from the IM server.
-	 * 
+	 *
 	 * @param charBuffer
 	 *            Buffer holding text from over the network.
 	 * @return String holding the next argument sent over the network.
@@ -130,7 +130,7 @@ public final class SocketNB {
 	/**
 	 * This method will block while it waits to enqueue 1 (or more) messages
 	 * sent from the server.
-	 * 
+	 *
 	 * @param messages
 	 *            Queue to which the messages should be added.
 	 */
@@ -219,7 +219,7 @@ public final class SocketNB {
 	 * Send a Message over the network. This method performs its actions by
 	 * printing the given Message over the SocketNB instance with which the
 	 * SendIM was instantiated.
-	 * 
+	 *
 	 * @param msg
 	 *            Message to be sent out over the network.
 	 */

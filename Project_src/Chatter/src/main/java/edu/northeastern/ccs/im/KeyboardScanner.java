@@ -11,13 +11,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Strings from the keyboard. This class's methods will return immediately and,
  * if there is no input available, will not hang until the user types something
  * in (it is &quot;non-blocking&quot; in technical parlance).
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public final class KeyboardScanner {
@@ -56,7 +56,7 @@ public final class KeyboardScanner {
 	/**
 	 * Returns the singleton instance of this class. If the singleton instance
 	 * does not yet exist, this method will instantiate it.
-	 * 
+	 *
 	 * @return Singleton instance that can be used to read keyboard input in a
 	 *         non-blocking manner.
 	 */
@@ -123,7 +123,7 @@ public final class KeyboardScanner {
 	 * Returns true if there is another line of keyboard input. This method will
 	 * NOT block while waiting for input. This class does not advance past any
 	 * input.
-	 * 
+	 *
 	 * @return True if and only if this instance of the class has another line
 	 *         of input from the keyboard available.
 	 * @see java.util.Scanner#hasNext()
@@ -134,7 +134,7 @@ public final class KeyboardScanner {
 
 	/**
 	 * Returns the next word that the user typed at the keyboard.
-	 * 
+	 *
 	 * @throws NoSuchElementException
 	 *             Exception thrown if the user has not entered any new lines of
 	 *             text ( {@link #next()} returns false).
@@ -160,7 +160,7 @@ public final class KeyboardScanner {
 
 	/**
 	 * Returns the next line of text the user typed at the keyboard.
-	 * 
+	 *
 	 * @throws NoSuchElementException
 	 *             Exception thrown if the user has not entered any new lines of
 	 *             text ( {@link #next()} returns false).

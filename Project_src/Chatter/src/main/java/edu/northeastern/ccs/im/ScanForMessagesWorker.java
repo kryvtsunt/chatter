@@ -12,13 +12,13 @@ import javax.swing.SwingWorker;
  * thread. This has the side effect of not interfering with the event dispatch
  * thread. Like all <code>SwingWorker</code>s each instance should be executed
  * exactly once.
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public final class ScanForMessagesWorker extends SwingWorker<Void, Message> {
@@ -39,7 +39,7 @@ public final class ScanForMessagesWorker extends SwingWorker<Void, Message> {
 	/**
 	 * Create an initialize the worker thread we will use to scan for incoming
 	 * messages.
-	 * 
+	 *
 	 * @param cimConnection
 	 *            Instance to which this will be attached.
 	 * @param sock
@@ -57,7 +57,7 @@ public final class ScanForMessagesWorker extends SwingWorker<Void, Message> {
 
 	/**
 	 * Executes the steps needed to switch which method is being executed.
-	 * 
+	 *
 	 * @return Null value needed to comply with original method definition
 	 */
 	@Override

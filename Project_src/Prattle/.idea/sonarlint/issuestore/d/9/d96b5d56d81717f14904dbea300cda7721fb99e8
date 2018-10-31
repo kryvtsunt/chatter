@@ -1,10 +1,9 @@
 
-psquid:S2293t"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÚÝŸý
-usquid:S2293v"YReplace the type specification in this constructor call with the diamond operator ("<>").(ß´¾­øÿÿÿÿ
-usquid:S2293x"YReplace the type specification in this constructor call with the diamond operator ("<>").(“ÍÓ£þÿÿÿÿ
-U
-squid:S106Ì"9Replace this use of System.out or System.err by a logger.(½ÒÖ–ýÿÿÿÿ
-P
-squid:S106ï"9Replace this use of System.out or System.err by a logger.(è¸Æî
-jsquid:S3776—"RRefactor this method to reduce its Cognitive Complexity from 51 to the 15 allowed.(“–ýþ
-@squid:S1148Š"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
+qsquid:S3776£"RRefactor this method to reduce its Cognitive Complexity from 51 to the 15 allowed.(“–ýþ8…¢×Ûì,
+xsquid:S2293€"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÚÝŸý8…¢×Ûì,
+}squid:S2293‚"YReplace the type specification in this constructor call with the diamond operator ("<>").(ß´¾­øÿÿÿÿ8…¢×Ûì,
+W
+squid:S106û"9Replace this use of System.out or System.err by a logger.(è¸Æî8…¢×Ûì,
+}squid:S2293„"YReplace the type specification in this constructor call with the diamond operator ("<>").(“ÍÓ£þÿÿÿÿ8‹ØÕÛì,
+\
+squid:S106Ø"9Replace this use of System.out or System.err by a logger.(½ÒÖ–ýÿÿÿÿ8…¢×Ûì,

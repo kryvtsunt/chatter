@@ -12,13 +12,13 @@ import javax.swing.SwingWorker;
  * Instances of this class can be relied upon to manage all the details of this
  * connection and sends alerts when appropriate. Instances of this class must be
  * constructed and connected before it can be used to transmit messages.
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public class IMConnection {
@@ -60,7 +60,7 @@ public class IMConnection {
 	/**
 	 * Creates an instance that will manage a connection with an IM server, but does
 	 * not begin the process of making a connection to the IM server.
-	 * 
+	 *
 	 * @param host     The name of the host that this connection is using
 	 * @param port     The port number to use.
 	 * @param username Name of the user for which this connection is being made.
@@ -79,7 +79,7 @@ public class IMConnection {
 	/**
 	 * Add the given listener to be notified whenever 1 or more Messages are
 	 * received from IM server via this connection.
-	 * 
+	 *
 	 * @param listener Instance which will begin to receive notifications of any
 	 *                 messages received by this IMConnection.
 	 * @throws InvalidListenerException Exception thrown when this is called with a
@@ -97,7 +97,7 @@ public class IMConnection {
 	 * moment, you will automatically be logged in to the server, even if there is
 	 * already someone with that username.<br/>
 	 * Precondition: connectionActive() == false
-	 * 
+	 *
 	 * @throws IllegalNameException Exception thrown if we try to connect with an
 	 *                              illegal username. Legal usernames can only
 	 *                              contain letters and numbers.
@@ -121,7 +121,7 @@ public class IMConnection {
 	/**
 	 * Returns whether the instance is managing an active, logged-in connection
 	 * between the client and an IM server.
-	 * 
+	 *
 	 * @return True if the client is logged in to the server using this connection;
 	 *         false otherwise.
 	 */
@@ -149,7 +149,7 @@ public class IMConnection {
 	 * keyboard without waiting. The object returned by this method should be used
 	 * rather than {@link Scanner} since {@code Scanner} will cause a program to
 	 * halt if there is no input.
-	 * 
+	 *
 	 * @return Instance of {@link KeyboardScanner} that can be used to read keyboard
 	 *         input for this connection of the server.
 	 */
@@ -161,7 +161,7 @@ public class IMConnection {
 	 * Gets an object which can be used to get the message sent by the server over
 	 * this connection. This is the only object that can be used to retrieve all
 	 * these messages.
-	 * 
+	 *
 	 * @return Instance of {@link MessageScanner} that can be used to read message
 	 *         sent over this connection for this user.
 	 */
@@ -174,7 +174,7 @@ public class IMConnection {
 
 	/**
 	 * Get the name of the user for which we have created this connection.
-	 * 
+	 *
 	 * @return Current value of the user name and/or the username with which we
 	 *         logged in to this IM server.
 	 */
@@ -186,7 +186,7 @@ public class IMConnection {
 	 * Unless this is a &quot;special&quot; server message, this sends the given
 	 * message to all of the users logged in to the IM server. <br/>
 	 * Precondition: connectionActive() == true
-	 * 
+	 *
 	 * @param message Text of the message which will be broadcast to all users.
 	 */
 	public void sendMessage(String message) {
@@ -202,7 +202,7 @@ public class IMConnection {
 	 * moment, you will automatically be logged in to the server, even if there is
 	 * already someone with that username.<br/>
 	 * Precondition: connectionActive() == false
-	 * 
+	 *
 	 * @return True if the connection was successfully made; false otherwise.
 	 */
 	private boolean login() {
