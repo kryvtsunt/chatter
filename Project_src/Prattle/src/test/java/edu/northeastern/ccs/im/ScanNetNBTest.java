@@ -7,14 +7,21 @@ import java.nio.channels.SocketChannel;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.nio.channels.spi.SelectorProvider;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 class ScanNetNBTest {
-    /** The port number to listen on. */
+    /**
+     * The port number to listen on.
+     */
     public static final int PORT = 4545;
     ScanNetNB input;
     ServerSocketChannel serverSocket;
@@ -35,12 +42,17 @@ class ScanNetNBTest {
         socketChannel.connect(socketAddr);
 
         String toSend = "HLO 4 temp 2 --";
-
-        ByteBuffer wrapper = ByteBuffer.wrap(toSend.getBytes());
-        int bytesWritten = 0;
-        while (bytesWritten != toSend.length()) {
-            System.out.println(wrapper);
-            bytesWritten += socketChannel.write(wrapper);
+        List<String> msgs = new ArrayList<>();
+        msgs.add(toSend);
+        msgs.add("BCT 4 temp 4 test");
+        msgs.add("\\n");
+        for (String s : msgs) {
+            ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
+            int bytesWritten = 0;
+            while (bytesWritten != s.length()) {
+                System.out.println(wrapper);
+                bytesWritten += socketChannel.write(wrapper);
+            }
         }
     }
 
@@ -51,18 +63,26 @@ class ScanNetNBTest {
         try {
             client = serverSocket.accept();
             client.configureBlocking(false);
-        } catch(Exception e) {
+        } catch (Exception e) {
 
         }
-        if (client != null) {
-            input = new ScanNetNB(client);
-            if (input.hasNextMessage()) {
-                Message msg = input.nextMessage();
-                System.out.println(msg.toString());
-                assertEquals(msg.toString(), "HLO 4 temp 2 --");
+        List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "\\n");
+        try {
+            if (client != null) {
+                input = new ScanNetNB(client);
+
+                while (input.hasNextMessage()) {
+                    for (String each : tests) {
+                        Message msg = input.nextMessage();
+                        System.out.println(msg.toString());
+                        assertEquals(msg.toString(), each);
+                    }
+                }
+            } else {
+                System.out.println("socket channel is null");
             }
-        } else {
-            System.out.println("socket channel is null");
+        } catch (Exception e) {
+            assertEquals("No next line has been typed in at the keyboard", e.getMessage());
         }
     }
 

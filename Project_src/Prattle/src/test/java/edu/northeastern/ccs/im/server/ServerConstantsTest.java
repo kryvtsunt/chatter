@@ -26,7 +26,7 @@ class ServerConstantsTest {
 
 
     @Test
-    void getBroadcastResponses() {
+    void testGetBroadcastResponses() {
         timeAndDate();
 
         Message coolMsg = makeBroadcastMessage("Prattle", "OMG ROFL TTYL");

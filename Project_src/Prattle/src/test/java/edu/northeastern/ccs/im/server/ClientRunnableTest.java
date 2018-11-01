@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 //    public void run(){
 //        String[] strings = {};
 //        try {
-////            main(strings);
+//            main(strings);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -111,7 +111,12 @@ class ClientRunnableTest {
 //    void setFuture() {
 //    }
 //
-//    @Test
-//    void terminateClient() {
-//    }
+    @Test
+    void terminateClient() throws IOException {
+        try{
+
+        }catch (Exception e) {
+            assertEquals("Connection refused: no further information", e.getMessage());
+        }
+    }
 }
