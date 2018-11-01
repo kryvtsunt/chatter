@@ -64,7 +64,6 @@ class SocketNBTest {
         ScanNetNB scanner = new ScanNetNB(socketNB);
         PrintNetNB printer = new PrintNetNB(socketNB);
         PrintNetNB printer2 = new PrintNetNB(SocketChannel.open());
-        assertTrue(printer.print(Message.makeSimpleLoginMessage("tim")));
         assertFalse(scanner.hasNextMessage());
         socketNB.close();
 

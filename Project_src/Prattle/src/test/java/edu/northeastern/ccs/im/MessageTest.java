@@ -13,6 +13,22 @@ class MessageTest {
 
     @Test
     void makeQuitMessage() {
+        Message message = Message.makeQuitMessage("a");
+        Message messga2 = Message.makeBroadcastMessage("a","b");
+        Message messgae3 = Message.makeSimpleLoginMessage("tim");
+        Message message4 = Message.makeMessage("a", null, "c");
+        Message message5 = Message.makeAcknowledgeMessage("tim");
+        Message message6 = Message.makeNoAcknowledgeMessage();
+        Message message7 = Message.makeHelloMessage("heelo");
+
+        message.toString();
+        message.getName();
+        message.getText();
+        message.isBroadcastMessage();
+        message.isDisplayMessage();
+        message.isAcknowledge();
+        message.isInitialization();
+        message.terminate();
     }
 
     @Test
