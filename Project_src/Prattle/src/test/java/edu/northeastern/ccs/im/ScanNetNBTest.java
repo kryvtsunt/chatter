@@ -45,7 +45,7 @@ class ScanNetNBTest {
         List<String> msgs = new ArrayList<>();
         msgs.add(toSend);
         msgs.add("BCT 4 temp 4 test");
-        msgs.add("\\n");
+        msgs.add("BYE 4 temp 2 --");
         for (String s : msgs) {
             ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
             int bytesWritten = 0;
@@ -66,7 +66,8 @@ class ScanNetNBTest {
         } catch (Exception e) {
 
         }
-        List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "\\n");
+        //List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "\\n");
+        List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "BYE 4 temp 2 --");
         try {
             if (client != null) {
                 input = new ScanNetNB(client);
@@ -74,10 +75,13 @@ class ScanNetNBTest {
                 while (input.hasNextMessage()) {
                     for (String each : tests) {
                         Message msg = input.nextMessage();
-                        System.out.println(msg.toString());
+                        //System.out.println(msg.toString());
                         assertEquals(msg.toString(), each);
                     }
                 }
+                //System.out.println("while loop closed in ScanNetNBTest");
+                input.close();
+                System.out.println("Scan Net NB closed");
             } else {
                 System.out.println("socket channel is null");
             }
