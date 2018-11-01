@@ -25,12 +25,12 @@ class PrattleTest {
         serverThread.start();
         Message loginmsg = Message.makeSimpleLoginMessage("temp");
         Message msg = Message.makeBroadcastMessage("test message", "temp");
-        SocketNB sc2 = new SocketNB("localhost",ServerConstants.PORT);
+        SocketNB sc2 = new SocketNB("localhost", 4545);
 
         PrintNetNB printer = new PrintNetNB(sc2.getSocket());
         printer.print(loginmsg);
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
         Prattle.broadcastMessage(msg);
 
         Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
