@@ -54,6 +54,8 @@ class ScanNetNBTest {
                 bytesWritten += socketChannel.write(wrapper);
             }
         }
+
+        socketChannel.close();
     }
 
 //    @AfterEach
@@ -88,7 +90,7 @@ class ScanNetNBTest {
                     }
                 }
                 //System.out.println("while loop closed in ScanNetNBTest");
-                input.close();
+                client.close();
                 System.out.println("Scan Net NB closed");
                 //serverSocket.close();
             } else {

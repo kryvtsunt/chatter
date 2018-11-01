@@ -44,7 +44,7 @@ class ClientRunnableTest {
     private PrintNetNB printer;
     private ScanNetNB scanner;
     private SocketNB socket;
-    public static final int PORT = 4545;
+    public static final int PORT = 4546;
     ServerSocketChannel serverSocket;
 
 //    @BeforeAll
@@ -84,6 +84,7 @@ class ClientRunnableTest {
                 bytesWritten += socketChannel.write(wrapper);
             }
         }
+        socketChannel.close();
     }
 
     @Test
@@ -99,6 +100,7 @@ class ClientRunnableTest {
             cl.run();
             cl.run();
             cl.run();
+            client.close();
         } catch (Exception e) {
 
         }
