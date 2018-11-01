@@ -1,17 +1,18 @@
 package edu.northeastern.ccs.im.server;
 
-import org.junit.jupiter.api.BeforeEach;
+import edu.northeastern.ccs.im.Message;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static edu.northeastern.ccs.im.Message.*;
+
 
 class ServerConstantsTest {
-
-    @BeforeEach
-    void setUp() {
-    }
+    ServerConstants serverConstants;
 
     @Test
     void getBroadcastResponses() {
+        Message msg = makeBroadcastMessage("User1", "WTF");
+//        System.out.println(ServerConstants.getBroadcastResponses("WTF").get(0));
+
     }
 }

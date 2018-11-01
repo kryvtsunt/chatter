@@ -20,16 +20,16 @@ import static edu.northeastern.ccs.im.server.Prattle.main;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-class MyClass implements Runnable {
-    public void run(){
-        String[] strings = {};
-        try {
-            main(strings);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-}
+//class MyClass implements Runnable {
+//    public void run(){
+//        String[] strings = {};
+//        try {
+////            main(strings);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//}
 
 class ClientRunnableTest {
 
@@ -38,11 +38,11 @@ class ClientRunnableTest {
     private ScanNetNB scanner;
     private SocketNB socket;
 
-    @BeforeAll
-    static void startServer(){
-        Thread t1 = new Thread(new MyClass ());
-        t1.start();
-    }
+//    @BeforeAll
+//    static void startServer(){
+//        Thread t1 = new Thread(new MyClass ());
+//        t1.start();
+//    }
 
     @BeforeEach
     void setUp() throws IOException {
