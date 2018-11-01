@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * This class is similar to the java.util.Scanner class, but this class's
  * methods return immediately and does not wait for network input (it is
  * &quot;non-blocking&quot; in technical parlance).
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public class ScanNetNB {
@@ -50,7 +50,7 @@ public class ScanNetNB {
 	 * Creates a new instance of this class. Since, by definition, this class takes
 	 * in input from the network, we need to supply the non-blocking Socket instance
 	 * from which we will read.
-	 * 
+	 *
 	 * @param sockChan Non-blocking SocketChannel from which we will receive
 	 *                 communications.
 	 */
@@ -77,7 +77,7 @@ public class ScanNetNB {
 	 * Creates a new instance of this class. Since, by definition, this class takes
 	 * in input from the network, we need to supply the non-blocking Socket instance
 	 * from which we will read.
-	 * 
+	 *
 	 * @param connection Non-blocking Socket instance from which we will receive
 	 *                   communications.
 	 */
@@ -88,7 +88,7 @@ public class ScanNetNB {
 
 	/**
 	 * Read in a new argument from the IM server.
-	 * 
+	 *
 	 * @param charBuffer Buffer holding text from over the network.
 	 * @return String holding the next argument sent over the network.
 	 */
@@ -126,7 +126,7 @@ public class ScanNetNB {
 	 * Returns true if there is another line of input from this instance. This
 	 * method will NOT block while waiting for input. This class does not advance
 	 * past any input.
-	 * 
+	 *
 	 * @return True if and only if this instance of the class has another line of
 	 *         input
 	 * @see java.util.Scanner#hasNextLine()
@@ -193,7 +193,7 @@ public class ScanNetNB {
 	 * Advances past the current line and returns the line that was read. This
 	 * method returns the rest of the current line, excluding any line separator at
 	 * the end. The position in the input is set to the beginning of the next line.
-	 * 
+	 *
 	 * @throws NextDoesNotExistException Exception thrown when hasNextLine returns
 	 *                                   false.
 	 * @return String containing the line that was skipped
@@ -212,8 +212,6 @@ public class ScanNetNB {
 		try {
 			selector.close();
 		} catch (IOException e) {
-			System.err.print("Caught exception: ");
-			e.printStackTrace();
 			assert false;
 		}
 	}
