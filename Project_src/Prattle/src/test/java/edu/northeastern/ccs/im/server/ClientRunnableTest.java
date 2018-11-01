@@ -105,6 +105,7 @@ class ClientRunnableTest {
             cl.run();
             assertEquals(-1, cl.getUserId());
             cl.run();
+            ClientRunnable.getWaitingList();
             cl.run();
             cl.run();
             cl.run();
@@ -121,75 +122,133 @@ class ClientRunnableTest {
 
     }
 
-//    @AfterEach
-//    void end() throws IOException {
-//        serverSocket.close();
-//    }
-
-    /*
-
-
-    @Test
-    void enqueueMessage() {
-        Message message = Message.makeQuitMessage("tim");
-        this.client.enqueueMessage(message);
-    }
-
-    @Test
-    void getName() {
-        String name;
-        name = this.client.getName();
-        assertNull(name);
-    }
-
-    @Test
-    void setName() {
-        String name;
-        name = this.client.getName();
-        assertNull(name);
-        this.client.setName("tim");
-        name = this.client.getName();
-        assertEquals("tim", name);
-    }
-
-    @Test
-    void getUserId() {
-        int id;
-        id = this.client.getUserId();
-        assertEquals(0, id);
-        this.client.setName("tim");
-        id = this.client.getUserId();
-        assertEquals(0, id);
-
-    }
-
-    @Test
-    void isInitialized() {
-        assertFalse(this.client.isInitialized());
-    }
-
-    @Test
-    void run() throws IOException {
-
-        printer = new PrintNetNB(socket);
-        scanner = new ScanNetNB(socket);
-        assertFalse(scanner.hasNextMessage());
-        assertTrue(printer.print(Message.makeAcknowledgeMessage("Hello")));
-
-
-        this.client.run();
-    }
-
-//    @Test
-//    void setFuture() {
+//    private ClientRunnable client;
+//    ServerSocketChannel serverSocket;
+//    SocketChannel socketChannel;
+//    int port = 4548;
+//
+//
+//    @BeforeEach
+//    void setUp() throws IOException {
+//        client = new ClientRunnable(SocketChannel.open());
 //    }
 //
-    @Test
-    void terminateClient() throws IOException {
-        try{
-
-        }catch (Exception e) {
-            assertEquals("Connection refused: no further information", e.getMessage());
-        }
-    }*/
+//
+//    @Test
+//    void testBroadcastMessageIsSpecial() throws IOException {
+//        serverSocket = ServerSocketChannel.open();
+//        serverSocket.configureBlocking(false);
+//        serverSocket.socket().bind(new InetSocketAddress(port));
+//        Selector selector = SelectorProvider.provider().openSelector();
+//        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+//
+//
+//        socketChannel = SocketChannel.open();
+//        SocketAddress socketAddr = new InetSocketAddress("localhost", port);
+//        socketChannel.connect(socketAddr);
+//
+//        List<String> msgs = new ArrayList<>();
+//        msgs.add("HLO 4 temp 2 --");
+//        msgs.add("BCT 4 temp 4 test");
+//        msgs.add("BCT 4 temp 17 What is the date?");
+//        msgs.add("BCT 4 temp 29 Prattle says everyone log off");
+//        msgs.add("HLO 26 TooDumbToEnterRealUsername 2 --");
+//        msgs.add("HLO 7 BOUNCER 2 --");
+//        msgs.add("HLO 0"+"\\n"+"2 --");
+//        msgs.add("BCT 0 " + " 2 --");
+//        msgs.add("BYE 4 temp 2 --");
+//        for (String s : msgs) {
+//            ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
+//            int bytesWritten = 0;
+//            while (bytesWritten != s.length()) {
+//                System.out.println(wrapper);
+//                bytesWritten += socketChannel.write(wrapper);
+//            }
+//        }
+//
+//        SocketChannel channel = serverSocket.accept();
+//        channel.configureBlocking(false);
+//        client = new ClientRunnable(channel);
+//
+//        assertFalse(client.isInitialized());
+//        assertEquals(0, client.getUserId());
+//        client.run();
+//        client.run();
+//        client.run();
+//        client.run();
+//        client.run();
+//
+//        String name = this.client.getName();
+//        assertEquals("TooDumbToEnterRealUsername", name);
+//        this.client.setName("tim");
+//        name = this.client.getName();
+//        assertEquals("tim", name);
+//        int id = this.client.getUserId();
+//        id = this.client.getUserId();
+//        assertNotEquals(0, id);
+//        assertNotEquals(-1, id);
+//        assertTrue(client.isInitialized());
+//        serverSocket.close();
+//        client.run();
+//        client.run();
+//        client.run();
+//
+//
+//    }
+//
+//    @Test
+//    void getName() {
+//        String name;
+//        name = this.client.getName();
+//        assertNull(name);
+//    }
+//
+//    @Test
+//    void setName() {
+//        String name;
+//        name = this.client.getName();
+//        assertNull(name);
+//        this.client.setName("tim");
+//        name = this.client.getName();
+//        assertEquals("tim", name);
+//    }
+//
+//    @Test
+//    void getUserId() {
+//        int id;
+//        id = this.client.getUserId();
+//        assertEquals(0, id);
+//        this.client.setName("tim");
+//        id = this.client.getUserId();
+//        assertEquals(0, id);
+//
+//    }
+//
+//
+//    @Test
+//    void enqueueMessage() {
+//        Message message = Message.makeSimpleLoginMessage("tim");
+//        this.client.enqueueMessage(message);
+//    }
+//
+//
+//    @Test
+//    void isInitialized() {
+//        assertFalse(this.client.isInitialized());
+//    }
+//
+//    @Test
+//    void run(){
+////        this.client.run();
+//    }
+//
+//    @Test
+//    void terminateClient() throws IOException {
+//        try {
+//            this.client.terminateClient();
+//        } catch (Exception e) {
+//            assertEquals(null, e.getMessage());
+//        }
+//
+//    }
 }
