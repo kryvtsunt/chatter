@@ -46,7 +46,7 @@ class ClientRunnableTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        socket = new SocketNB("localhost", 4545);
+//        socket = new SocketNB(4545);
         this.client = new ClientRunnable(socket.getSocket());
     }
 
