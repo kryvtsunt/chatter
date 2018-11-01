@@ -11,14 +11,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
+import java.util.ArrayList;
+import java.util.List;
 
 import static edu.northeastern.ccs.im.server.Prattle.main;
 import static org.junit.jupiter.api.Assertions.*;
 
+
+//class MyClass implements Runnable {
+//    public void run(){
+//        String[] strings = {};
+//        try {
+//            main(strings);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//}
 
 class ClientRunnableTest {
 
@@ -26,6 +44,8 @@ class ClientRunnableTest {
     private PrintNetNB printer;
     private ScanNetNB scanner;
     private SocketNB socket;
+    public static final int PORT = 4545;
+    ServerSocketChannel serverSocket;
 
 //    @BeforeAll
 //    static void startServer(){
@@ -35,11 +55,57 @@ class ClientRunnableTest {
 
     @BeforeEach
     void setUp() throws IOException {
-        socket = new SocketNB("localhost", 4545);
-        this.client = new ClientRunnable(socket.getSocket());
+        serverSocket = null;
+        serverSocket = ServerSocketChannel.open();
+        serverSocket.configureBlocking(false);
+        serverSocket.socket().bind(new InetSocketAddress(PORT));
+        // Create the Selector with which our channel is registered.
+        Selector selector = SelectorProvider.provider().openSelector();
+        // Register to receive any incoming connection messages.
+        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+
+        SocketChannel socketChannel = SocketChannel.open();
+        SocketAddress socketAddr = new InetSocketAddress("localhost", PORT);
+        socketChannel.connect(socketAddr);
+
+        String toSend = "HLO 4 temp 2 --";
+        List<String> msgs = new ArrayList<>();
+        msgs.add(toSend);
+        msgs.add("BCT 4 temp 4 test");
+        msgs.add("BCT 4 temp 17 What is the date?");
+        msgs.add("BCT 4 temp 29 Prattle says everyone log off");
+        msgs.add("BCT 4 abcd 2 --");
+        msgs.add("BYE 4 temp 2 --");
+        for (String s : msgs) {
+            ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
+            int bytesWritten = 0;
+            while (bytesWritten != s.length()) {
+                System.out.println(wrapper);
+                bytesWritten += socketChannel.write(wrapper);
+            }
+        }
     }
 
-    @AfterEach
+    @Test
+    void testBroadcastMessageIsSpecial() {
+        SocketChannel client = null;
+        try {
+            client = serverSocket.accept();
+            client.configureBlocking(false);
+            ClientRunnable cl = new ClientRunnable(client);
+            cl.run();
+            cl.run();
+            cl.run();
+            cl.run();
+            cl.run();
+            cl.run();
+        } catch (Exception e) {
+
+        }
+
+    }
+
+    /*@AfterEach
     void end() throws IOException {
         socket.close();
     }
@@ -48,8 +114,7 @@ class ClientRunnableTest {
     @Test
     void enqueueMessage() {
         Message message = Message.makeQuitMessage("tim");
-        Message testMessage = Message.makeBroadcastMessage("tim", "Hello");
-        this.client.enqueueMessage(testMessage);
+        this.client.enqueueMessage(message);
     }
 
     @Test
@@ -108,5 +173,5 @@ class ClientRunnableTest {
         }catch (Exception e) {
             assertEquals("Connection refused: no further information", e.getMessage());
         }
-    }
+    }*/
 }

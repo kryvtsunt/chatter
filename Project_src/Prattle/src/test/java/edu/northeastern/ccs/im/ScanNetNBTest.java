@@ -2,7 +2,6 @@ package edu.northeastern.ccs.im;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.net.SocketAddress;
@@ -57,9 +56,17 @@ class ScanNetNBTest {
         }
     }
 
+//    @AfterEach
+//    void end() throws IOException {
+//        try {
+//            serverSocket.close();
+//        } catch(Exception e) {}
+//
+//    }
+
 
     @Test
-    public void testNextMessage() throws IOException {
+    public void testNextMessage() {
         SocketChannel client = null;
         try {
             client = serverSocket.accept();
@@ -83,13 +90,13 @@ class ScanNetNBTest {
                 //System.out.println("while loop closed in ScanNetNBTest");
                 input.close();
                 System.out.println("Scan Net NB closed");
+                //serverSocket.close();
             } else {
                 System.out.println("socket channel is null");
             }
         } catch (Exception e) {
             assertEquals("No next line has been typed in at the keyboard", e.getMessage());
         }
-        serverSocket.close();
     }
 
 }
