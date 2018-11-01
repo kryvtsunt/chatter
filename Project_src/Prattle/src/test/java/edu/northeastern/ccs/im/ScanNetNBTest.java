@@ -2,6 +2,7 @@ package edu.northeastern.ccs.im;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.net.SocketAddress;
@@ -58,7 +59,7 @@ class ScanNetNBTest {
 
 
     @Test
-    public void testNextMessage() {
+    public void testNextMessage() throws IOException {
         SocketChannel client = null;
         try {
             client = serverSocket.accept();
@@ -88,6 +89,7 @@ class ScanNetNBTest {
         } catch (Exception e) {
             assertEquals("No next line has been typed in at the keyboard", e.getMessage());
         }
+        serverSocket.close();
     }
 
 }
