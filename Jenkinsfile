@@ -33,8 +33,9 @@ pipeline {
       }
     }
   }
-}
-}
+} //SONAR 
+
+} // STAGES
 
 
  post {
@@ -47,6 +48,5 @@ pipeline {
     failure {  
            slackSend (baseUrl: "https://cs5500.slack.com/services/hooks/jenkins-ci/", token: "KMCs4FgzEHNwyv9ioFqIwO4m", channel: "#cs5500-team-105-f18", color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME}")
             }
-       }
-}
-}
+       } //POST
+} //PIPELINE
