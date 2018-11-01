@@ -4,6 +4,7 @@ import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
 import edu.northeastern.ccs.im.SocketNB;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,8 +40,8 @@ class ClientRunnableTest {
 
     @BeforeAll
     static void startServer(){
-//        Thread t1 = new Thread(new MyClass ());
-//        t1.start();
+        Thread t1 = new Thread(new MyClass ());
+        t1.start();
     }
 
     @BeforeEach
@@ -55,57 +56,56 @@ class ClientRunnableTest {
     }
 
 
-//    @Test
-//    void enqueueMessage() {
-//        Message message = Message.makeQuitMessage("tim");
-//        this.client.enqueueMessage(message);
-//    }
-//
+    @Test
+    void enqueueMessage() {
+        Message message = Message.makeQuitMessage("tim");
+        this.client.enqueueMessage(message);
+    }
+
     @Test
     void getName() {
         String name;
         name = this.client.getName();
         assertNull(name);
     }
-//
-//    @Test
-//    void setName() {
-//        String name;
-//        name = this.client.getName();
-//        assertNull(name);
-//        this.client.setName("tim");
-//        name = this.client.getName();
-//        assertEquals("tim", name);
-//    }
-//
-//    @Test
-//    void getUserId() {
-//        int id;
-//        id = this.client.getUserId();
-//        assertEquals(0, id);
-//        this.client.setName("tim");
-//        id = this.client.getUserId();
-//        assertEquals(0, id);
-//
-//    }
-//
-//    @Test
-//    void isInitialized() {
-//        assertFalse(this.client.isInitialized());
-//    }
 
-//    @Test
-//    void run() throws IOException {
-//
-//        printer = new PrintNetNB(socket);
-//        scanner = new ScanNetNB(socket);
-//
-//        assertTrue(printer.print(Message.makeAcknowledgeMessage("tim")));
-//        assertFalse(scanner.hasNextMessage());
-//        scanner.nextMessage();
-//
-//        this.client.run();
-//    }
+    @Test
+    void setName() {
+        String name;
+        name = this.client.getName();
+        assertNull(name);
+        this.client.setName("tim");
+        name = this.client.getName();
+        assertEquals("tim", name);
+    }
+
+    @Test
+    void getUserId() {
+        int id;
+        id = this.client.getUserId();
+        assertEquals(0, id);
+        this.client.setName("tim");
+        id = this.client.getUserId();
+        assertEquals(0, id);
+
+    }
+
+    @Test
+    void isInitialized() {
+        assertFalse(this.client.isInitialized());
+    }
+
+    @Test
+    void run() throws IOException {
+
+        printer = new PrintNetNB(socket);
+        scanner = new ScanNetNB(socket);
+        assertFalse(scanner.hasNextMessage());
+        assertTrue(printer.print(Message.makeAcknowledgeMessage("Hello")));
+
+
+        this.client.run();
+    }
 
 //    @Test
 //    void setFuture() {
