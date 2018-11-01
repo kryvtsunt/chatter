@@ -2,24 +2,52 @@ package edu.northeastern.ccs.im.server;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import edu.northeastern.ccs.im.Message;
+import edu.northeastern.ccs.im.PrintNetNB;
+import edu.northeastern.ccs.im.SocketNB;
+import org.junit.jupiter.api.AfterEach;
+
+import java.io.IOException;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrattleTest {
-
-    @BeforeEach
-    void setUp() {
-    }
+    ServerRunnable server;
+    Thread serverThread;
 
     @Test
-    void broadcastMessage() {
+    void broadcastMessage() throws IOException, NoSuchFieldException, SecurityException,
+            IllegalArgumentException, IllegalAccessException, InterruptedException {
+        server = new PrattleTest().new ServerRunnable();
+        serverThread = new Thread(server);
+        serverThread.start();
+        Message loginmsg = Message.makeSimpleLoginMessage("temp");
+        Message msg = Message.makeBroadcastMessage("test message", "temp");
+        SocketNB sc2 = new SocketNB("localhost",ServerConstants.PORT);
+
+        PrintNetNB printer = new PrintNetNB(sc2.getSocket());
+        printer.print(loginmsg);
+
+        Thread.sleep(1000);
+        Prattle.broadcastMessage(msg);
+
+        Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
+        waitingList = ClientRunnable.getWaitingList();
+        assertEquals(msg.getText(), waitingList.poll().getText());
+        serverThread.interrupt();
+        Prattle.getServerSocket().close();
     }
 
-    @Test
-    void main() {
-    }
-
-    @Test
-    void removeClient() {
+    private class ServerRunnable implements Runnable {
+        public void run()
+        {
+            try {
+                Prattle.main(new String[2]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

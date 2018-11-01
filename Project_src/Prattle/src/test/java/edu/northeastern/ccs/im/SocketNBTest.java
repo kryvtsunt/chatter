@@ -59,7 +59,7 @@ class SocketNBTest {
             }
         }
 
-        SocketNB socketNB= new SocketNB("localhost", 4545);
+        SocketNB socketNB= new SocketNB("localhost", port);
         socketNB.getSocket();
         ScanNetNB scanner = new ScanNetNB(socketNB);
         PrintNetNB printer = new PrintNetNB(socketNB);

@@ -22,13 +22,13 @@ import edu.northeastern.ccs.im.Message;
  * version of the server spawns a new thread to handle each client that connects
  * to it. At this point, messages are broadcast to all of the other clients. 
  * It does not send a response when the user has gone off-line.
- * 
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
  * originally written by Matthew Hertz and has been adapted for use in a class
  * assignment at Northeastern University.
- * 
+ *
  * @version 1.3
  */
 public abstract class Prattle {
@@ -45,6 +45,9 @@ public abstract class Prattle {
 	/* Collection of threads that are currently being used. */
 	private static ConcurrentLinkedQueue<ClientRunnable> active;
 
+	/* Socket on the appropriate port to which this server connects. */
+	private static ServerSocketChannel serverSocket;
+
 	/* All of the static initialization occurs in this "method" */
 	static {
 		// Create the new queue of active threads.
@@ -54,7 +57,7 @@ public abstract class Prattle {
 	/**
 	 * Broadcast a given message to all the other IM clients currently on the
 	 * system. This message _will_ be sent to the client who originally sent it.
-	 * 
+	 *
 	 * @param message Message that the client sent.
 	 */
 	public static void broadcastMessage(Message message) {
@@ -73,7 +76,7 @@ public abstract class Prattle {
 	 * connection, it will spawn a thread to perform all of the I/O with that
 	 * client. This class relies on the server not receiving too many requests -- it
 	 * does not include any code to limit the number of extant threads.
-	 * 
+	 *
 	 * @param args String arguments to the server from the command line. At present
 	 *             the only legal (and required) argument is the port on which this
 	 *             server should list.
@@ -83,7 +86,7 @@ public abstract class Prattle {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		// Connect to the socket on the appropriate port to which this server connects.
-		ServerSocketChannel serverSocket = ServerSocketChannel.open();
+		serverSocket = ServerSocketChannel.open();
 		serverSocket.configureBlocking(false);
 		serverSocket.socket().bind(new InetSocketAddress(ServerConstants.PORT));
 		// Create the Selector with which our channel is registered.
@@ -137,7 +140,7 @@ public abstract class Prattle {
 
 	/**
 	 * Remove the given IM client from the list of active threads.
-	 * 
+	 *
 	 * @param dead Thread which had been handling all the I/O for a client who has
 	 *             since quit.
 	 */
@@ -147,5 +150,9 @@ public abstract class Prattle {
 		if (!active.remove(dead)) {
 			System.out.println("Could not find a thread that I tried to remove!\n");
 		}
+	}
+
+	public static ServerSocketChannel getServerSocket() {
+		return serverSocket;
 	}
 }

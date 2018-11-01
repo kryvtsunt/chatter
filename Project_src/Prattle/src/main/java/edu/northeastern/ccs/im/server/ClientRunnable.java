@@ -104,7 +104,7 @@ public class ClientRunnable implements Runnable {
     /**
      * Collection of messages queued up to be sent to this client.
      */
-    private Queue<Message> waitingList;
+    private static Queue<Message> waitingList;
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -410,5 +410,9 @@ public class ClientRunnable implements Runnable {
             // And remove the client from our client pool.
             runnableMe.cancel(false);
         }
+    }
+
+    public static Queue<Message> getWaitingList() {
+        return waitingList;
     }
 }
