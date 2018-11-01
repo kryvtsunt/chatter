@@ -65,7 +65,7 @@ public class SocketNB {
 	 *
 	 * @return Returns the SocketChannel for which this class acts as a wrapper.
 	 */
-	protected SocketChannel getSocket() {
+	public SocketChannel getSocket() {
 		return channel;
 	}
 
