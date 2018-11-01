@@ -46,7 +46,7 @@
   </component>
   <component name="CoverageViewManager">
     <option name="myFlattenPackages" value="true" />
-    <option name="myElementSize" value="423" />
+    <option name="myElementSize" value="444" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1821276108">
@@ -130,7 +130,7 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="class" value="1" />
-          <entry key="java" value="16" />
+          <entry key="java" value="17" />
           <entry key="lst" value="2" />
           <entry key="xml" value="1" />
         </counts>
@@ -138,30 +138,30 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="1" />
-          <entry key="JAVA" value="16" />
+          <entry key="JAVA" value="17" />
           <entry key="PLAIN_TEXT" value="2" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="1639" />
+          <entry key="java" value="1679" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="1639" />
+          <entry key="JAVA" value="1679" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="61" column="42" lean-forward="true" selection-start-line="61" selection-start-column="42" selection-end-line="61" selection-end-column="42" />
+            <state relative-caret-position="141">
+              <caret line="48" column="26" lean-forward="true" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#2192#2193#0" expanded="true" />
@@ -198,8 +198,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
+            <state relative-caret-position="961">
               <caret line="77" column="46" selection-start-line="77" selection-start-column="46" selection-end-line="77" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="228">
+              <caret line="38" column="11" selection-start-line="38" selection-start-column="11" selection-end-line="38" selection-end-column="11" />
             </state>
           </provider>
         </entry>
@@ -416,6 +425,16 @@
               <item name="im" type="462c0819:PsiDirectoryNode" />
               <item name="server" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="prattle" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Prattle" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="im" type="462c0819:PsiDirectoryNode" />
+              <item name="server" type="462c0819:PsiDirectoryNode" />
+              <item name="ClientRunnableTest.java" type="529ef68f:ClassesTreeStructureProvider$PsiClassOwnerTreeNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -428,7 +447,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541089173540" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541089759371" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Chatter" />
@@ -593,32 +612,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1540421176843</updated>
-      <workItem from="1541043409823" duration="13958000" />
+      <workItem from="1541043409823" duration="14547000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ClientRunnableTest_terminateClient - 2018.11.01 at 02h 25m 06s.xml">
-      <configuration name="ClientRunnableTest.terminateClient" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.01 at 02h 25m 52s.xml">
-      <configuration name="ClientRunnableTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_Prattle - 2018.11.01 at 02h 26m 25s.xml">
-      <configuration name="All in Prattle" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_Prattle - 2018.11.01 at 02h 27m 10s.xml">
-      <configuration name="All in Prattle" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="All_in_Prattle - 2018.11.01 at 10h 30m 16s.xml">
-      <configuration name="All in Prattle" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="SocketNBTest - 2018.11.01 at 10h 32m 01s.xml">
-      <configuration name="SocketNBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="edu_northeastern_ccs_im_in_Prattle - 2018.11.01 at 12h 08m 03s.xml">
-      <configuration name="edu.northeastern.ccs.im in Prattle" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="SocketNBTest - 2018.11.01 at 12h 09m 07s.xml">
       <configuration name="SocketNBTest" configurationId="JUnit" />
     </history-entry>
@@ -628,15 +626,36 @@
     <history-entry file="All_in_Prattle - 2018.11.01 at 12h 11m 53s.xml">
       <configuration name="All in Prattle" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="ClientRunnableTest_enqueueMessage - 2018.11.01 at 12h 17m 14s.xml">
+      <configuration name="ClientRunnableTest.enqueueMessage" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ClientRunnableTest_enqueueMessage - 2018.11.01 at 12h 17m 47s.xml">
+      <configuration name="ClientRunnableTest.enqueueMessage" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ClientRunnableTest_enqueueMessage - 2018.11.01 at 12h 17m 54s.xml">
+      <configuration name="ClientRunnableTest.enqueueMessage" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ClientRunnableTest_enqueueMessage - 2018.11.01 at 12h 18m 28s.xml">
+      <configuration name="ClientRunnableTest.enqueueMessage" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ClientRunnableTest_getName - 2018.11.01 at 12h 18m 51s.xml">
+      <configuration name="ClientRunnableTest.getName" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="edu_northeastern_ccs_im_in_Prattle - 2018.11.01 at 12h 19m 13s.xml">
+      <configuration name="edu.northeastern.ccs.im in Prattle" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="edu_northeastern_ccs_im_in_Prattle - 2018.11.01 at 12h 19m 38s.xml">
+      <configuration name="edu.northeastern.ccs.im in Prattle" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="13958000" />
+    <option name="totallyTimeSpent" value="14547000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.32348993" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.32348993" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -646,13 +665,13 @@
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.42978725" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.42978725" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991684" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="SonarLint" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32907802" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.32907802" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32907802" />
@@ -695,13 +714,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1311">
           <caret line="71" column="36" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
         </state>
       </provider>
     </entry>
@@ -800,13 +812,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="77" column="46" selection-start-line="77" selection-start-column="46" selection-end-line="77" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1007">
@@ -837,15 +842,29 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="961">
+          <caret line="77" column="46" selection-start-line="77" selection-start-column="46" selection-end-line="77" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="61" column="42" lean-forward="true" selection-start-line="61" selection-start-column="42" selection-end-line="61" selection-end-column="42" />
+        <state relative-caret-position="141">
+          <caret line="48" column="26" lean-forward="true" selection-start-line="48" selection-start-column="26" selection-end-line="48" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#2192#2193#0" expanded="true" />
             <element signature="e#2248#2249#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="38" column="11" selection-start-line="38" selection-start-column="11" selection-end-line="38" selection-end-column="11" />
         </state>
       </provider>
     </entry>
