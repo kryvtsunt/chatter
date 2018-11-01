@@ -34,10 +34,10 @@ class PrattleTest {
         Prattle.broadcastMessage(msg);
 
         Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
-        waitingList = ClientRunnable.getWaitingList();
+//        waitingList = ClientRunnable.getWaitingList();
 //        assertEquals(msg.getText(), waitingList.poll().getText());
         serverThread.interrupt();
-        Prattle.getServerSocket();
+//        Prattle.getServerSocket().close();
     }
 
     private class ServerRunnable implements Runnable {
