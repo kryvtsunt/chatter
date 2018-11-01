@@ -5,10 +5,7 @@ import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
 import edu.northeastern.ccs.im.SocketNB;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -22,60 +19,46 @@ import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
-import static edu.northeastern.ccs.im.server.Prattle.main;
 import static org.junit.jupiter.api.Assertions.*;
 
-
-//class MyClass implements Runnable {
-//    public void run(){
-//        String[] strings = {};
-//        try {
-//            main(strings);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//}
 
 class ClientRunnableTest {
 
     private ClientRunnable client;
-    private PrintNetNB printer;
-    private ScanNetNB scanner;
-    private SocketNB socket;
-    public static final int PORT = 4545;
     ServerSocketChannel serverSocket;
+    SocketChannel socketChannel;
+    int port = 4545;
 
-//    @BeforeAll
-//    static void startServer(){
-//        Thread t1 = new Thread(new MyClass ());
-//        t1.start();
-//    }
 
     @BeforeEach
     void setUp() throws IOException {
-        serverSocket = null;
+        client = new ClientRunnable(SocketChannel.open());
+    }
+
+
+    @Test
+    void testBroadcastMessageIsSpecial() throws IOException {
         serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
-        serverSocket.socket().bind(new InetSocketAddress(PORT));
-        // Create the Selector with which our channel is registered.
+        serverSocket.socket().bind(new InetSocketAddress(port));
         Selector selector = SelectorProvider.provider().openSelector();
-        // Register to receive any incoming connection messages.
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
-        SocketChannel socketChannel = SocketChannel.open();
-        SocketAddress socketAddr = new InetSocketAddress("localhost", PORT);
+
+        socketChannel = SocketChannel.open();
+        SocketAddress socketAddr = new InetSocketAddress("localhost", port);
         socketChannel.connect(socketAddr);
 
-        String toSend = "HLO 4 temp 2 --";
         List<String> msgs = new ArrayList<>();
-        msgs.add(toSend);
+        msgs.add("HLO 4 temp 2 --");
         msgs.add("BCT 4 temp 4 test");
         msgs.add("BCT 4 temp 17 What is the date?");
         msgs.add("BCT 4 temp 29 Prattle says everyone log off");
-        msgs.add("BCT 4 abcd 2 --");
-        msgs.add("BYE 4 temp 2 --");
+        msgs.add("BYE 4 abcd 2 --");
+        msgs.add("BYE 4 abcd 2 --");
         for (String s : msgs) {
             ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
             int bytesWritten = 0;
@@ -84,37 +67,29 @@ class ClientRunnableTest {
                 bytesWritten += socketChannel.write(wrapper);
             }
         }
-    }
 
-    @Test
-    void testBroadcastMessageIsSpecial() {
-        SocketChannel client = null;
-        try {
-            client = serverSocket.accept();
-            client.configureBlocking(false);
-            ClientRunnable cl = new ClientRunnable(client);
-            cl.run();
-            cl.run();
-            cl.run();
-            cl.run();
-            cl.run();
-            cl.run();
-        } catch (Exception e) {
+        SocketChannel channel = serverSocket.accept();
+        channel.configureBlocking(false);
+        client = new ClientRunnable(channel);
 
-        }
+        client.run();
+        client.run();
+        client.run();
+        client.run();
+        client.run();
 
-    }
-
-    /*@AfterEach
-    void end() throws IOException {
-        socket.close();
-    }
-
-
-    @Test
-    void enqueueMessage() {
-        Message message = Message.makeQuitMessage("tim");
-        this.client.enqueueMessage(message);
+        String name;
+        name = this.client.getName();
+        assertEquals("abcd", name);
+        this.client.setName("tim");
+        name = this.client.getName();
+        assertEquals("tim", name);
+        int id = this.client.getUserId();
+        id = this.client.getUserId();
+        assertNotEquals(0, id);
+        assertNotEquals(-1, id);
+        assertTrue(client.isInitialized());
+        serverSocket.close();
     }
 
     @Test
@@ -145,33 +120,31 @@ class ClientRunnableTest {
 
     }
 
+
+    @Test
+    void enqueueMessage() {
+        Message message = Message.makeSimpleLoginMessage("tim");
+        this.client.enqueueMessage(message);
+    }
+
+
     @Test
     void isInitialized() {
         assertFalse(this.client.isInitialized());
     }
 
     @Test
-    void run() throws IOException {
-
-        printer = new PrintNetNB(socket);
-        scanner = new ScanNetNB(socket);
-        assertFalse(scanner.hasNextMessage());
-        assertTrue(printer.print(Message.makeAcknowledgeMessage("Hello")));
-
-
+    void run(){
         this.client.run();
     }
 
-//    @Test
-//    void setFuture() {
-//    }
-//
     @Test
     void terminateClient() throws IOException {
-        try{
-
-        }catch (Exception e) {
-            assertEquals("Connection refused: no further information", e.getMessage());
+        try {
+            this.client.terminateClient();
+        } catch (Exception e) {
+            assertEquals(null, e.getMessage());
         }
-    }*/
+
+    }
 }
