@@ -1,8 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: edu.northeastern.ccs.im.server.ClientRunnableTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.022 s <<< FAILURE! - in edu.northeastern.ccs.im.server.ClientRunnableTest
-testBroadcastMessageIsSpecial  Time elapsed: 0.022 s  <<< ERROR!
-java.net.BindException: Address already in use: bind
-	at edu.northeastern.ccs.im.server.ClientRunnableTest.setUp(ClientRunnableTest.java:58)
-
+Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in edu.northeastern.ccs.im.server.ClientRunnableTest

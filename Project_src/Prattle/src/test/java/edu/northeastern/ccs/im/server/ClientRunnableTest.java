@@ -30,7 +30,7 @@ class ClientRunnableTest {
     private ClientRunnable client;
     ServerSocketChannel serverSocket;
     SocketChannel socketChannel;
-    int port = 4545;
+    int port = 4548;
 
 
     @BeforeEach

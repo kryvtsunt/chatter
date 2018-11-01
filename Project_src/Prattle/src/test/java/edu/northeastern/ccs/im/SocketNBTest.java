@@ -30,7 +30,7 @@ class SocketNBTest {
         ClientRunnable client;
         ServerSocketChannel serverSocket;
         SocketChannel socketChannel;
-        int port = 4545;
+        int port = 4547;
 
         serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
