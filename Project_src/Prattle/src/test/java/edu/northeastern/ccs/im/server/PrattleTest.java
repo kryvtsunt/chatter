@@ -11,18 +11,18 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrattleTest {
-    private Thread serverThread;
+    ServerRunnable server;
+    Thread serverThread;
 
     @BeforeEach
     void setUp() throws IOException, InterruptedException {
-        ServerRunnable server = new PrattleTest().new ServerRunnable();
+        server = new PrattleTest().new ServerRunnable();
         serverThread = new Thread(server);
         serverThread.start();
         Thread.sleep(1000);
@@ -56,7 +56,7 @@ class PrattleTest {
 
         Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
         waitingList = ClientRunnable.getWaitingList();
-        assertEquals(msg.getText(), Objects.requireNonNull(waitingList.poll()).getText());
+        assertEquals(msg.getText(), waitingList.poll().getText());
 
         printer.print(quitMsg);
         socketChannel.close();

@@ -122,6 +122,7 @@ public abstract class Prattle {
                             // Add the thread to the queue of active threads
                             active.add(tt);
                             // Have the client executed by our pool of threads.
+                            @SuppressWarnings("rawtypes")
                             ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(tt, CLIENT_CHECK_DELAY,
                                     CLIENT_CHECK_DELAY, TimeUnit.MILLISECONDS);
                             tt.setFuture(clientFuture);
