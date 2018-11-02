@@ -209,7 +209,7 @@ public class ScanNetNB {
 			throw new NextDoesNotExistException("No next line has been typed in at the keyboard");
 		}
 		Message msg = messages.remove();
-		LOGGER.log(Level.WARNING, msg.toString());
+		LOGGER.log(Level.INFO, msg.toString());
 		return msg;
 	}
 

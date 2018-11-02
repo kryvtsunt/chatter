@@ -102,6 +102,8 @@ public class ClientRunnable implements Runnable {
      */
     private boolean initialized;
 
+    private boolean validated;
+
     /**
      * The future that is used to schedule the client for execution in the thread
      * pool.
@@ -111,7 +113,7 @@ public class ClientRunnable implements Runnable {
     /**
      * Collection of messages queued up to be sent to this client.
      */
-    private static Queue<Message> waitingList;
+    private Queue<Message> waitingList;
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -220,7 +222,7 @@ public class ClientRunnable implements Runnable {
      * @return True if we sent the message successfully; false otherwise.
      */
     private boolean sendMessage(Message message) {
-        LOGGER.log(Level.INFO,"\t" + message.toString());
+        LOGGER.log(Level.INFO, "\t" + message.toString());
         return output.print(message);
     }
 
@@ -313,7 +315,18 @@ public class ClientRunnable implements Runnable {
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a broadcast message, send it out
-                    if (msg.isDisplayMessage()) {
+                    if (msg.getText().contains(">")) {
+                        String[] args = msg.getText().split(">");
+                        String to = args[0];
+                        String content = args[1];
+                        Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), to);
+                    } else if (msg.getText().contains("!update:")) {
+                        PrattleDB db = PrattleDB.instance();
+
+                    }
+
+
+                    else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
                         if (messageChecks(msg)) {
                             // Check for our "special messages"
@@ -383,7 +396,7 @@ public class ClientRunnable implements Runnable {
         // when they have, terminate
         // the client.
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
-            LOGGER.log(Level.WARNING, "Timing out or forcing off a user " + name);
+            LOGGER.log(Level.INFO, "Timing out or forcing off a user " + name);
             terminateClient();
         }
     }
@@ -417,7 +430,7 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public static Queue<Message> getWaitingList() {
+    public Queue<Message> getWaitingList() {
         return waitingList;
     }
 }

@@ -47,16 +47,14 @@ class PrattleTest {
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
-        //SocketNB sc2 = new SocketNB("localhost",ServerConstants.PORT);
         PrintNetNB printer = new PrintNetNB(socketChannel);
         printer.print(loginmsg);
 
         Thread.sleep(1000);
         Prattle.broadcastMessage(msg);
+        Prattle.directMessage(msg, "tim");
 
         Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
-        waitingList = ClientRunnable.getWaitingList();
-        assertEquals(msg.getText(), Objects.requireNonNull(waitingList.poll()).getText());
 
         printer.print(quitMsg);
         socketChannel.close();

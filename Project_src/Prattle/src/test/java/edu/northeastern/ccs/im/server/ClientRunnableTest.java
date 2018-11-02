@@ -105,7 +105,7 @@ class ClientRunnableTest {
             cl.run();
             assertEquals(-1, cl.getUserId());
             cl.run();
-            ClientRunnable.getWaitingList();
+            cl.getWaitingList();
             cl.run();
             cl.run();
             cl.run();
@@ -115,6 +115,8 @@ class ClientRunnableTest {
             cl.run();
             cl.run();
             cl.run();
+
+            cl.terminateClient();
 
         } catch (Exception e) {
 

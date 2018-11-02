@@ -23,7 +23,7 @@ import edu.northeastern.ccs.im.Message;
  * version of the server spawns a new thread to handle each client that connects
  * to it. At this point, messages are broadcast to all of the other clients.
  * It does not send a response when the user has gone off-line.
- *
+ * <p>
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
@@ -35,7 +35,7 @@ import edu.northeastern.ccs.im.Message;
 public abstract class Prattle {
 
     /* Logger */
-    private static final Logger LOGGER = Logger.getLogger( Prattle.class.getName() );
+    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
 
     /* Amount of time we should wait for a signal to arrive. */
@@ -49,6 +49,7 @@ public abstract class Prattle {
 
     /* Collection of threads that are currently being used. */
     private static ConcurrentLinkedQueue<ClientRunnable> active;
+
 
     /* Socket on the appropriate port to which this server connects. */
     private static ServerSocketChannel serverSocket;
@@ -70,6 +71,16 @@ public abstract class Prattle {
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized()) {
+                tt.enqueueMessage(message);
+            }
+        }
+    }
+
+    public static void directMessage(Message message, String client) {
+        // Loop through all of our active threads
+        for (ClientRunnable tt : active) {
+            // Do not send the message to any clients that are not ready to receive it.
+            if (tt.isInitialized() && tt.getName().equals(client)) {
                 tt.enqueueMessage(message);
             }
         }
@@ -141,8 +152,6 @@ public abstract class Prattle {
             }
         }
     }
-
-
 
 
     /**
