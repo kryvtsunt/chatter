@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="edu.northeastern.ccs.im.MessageTest" time="0.073" tests="14" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="edu.northeastern.ccs.im.MessageTest" time="0.065" tests="14" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -18,7 +18,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_181\jre\bin"/>
-    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter C:\Users\Tim\AppData\Local\Temp\surefire4651720780202724207 2018-11-02T12-55-49_773-jvmRun1 surefire5417012901352237339tmp surefire_08768801281272851179tmp"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter C:\Users\Tim\AppData\Local\Temp\surefire7212986877860859563 2018-11-02T14-24-12_849-jvmRun1 surefire3247274723526019484tmp surefire_03579645944851460142tmp"/>
     <property name="surefire.test.class.path" value="C:\Users\Tim\IdeaProjects\MSDProject\team-105-F18\Project_src\Prattle\target\test-classes;C:\Users\Tim\IdeaProjects\MSDProject\team-105-F18\Project_src\Prattle\target\classes;C:\Users\Tim\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.3.1\junit-jupiter-engine-5.3.1.jar;C:\Users\Tim\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\Tim\.m2\repository\org\junit\platform\junit-platform-engine\1.3.1\junit-platform-engine-1.3.1.jar;C:\Users\Tim\.m2\repository\org\junit\platform\junit-platform-commons\1.3.1\junit-platform-commons-1.3.1.jar;C:\Users\Tim\.m2\repository\org\opentest4j\opentest4j\1.1.1\opentest4j-1.1.1.jar;C:\Users\Tim\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.3.1\junit-jupiter-api-5.3.1.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Tim"/>
@@ -60,18 +60,18 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="52.0"/>
   </properties>
-  <testcase name="makeMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.019"/>
+  <testcase name="makeMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
   <testcase name="makeSimpleLoginMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
-  <testcase name="makeHelloMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.003"/>
+  <testcase name="makeHelloMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
   <testcase name="isBroadcastMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
-  <testcase name="makeQuitMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.006"/>
-  <testcase name="makeNoAcknowledgeMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
-  <testcase name="isAcknowledge" classname="edu.northeastern.ccs.im.MessageTest" time="0.002"/>
-  <testcase name="getName" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
-  <testcase name="getText" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
+  <testcase name="makeQuitMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.003"/>
+  <testcase name="makeNoAcknowledgeMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.001"/>
+  <testcase name="isAcknowledge" classname="edu.northeastern.ccs.im.MessageTest" time="0.001"/>
+  <testcase name="getName" classname="edu.northeastern.ccs.im.MessageTest" time="0.001"/>
+  <testcase name="getText" classname="edu.northeastern.ccs.im.MessageTest" time="0.002"/>
   <testcase name="isInitialization" classname="edu.northeastern.ccs.im.MessageTest" time="0.001"/>
-  <testcase name="isDisplayMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.002"/>
+  <testcase name="isDisplayMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
   <testcase name="makeBroadcastMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.002"/>
   <testcase name="makeAcknowledgeMessage" classname="edu.northeastern.ccs.im.MessageTest" time="0.001"/>
-  <testcase name="terminate" classname="edu.northeastern.ccs.im.MessageTest" time="0.001"/>
+  <testcase name="terminate" classname="edu.northeastern.ccs.im.MessageTest" time="0"/>
 </testsuite>

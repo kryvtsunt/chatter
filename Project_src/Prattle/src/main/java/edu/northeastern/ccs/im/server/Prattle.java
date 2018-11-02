@@ -143,6 +143,8 @@ public abstract class Prattle {
     }
 
 
+
+
     /**
      * Remove the given IM client from the list of active threads.
      *
