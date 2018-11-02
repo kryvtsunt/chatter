@@ -33,7 +33,7 @@ public class CommandLineMain {
 
 		do {
 			// Prompt the user to type in a username.
-			System.out.println("What username would you like?");
+			System.out.println("Input your credentials.");
 
 			String username = in.nextLine();
 
