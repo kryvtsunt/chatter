@@ -102,6 +102,7 @@ class ClientRunnableTest {
             client.configureBlocking(false);
             ClientRunnable cl = new ClientRunnable(client);
             assertFalse(cl.isInitialized());
+            assertFalse(cl.isValidated());
             cl.run();
             assertEquals(-1, cl.getUserId());
             cl.run();

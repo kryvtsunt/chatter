@@ -77,8 +77,12 @@ public class PrattleDB {
      */
     public String retrieve(String username) throws FileNotFoundException {
         readDB();
-        return users.get(username);
+        if (users.containsKey(username)){
+            return users.get(username);
+        }
+        return null;
     }
+
 
     /**
      * Delete entry

@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: edu.northeastern.ccs.im.server.PrattleTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.963 s - in edu.northeastern.ccs.im.server.PrattleTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.99 s - in edu.northeastern.ccs.im.server.PrattleTest

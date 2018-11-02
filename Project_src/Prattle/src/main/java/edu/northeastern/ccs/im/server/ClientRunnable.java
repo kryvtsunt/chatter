@@ -1,5 +1,6 @@
 package edu.northeastern.ccs.im.server;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
@@ -183,8 +184,42 @@ public class ClientRunnable implements Runnable {
                         new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
                 // Set that the client is initialized.
                 initialized = true;
+
             } else {
                 initialized = false;
+            }
+        }
+    }
+
+    private void checkForValidation() {
+        String password = null;
+
+        // Check if there are any input messages to read
+        if (input.hasNextMessage()) {
+            // If a message exists, try to use it to initialize the connection
+            Message msg = input.nextMessage();
+            String passwordInput = msg.getText();
+
+            try {
+                password = PrattleDB.instance().retrieve(this.getName());
+            } catch (FileNotFoundException ignored) {
+            }
+
+            if (password == null){
+                try {
+                    PrattleDB.instance().create(getName(), passwordInput);
+                } catch (IOException ignored) {
+                }
+                validated = true;
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                return;
+            }
+
+            if (passwordInput.equals(password)) {
+                validated = true;
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+            } else {
+                validated = false;
             }
         }
     }
@@ -245,6 +280,17 @@ public class ClientRunnable implements Runnable {
         return false;
     }
 
+    private boolean setPassword(String password) {
+        // Now make sure this name is legal.
+        if (password != null) {
+            // Optimistically set this users ID number.
+            setPassword(password);
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Add the given message to this client to the queue of message to be sent to
      * the client.
@@ -292,6 +338,10 @@ public class ClientRunnable implements Runnable {
         return initialized;
     }
 
+    public boolean isValidated() {
+        return validated;
+    }
+
     /**
      * Perform the periodic actions needed to work with this client.
      *
@@ -299,9 +349,13 @@ public class ClientRunnable implements Runnable {
      */
     public void run() {
         boolean terminate = false;
+
         // The client must be initialized before we can do anything else
         if (!initialized) {
             checkForInitialization();
+
+        } else if(!validated){
+            checkForValidation();
         } else {
             try {
                 // Client has already been initialized, so we should first check
@@ -320,9 +374,21 @@ public class ClientRunnable implements Runnable {
                         String to = args[0];
                         String content = args[1];
                         Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), to);
-                    } else if (msg.getText().contains("!update:")) {
-                        PrattleDB db = PrattleDB.instance();
+                    } else if (msg.getText().contains("DELETE")) {
+                        try {
+                            PrattleDB.instance().delete(getName());
+                            this.terminateClient();
+                            return;
+                        } catch (IOException ignored) {
 
+                        }
+                    } else if (msg.getText().contains("UPDATE")) {
+                        try {
+                            PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
+                            return;
+                        } catch (IOException ignored) {
+
+                        }
                     }
 
 
