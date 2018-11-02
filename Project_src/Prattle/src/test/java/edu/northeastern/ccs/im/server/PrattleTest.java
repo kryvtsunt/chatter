@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -25,7 +26,6 @@ class PrattleTest {
         server = new PrattleTest().new ServerRunnable();
         serverThread = new Thread(server);
         serverThread.start();
-        Thread.sleep(1000);
     }
     @AfterEach
     void tearDown() throws IOException {
@@ -56,7 +56,7 @@ class PrattleTest {
 
         Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
         waitingList = ClientRunnable.getWaitingList();
-        assertEquals(msg.getText(), waitingList.poll().getText());
+        assertEquals(msg.getText(), Objects.requireNonNull(waitingList.poll()).getText());
 
         printer.print(quitMsg);
         socketChannel.close();

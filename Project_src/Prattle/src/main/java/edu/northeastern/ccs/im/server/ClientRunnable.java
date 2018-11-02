@@ -5,10 +5,13 @@ import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
+
 
 /**
  * Instances of this class handle all of the incoming communication from a
@@ -26,6 +29,10 @@ import edu.northeastern.ccs.im.ScanNetNB;
  * @version 1.3
  */
 public class ClientRunnable implements Runnable {
+
+    /* Logger */
+    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+
     /**
      * Number of milliseconds that special responses are delayed before being sent.
      */
@@ -125,11 +132,11 @@ public class ClientRunnable implements Runnable {
         // Mark that we are not initialized
         initialized = false;
         // Create our queue of special messages
-        specialResponse = new LinkedList<Message>();
+        specialResponse = new LinkedList<>();
         // Create the queue of messages to be sent
-        waitingList = new ConcurrentLinkedQueue<Message>();
+        waitingList = new ConcurrentLinkedQueue<>();
         // Create our queue of message we must respond to immediately
-        immediateResponse = new LinkedList<Message>();
+        immediateResponse = new LinkedList<>();
         // Mark that the client is active now and start the timer until we
         // terminate for inactivity.
         terminateInactivity = new GregorianCalendar();
@@ -213,7 +220,7 @@ public class ClientRunnable implements Runnable {
      * @return True if we sent the message successfully; false otherwise.
      */
     private boolean sendMessage(Message message) {
-        System.out.println("\t" + message);
+        LOGGER.log(Level.INFO,"\t" + message.toString());
         return output.print(message);
     }
 
@@ -376,7 +383,7 @@ public class ClientRunnable implements Runnable {
         // when they have, terminate
         // the client.
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
-            System.err.println("Timing out or forcing off a user " + name);
+            LOGGER.log(Level.WARNING, "Timing out or forcing off a user " + name);
             terminateClient();
         }
     }

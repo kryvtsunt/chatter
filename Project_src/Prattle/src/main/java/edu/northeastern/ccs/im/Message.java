@@ -133,11 +133,10 @@ public class Message {
 	 * Create a new message stating the name with which the user would like to
 	 * login.
 	 * 
-	 * @param text Name the user wishes to use as their screen name.
 	 * @return Instance of Message that can be sent to the server to try and login.
 	 */
-	protected static Message makeHelloMessage(String text) {
-		return new Message(MessageType.HELLO, null, text);
+	protected static Message makeHelloMessage() {
+		return new Message(MessageType.HELLO, null, "Hello");
 	}
 
 	/**

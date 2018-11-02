@@ -3,8 +3,6 @@ package edu.northeastern.ccs.im;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class MessageTest {
 
     @BeforeEach
@@ -19,7 +17,7 @@ class MessageTest {
         Message message4 = Message.makeMessage("a", null, "c");
         Message message5 = Message.makeAcknowledgeMessage("tim");
         Message message6 = Message.makeNoAcknowledgeMessage();
-        Message message7 = Message.makeHelloMessage("heelo");
+        Message message7 = Message.makeHelloMessage();
 
         message.toString();
         message.getName();

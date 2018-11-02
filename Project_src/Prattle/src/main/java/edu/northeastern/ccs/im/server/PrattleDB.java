@@ -20,7 +20,7 @@ public class PrattleDB {
      */
     private static Map<String, String> users = new HashMap<>();
 
-    private static PrattleDB _theInstance;
+    private static PrattleDB instance;
 
     private PrattleDB(){ }
 
@@ -29,10 +29,10 @@ public class PrattleDB {
      * @return instance of the state (create new if it does not exist);
      */
     public static PrattleDB  instance(){
-        if (_theInstance == null) {
-            _theInstance = new  PrattleDB();
+        if (instance == null) {
+            instance = new  PrattleDB();
         }
-        return _theInstance;
+        return instance;
     }
 
     /**
