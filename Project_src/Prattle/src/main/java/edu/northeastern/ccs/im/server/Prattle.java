@@ -1,7 +1,5 @@
 package edu.northeastern.ccs.im.server;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
@@ -9,9 +7,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -25,7 +22,7 @@ import edu.northeastern.ccs.im.Message;
  * version of the server spawns a new thread to handle each client that connects
  * to it. At this point, messages are broadcast to all of the other clients.
  * It does not send a response when the user has gone off-line.
- * <p>
+ *
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
@@ -56,8 +53,6 @@ public abstract class Prattle {
         // Create the new queue of active threads.
         active = new ConcurrentLinkedQueue<>();
     }
-
-
 
     /**
      * Broadcast a given message to all the other IM clients currently on the
@@ -127,7 +122,6 @@ public abstract class Prattle {
                             // Add the thread to the queue of active threads
                             active.add(tt);
                             // Have the client executed by our pool of threads.
-                            @SuppressWarnings("rawtypes")
                             ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(tt, CLIENT_CHECK_DELAY,
                                     CLIENT_CHECK_DELAY, TimeUnit.MILLISECONDS);
                             tt.setFuture(clientFuture);
@@ -141,8 +135,6 @@ public abstract class Prattle {
             }
         }
     }
-
-
 
 
     /**

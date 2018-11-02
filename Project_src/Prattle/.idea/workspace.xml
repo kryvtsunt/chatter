@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdf8bb45-eac7-46c9-a917-edf8f8768b16" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -103,13 +101,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="2676" />
+          <entry key="java" value="2688" />
           <entry key="xml" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2676" />
+          <entry key="JAVA" value="2688" />
           <entry key="XML" value="6" />
         </counts>
       </usages-collector>
@@ -186,11 +184,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="29" column="30" lean-forward="true" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
+            <state relative-caret-position="-103">
+              <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
             </state>
           </provider>
         </entry>
@@ -213,12 +211,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1428">
-              <caret line="102" column="38" lean-forward="true" selection-start-line="102" selection-start-column="38" selection-end-line="102" selection-end-column="38" />
+            <state relative-caret-position="790">
+              <caret line="118" column="42" lean-forward="true" selection-start-line="118" selection-start-column="42" selection-end-line="118" selection-end-column="42" />
               <folding>
-                <element signature="e#3642#3672#0" expanded="true" />
-                <element signature="e#9043#9044#0" expanded="true" />
-                <element signature="e#9078#9079#0" expanded="true" />
+                <element signature="e#3487#3517#0" expanded="true" />
+                <element signature="e#7120#7121#0" expanded="true" />
+                <element signature="e#7155#7156#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -263,11 +261,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
-              <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
+              <caret line="28" column="5" lean-forward="true" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -320,7 +318,6 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" />
@@ -332,8 +329,9 @@
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" />
       </list>
     </option>
   </component>
@@ -477,7 +475,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541176130596" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541176808049" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../Chatter" />
@@ -506,7 +504,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.PrattleDBTest">
+  <component name="RunManager" selected="JUnit.PrattleTest">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -628,8 +626,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.PrattleDBTest" />
         <item itemvalue="JUnit.PrattleTest" />
+        <item itemvalue="JUnit.PrattleDBTest" />
         <item itemvalue="JUnit.ClientRunnableTest" />
         <item itemvalue="JUnit.ClientRunnableTest.testBroadcastMessageIsSpecial" />
         <item itemvalue="JUnit.edu.northeastern.ccs.im in Prattle" />
@@ -652,15 +650,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ClientRunnableTest - 2018.11.01 at 18h 02m 58s.xml">
-      <configuration name="ClientRunnableTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.01 at 18h 03m 10s.xml">
-      <configuration name="ClientRunnableTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.01 at 18h 05m 59s.xml">
-      <configuration name="ClientRunnableTest" configurationId="JUnit" />
-    </history-entry>
     <history-entry file="PrattleTest - 2018.11.01 at 18h 08m 56s.xml">
       <configuration name="PrattleTest" configurationId="JUnit" />
     </history-entry>
@@ -682,6 +671,15 @@
     <history-entry file="PrattleDBTest - 2018.11.02 at 12h 26m 11s.xml">
       <configuration name="PrattleDBTest" configurationId="JUnit" />
     </history-entry>
+    <history-entry file="PrattleTest - 2018.11.02 at 12h 35m 32s.xml">
+      <configuration name="PrattleTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PrattleTest - 2018.11.02 at 12h 37m 47s.xml">
+      <configuration name="PrattleTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PrattleTest - 2018.11.02 at 12h 38m 23s.xml">
+      <configuration name="PrattleTest" configurationId="JUnit" />
+    </history-entry>
   </component>
   <component name="TimeTrackingManager">
     <option name="totallyTimeSpent" value="16104000" />
@@ -690,7 +688,7 @@
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22921109" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22921109" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -699,7 +697,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32952183" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32952183" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991684" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -707,7 +705,7 @@
       <window_info anchor="bottom" id="SonarLint" order="7" />
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32907802" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Version Control" order="10" />
+      <window_info anchor="bottom" id="Version Control" order="10" weight="0.32952183" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32848233" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -838,13 +836,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="24" column="1" selection-start-line="24" selection-start-column="1" selection-end-line="24" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-834">
@@ -868,18 +859,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1428">
-          <caret line="102" column="38" lean-forward="true" selection-start-line="102" selection-start-column="38" selection-end-line="102" selection-end-column="38" />
-          <folding>
-            <element signature="e#3642#3672#0" expanded="true" />
-            <element signature="e#9043#9044#0" expanded="true" />
-            <element signature="e#9078#9079#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="555">
@@ -887,13 +866,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
         </state>
       </provider>
     </entry>
@@ -913,8 +885,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="29" column="30" lean-forward="true" selection-start-line="29" selection-start-column="30" selection-end-line="29" selection-end-column="30" />
+        <state relative-caret-position="-103">
+          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="790">
+          <caret line="118" column="42" lean-forward="true" selection-start-line="118" selection-start-column="42" selection-end-line="118" selection-end-column="42" />
+          <folding>
+            <element signature="e#3487#3517#0" expanded="true" />
+            <element signature="e#7120#7121#0" expanded="true" />
+            <element signature="e#7155#7156#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="28" column="5" lean-forward="true" selection-start-line="28" selection-start-column="5" selection-end-line="28" selection-end-column="5" />
         </state>
       </provider>
     </entry>
