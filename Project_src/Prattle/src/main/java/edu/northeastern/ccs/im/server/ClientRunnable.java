@@ -401,9 +401,7 @@ public class ClientRunnable implements Runnable {
             // Once the communication is done, close this connection.
             input.close();
             socket.close();
-        } catch (IOException e) {
-            // If we have an IOException, ignore the problem
-            e.printStackTrace();
+        } catch (IOException ignored) {
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);
