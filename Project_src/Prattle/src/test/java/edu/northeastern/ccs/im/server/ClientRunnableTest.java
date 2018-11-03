@@ -119,8 +119,7 @@ class ClientRunnableTest {
 
             cl.terminateClient();
 
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
 
     }

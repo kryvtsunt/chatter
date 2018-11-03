@@ -116,6 +116,7 @@ public class ClientRunnable implements Runnable {
      */
     private Queue<Message> waitingList;
 
+
     /**
      * Create a new thread with which we will communicate with this single client.
      *
@@ -136,8 +137,6 @@ public class ClientRunnable implements Runnable {
         initialized = false;
         // Create our queue of special messages
         specialResponse = new LinkedList<>();
-        // Create the queue of messages to be sent
-        waitingList = new ConcurrentLinkedQueue<>();
         // Create our queue of message we must respond to immediately
         immediateResponse = new LinkedList<>();
         // Mark that the client is active now and start the timer until we
@@ -211,13 +210,15 @@ public class ClientRunnable implements Runnable {
                 } catch (IOException ignored) {
                 }
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " +
+                        getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
             if (passwordInput.equals(password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back "
+                        + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
@@ -257,7 +258,8 @@ public class ClientRunnable implements Runnable {
      * @return True if we sent the message successfully; false otherwise.
      */
     private boolean sendMessage(Message message) {
-        LOGGER.log(Level.INFO, "\t" + message.toString());
+        String str = "\t" + message.toString();
+        LOGGER.log(Level.INFO, str);
         return output.print(message);
     }
 
@@ -462,7 +464,8 @@ public class ClientRunnable implements Runnable {
         // when they have, terminate
         // the client.
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
-            LOGGER.log(Level.INFO, "Timing out or forcing off a user " + name);
+            String str = "Timing out or forcing off a user " + name;
+            LOGGER.log(Level.INFO, str);
             terminateClient();
         }
     }
@@ -487,7 +490,8 @@ public class ClientRunnable implements Runnable {
             // Once the communication is done, close this connection.
             input.close();
             socket.close();
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            LOGGER.warning(e.getMessage());
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);

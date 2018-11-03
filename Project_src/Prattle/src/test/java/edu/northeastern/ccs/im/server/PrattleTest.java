@@ -37,6 +37,7 @@ class PrattleTest {
         Prattle.getServerSocket().close();
 
     }
+
     @Test
     void broadcastMessage() throws IOException, NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException, InterruptedException {
@@ -53,8 +54,6 @@ class PrattleTest {
         Thread.sleep(1000);
         Prattle.broadcastMessage(msg);
         Prattle.directMessage(msg, "tim");
-
-        Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
 
         printer.print(quitMsg);
         socketChannel.close();

@@ -81,7 +81,6 @@ public class PrintNetNB {
                 attemptsRemaining--;
                 bytesWritten += channel.write(wrapper);
             } catch (IOException e) {
-                // Show that this was unsuccessful
                 return false;
             }
         }

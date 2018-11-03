@@ -19,9 +19,7 @@ import edu.northeastern.ccs.im.Message;
  * @version 1.3
  */
 public class ServerConstants {
-
-	private ServerConstants(){};
-
+	
 	/** The port number to listen on. */
 	protected static final int PORT = 4565;
 
