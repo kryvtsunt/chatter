@@ -371,9 +371,12 @@ public class ClientRunnable implements Runnable {
                     // If the message is a broadcast message, send it out
                     if (msg.getText().contains(">")) {
                         String[] args = msg.getText().split(">");
-                        String to = args[0];
+                        String destination = args[0];
                         String content = args[1];
-                        Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), to);
+                        String[] to = destination.split(",");
+                        for (String user: to){
+                            Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
+                        }
                     } else if (msg.getText().contains("DELETE")) {
                         try {
                             PrattleDB.instance().delete(getName());
