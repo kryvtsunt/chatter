@@ -9,6 +9,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PrintNetNBTest {
 
+    @BeforeEach
+    void setUp() {
+    }
+
+    @Test
+    void print() {
+
+    }
 
     @Test
     void exception() throws IOException {
@@ -16,7 +24,8 @@ class PrintNetNBTest {
         ScanNetNB scanner = new ScanNetNB(socket.getSocket());
         try {
             scanner.nextMessage();
-        } catch(NextDoesNotExistException ignored){
+        } catch(NextDoesNotExistException e){
+            assertEquals("No next line has been typed in at the keyboard", e.getMessage());
         }
 
         scanner.close();

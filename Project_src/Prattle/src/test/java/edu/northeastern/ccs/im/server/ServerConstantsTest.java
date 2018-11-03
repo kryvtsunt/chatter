@@ -68,5 +68,8 @@ class ServerConstantsTest {
         assertEquals(queryMsg.get(1).toString(), ServerConstants.getBroadcastResponses(QUERY_COMMAND).get(1).toString());
 
 
+
+//        System.out.println(ServerConstants.getBroadcastResponses(COOL_COMMAND).get(0));
+
     }
 }

@@ -2,12 +2,95 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdf8bb45-eac7-46c9-a917-edf8f8768b16" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_0_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_0_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_opentest4j_opentest4j_1_1_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/libraries/Maven__org_opentest4j_opentest4j_1_1_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/8/7/870305f3ce8e02e5084bec0543e78a8f76272124" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/a/6/a680b8c41f1df10b1f5a3bba6ac4a5f17fa88b64" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/a/6/a680b8c41f1df10b1f5a3bba6ac4a5f17fa88b64" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/c/2/c241c88ae9035e1159abde3bcb8576c5238ffbdc" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/c/2/c241c88ae9035e1159abde3bcb8576c5238ffbdc" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/f/d/fd57bdc7831ea66bede9b54e4c5826db0311a107" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/f/d/fd57bdc7831ea66bede9b54e4c5826db0311a107" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Chatter/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/Chatter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/Chatter.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/Buddy.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/Buddy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/IMConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/IMConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/IllegalNameException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/IllegalNameException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/IllegalOperationException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/IllegalOperationException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/InvalidListenerException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/InvalidListenerException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/KeyboardScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/KeyboardScanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/LinkListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/LinkListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/MessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/MessageListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/MessageScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/MessageScanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/ScanForMessagesWorker.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/ScanForMessagesWorker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/SocketNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/SocketNB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/chatter/CommandLineMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/src/main/java/edu/northeastern/ccs/im/chatter/CommandLineMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_0_0.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_apiguardian_apiguardian_api_1_0_0.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_api_5_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_jupiter_junit_jupiter_engine_5_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_platform_junit_platform_commons_1_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_3_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_junit_platform_junit_platform_engine_1_3_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__org_opentest4j_opentest4j_1_1_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__org_opentest4j_opentest4j_1_1_1.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/c/6c7fdc70194909a8010f5833351fae852bacbe1a" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/6/c/6c7fdc70194909a8010f5833351fae852bacbe1a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/4/b4c74909c5e4decc80074ee9f163a3ef929a61b5" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/4/b4c74909c5e4decc80074ee9f163a3ef929a61b5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/9/d96b5d56d81717f14904dbea300cda7721fb99e8" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/9/d96b5d56d81717f14904dbea300cda7721fb99e8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/4/f4be09b18b3a3d97fd1aa68f32d93e7e91d4e372" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prattle.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Prattle.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.txt" beforeDir="false" afterPath="$PROJECT_DIR$/db.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/jacoco.exec" beforeDir="false" afterPath="$PROJECT_DIR$/target/jacoco.exec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2018-11-01T17-35-26_507-jvmRun1.dump" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/2018-11-01T17-35-26_507-jvmRun1.dump" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/2018-11-02T20-37-35_879-jvmRun1.dump" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.MessageTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.MessageTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.PrintNetNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.PrintNetNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.ScanNetNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.ScanNetNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.SocketNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.SocketNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ClientRunnableTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ClientRunnableTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleDBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleDBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ServerConstantsTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ServerConstantsTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.MessageTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.MessageTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.PrintNetNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.PrintNetNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.ScanNetNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.ScanNetNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.SocketNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.SocketNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.ClientRunnableTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.ClientRunnableTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleDBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleDBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.ServerConstantsTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.ServerConstantsTest.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,14 +100,18 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/prattle$SocketNBTest.ic" NAME="SocketNBTest Coverage Results" MODIFIED="1541213037794" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/prattle$SocketNBTest.ic" NAME="SocketNBTest Coverage Results" MODIFIED="1541088531975" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$PrattleTest.ic" NAME="PrattleTest Coverage Results" MODIFIED="1541213403544" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/prattle$ServerConstantsTest_getBroadcastResponses.ic" NAME="ServerConstantsTest.getBroadcastResponses Coverage Results" MODIFIED="1541048861498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$MessageTest.ic" NAME="MessageTest Coverage Results" MODIFIED="1541213080084" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.*</FILTER>
+    <SUITE FILE_PATH="coverage/prattle$PrattleTest.ic" NAME="PrattleTest Coverage Results" MODIFIED="1541193144700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/prattle$All_in_Prattle.ic" NAME="All in Prattle Coverage Results" MODIFIED="1541088693606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/prattle$Prattle.ic" NAME="Prattle Coverage Results" MODIFIED="1541193089429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/prattle$ClientRunnableTest_setName.ic" NAME="ClientRunnableTest.setName Coverage Results" MODIFIED="1541049910428" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
@@ -32,35 +119,19 @@
     <SUITE FILE_PATH="coverage/prattle$ClientRunnableTest_run.ic" NAME="ClientRunnableTest.run Coverage Results" MODIFIED="1541050458328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$ServerConstantsTest.ic" NAME="ServerConstantsTest Coverage Results" MODIFIED="1541213089804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$PrintNetNBTest.ic" NAME="PrintNetNBTest Coverage Results" MODIFIED="1541213346749" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$ScanNetNBTest.ic" NAME="ScanNetNBTest Coverage Results" MODIFIED="1541213158677" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$PrattleDBTest.ic" NAME="PrattleDBTest Coverage Results" MODIFIED="1541211097119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$ServerConstantsTest_getBroadcastResponses.ic" NAME="ServerConstantsTest.getBroadcastResponses Coverage Results" MODIFIED="1541048861498" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
-    </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$All_in_Prattle.ic" NAME="All in Prattle Coverage Results" MODIFIED="1541088693606" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
-    <SUITE FILE_PATH="coverage/prattle$Prattle.ic" NAME="Prattle Coverage Results" MODIFIED="1541193089429" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/prattle$ServerConstantsTest.ic" NAME="ServerConstantsTest Coverage Results" MODIFIED="1541046486869" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
     </SUITE>
     <SUITE FILE_PATH="coverage/prattle$edu_northeastern_ccs_im_in_Prattle.ic" NAME="edu.northeastern.ccs.im in Prattle Coverage Results" MODIFIED="1541107177715" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$NextDoesNotExistExceptionTest.ic" NAME="NextDoesNotExistExceptionTest Coverage Results" MODIFIED="1541213070330" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
-      <FILTER>edu.northeastern.ccs.im.*</FILTER>
-    </SUITE>
     <SUITE FILE_PATH="coverage/prattle$ScanNetNBTest_testNextMessage.ic" NAME="ScanNetNBTest.testNextMessage Coverage Results" MODIFIED="1541052546192" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/prattle$ClientRunnableTest.ic" NAME="ClientRunnableTest Coverage Results" MODIFIED="1541214593061" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/prattle$ClientRunnableTest.ic" NAME="ClientRunnableTest Coverage Results" MODIFIED="1541193184465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/prattle$PrattleDBTest.ic" NAME="PrattleDBTest Coverage Results" MODIFIED="1541175954268" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>edu.northeastern.ccs.im.server.*</FILTER>
     </SUITE>
   </component>
@@ -69,7 +140,7 @@
   </component>
   <component name="CoverageViewManager">
     <option name="myFlattenPackages" value="true" />
-    <option name="myElementSize" value="15" />
+    <option name="myElementSize" value="16" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="1821276108">
@@ -114,35 +185,35 @@
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="1" />
-          <entry key="project.open.time.1" value="4" />
-          <entry key="project.open.time.20" value="1" />
+          <entry key="project.open.time.1" value="3" />
+          <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="6" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="5798" />
+          <entry key="java" value="5066" />
           <entry key="xml" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="5798" />
+          <entry key="JAVA" value="5066" />
           <entry key="XML" value="6" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="115" />
-          <entry key="txt" value="2" />
+          <entry key="java" value="67" />
+          <entry key="txt" value="1" />
           <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="115" />
-          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="JAVA" value="67" />
+          <entry key="PLAIN_TEXT" value="1" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -189,70 +260,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1038">
-              <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
+            <state relative-caret-position="289">
+              <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="458">
-              <caret line="60" column="52" selection-start-line="60" selection-start-column="52" selection-end-line="60" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2380">
-              <caret line="274" column="24" selection-start-line="274" selection-start-column="24" selection-end-line="274" selection-end-column="24" />
+            <state relative-caret-position="240">
+              <caret line="488" column="44" lean-forward="true" selection-start-line="488" selection-start-column="44" selection-end-line="488" selection-end-column="44" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#17270#17271#0" expanded="true" />
-                <element signature="e#17302#17303#0" expanded="true" />
+                <element signature="e#17866#17867#0" expanded="true" />
+                <element signature="e#17901#17902#0" expanded="true" />
+                <element signature="e#18544#18545#0" expanded="true" />
+                <element signature="e#18578#18579#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="18" column="14" lean-forward="true" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" selection-start-line="14" selection-end-line="14" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="382">
-              <caret line="84" column="53" lean-forward="true" selection-start-line="84" selection-start-column="53" selection-end-line="84" selection-end-column="53" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1445">
-              <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+            <state relative-caret-position="289">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -261,19 +295,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
+        <entry file="file://$PROJECT_DIR$/db.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2244">
-              <caret line="148" column="17" lean-forward="true" selection-start-line="148" selection-start-column="17" selection-end-line="148" selection-end-column="17" />
+            <state relative-caret-position="119">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="56" lean-forward="true" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
+            <state relative-caret-position="1190">
+              <caret line="82" column="20" selection-start-line="82" selection-start-column="20" selection-end-line="82" selection-end-column="20" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -281,8 +318,44 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="318">
-              <caret line="51" column="11" lean-forward="true" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
+            <state relative-caret-position="1360">
+              <caret line="241" column="19" selection-start-line="241" selection-start-column="19" selection-end-line="241" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2822">
+              <caret line="179" column="59" selection-start-line="179" selection-start-column="59" selection-end-line="179" selection-end-column="59" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="323">
+              <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="87">
+              <caret line="106" column="74" selection-start-line="106" selection-start-column="74" selection-end-line="106" selection-end-column="74" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="563">
+              <caret line="54" column="35" selection-start-line="54" selection-start-column="35" selection-end-line="54" selection-end-column="35" />
             </state>
           </provider>
         </entry>
@@ -299,6 +372,13 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+      <find>message</find>
+      <find>accept</find>
+      <find>scanner</find>
+      <find>acce</find>
+      <find>makeBroadcastMessage</find>
+      <find>makeBroa</find>
+      <find>nist</find>
       <find>cal</find>
       <find>bb</find>
       <find>pratt</find>
@@ -318,17 +398,10 @@
       <find>getName</find>
       <find>getDe</find>
       <find>makeDire</find>
+      <find>ClientRu</find>
       <find>LEVEL</find>
       <find>WAr</find>
       <find>log</find>
-      <find>ClientRu</find>
-      <find>termina</find>
-      <find>Timin</find>
-      <find>waitListTe</find>
-      <find>waitingList</find>
-      <find>Prattle.b</find>
-      <find>DELETE</find>
-      <find>hasNe</find>
     </findStrings>
     <replaceStrings>
       <replace>private</replace>
@@ -340,25 +413,25 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MockSocketChannel.java" />
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MockSocketChannel.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" />
-        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" />
         <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java" />
-        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" />
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" />
         <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java" />
+        <option value="$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" />
       </list>
     </option>
   </component>
@@ -407,7 +480,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="953" />
     <option name="width" value="974" />
     <option name="height" value="1087" />
@@ -418,8 +491,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -496,13 +570,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541214592390" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541278859003" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -531,9 +604,23 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.ClientRunnableTest">
+  <component name="RunManager" selected="Application.Prattle">
     <configuration default="true" type="Applet" factoryName="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Prattle" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.server.Prattle" />
+      <module name="Prattle" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.northeastern.ccs.im.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -559,6 +646,38 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ClientRunnableTest.testBroadcastMessageIsSpecial" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Prattle" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.northeastern.ccs.im.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="edu.northeastern.ccs.im.server" />
+      <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.server.ClientRunnableTest" />
+      <option name="METHOD_NAME" value="testBroadcastMessageIsSpecial" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PrattleDBTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Prattle" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="edu.northeastern.ccs.im.server.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="edu.northeastern.ccs.im.server" />
+      <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.server.PrattleDBTest" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="PrattleTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="Prattle" />
       <extension name="coverage">
@@ -569,51 +688,6 @@
       </extension>
       <option name="PACKAGE_NAME" value="edu.northeastern.ccs.im.server" />
       <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.server.PrattleTest" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PrintNetNBTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Prattle" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="edu.northeastern.ccs.im.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="edu.northeastern.ccs.im" />
-      <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.PrintNetNBTest" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ScanNetNBTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Prattle" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="edu.northeastern.ccs.im.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="edu.northeastern.ccs.im" />
-      <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.ScanNetNBTest" />
-      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ServerConstantsTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="Prattle" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="edu.northeastern.ccs.im.server.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="edu.northeastern.ccs.im.server" />
-      <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.server.ServerConstantsTest" />
       <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -643,19 +717,19 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="JUnit.ScanNetNBTest" />
-      <item itemvalue="JUnit.PrintNetNBTest" />
-      <item itemvalue="JUnit.ServerConstantsTest" />
-      <item itemvalue="JUnit.PrattleTest" />
       <item itemvalue="JUnit.ClientRunnableTest" />
+      <item itemvalue="JUnit.ClientRunnableTest.testBroadcastMessageIsSpecial" />
+      <item itemvalue="JUnit.PrattleTest" />
+      <item itemvalue="JUnit.PrattleDBTest" />
+      <item itemvalue="Application.Prattle" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Prattle" />
         <item itemvalue="JUnit.ClientRunnableTest" />
         <item itemvalue="JUnit.PrattleTest" />
-        <item itemvalue="JUnit.PrintNetNBTest" />
-        <item itemvalue="JUnit.ScanNetNBTest" />
-        <item itemvalue="JUnit.ServerConstantsTest" />
+        <item itemvalue="JUnit.PrattleDBTest" />
+        <item itemvalue="JUnit.ClientRunnableTest.testBroadcastMessageIsSpecial" />
       </list>
     </recent_temporary>
   </component>
@@ -675,34 +749,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ScanNetNBTest - 2018.11.02 at 22h 45m 24s.xml">
-      <configuration name="ScanNetNBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="ScanNetNBTest - 2018.11.02 at 22h 46m 07s.xml">
-      <configuration name="ScanNetNBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PrintNetNBTest - 2018.11.02 at 22h 46m 40s.xml">
-      <configuration name="PrintNetNBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PrintNetNBTest - 2018.11.02 at 22h 49m 17s.xml">
-      <configuration name="PrintNetNBTest" configurationId="JUnit" />
-    </history-entry>
-    <history-entry file="PrattleTest - 2018.11.02 at 22h 50m 13s.xml">
+    <history-entry file="PrattleTest - 2018.11.02 at 17h 10m 22s.xml">
       <configuration name="PrattleTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.02 at 22h 52m 42s.xml">
+    <history-entry file="PrattleTest - 2018.11.02 at 17h 10m 59s.xml">
+      <configuration name="PrattleTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PrattleTest - 2018.11.02 at 17h 11m 51s.xml">
+      <configuration name="PrattleTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="PrattleTest - 2018.11.02 at 17h 12m 32s.xml">
+      <configuration name="PrattleTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ClientRunnableTest - 2018.11.02 at 17h 12m 56s.xml">
       <configuration name="ClientRunnableTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.02 at 23h 01m 31s.xml">
+    <history-entry file="ClientRunnableTest - 2018.11.02 at 17h 13m 11s.xml">
       <configuration name="ClientRunnableTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.02 at 23h 03m 46s.xml">
+    <history-entry file="ClientRunnableTest - 2018.11.02 at 19h 47m 52s.xml">
       <configuration name="ClientRunnableTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.02 at 23h 04m 03s.xml">
+    <history-entry file="ClientRunnableTest - 2018.11.02 at 19h 51m 51s.xml">
       <configuration name="ClientRunnableTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ClientRunnableTest - 2018.11.02 at 23h 04m 57s.xml">
+    <history-entry file="ClientRunnableTest - 2018.11.03 at 10h 30m 48s.xml">
+      <configuration name="ClientRunnableTest" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="ClientRunnableTest - 2018.11.03 at 10h 31m 55s.xml">
       <configuration name="ClientRunnableTest" configurationId="JUnit" />
     </history-entry>
   </component>
@@ -710,9 +784,10 @@
     <option name="totallyTimeSpent" value="16104000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="953" y="0" width="974" height="1087" extended-state="0" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23413567" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14392324" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -721,7 +796,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.2990556" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32640332" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991684" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -730,7 +805,7 @@
       <window_info anchor="bottom" id="Terminal" order="8" weight="0.32907802" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="10" weight="0.32952183" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32744282" />
+      <window_info anchor="bottom" id="Messages" order="11" weight="0.32738718" />
       <window_info anchor="bottom" id="Database Changes" order="12" show_stripe_button="false" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -739,9 +814,9 @@
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Maven Projects" order="7" sideWeight="0.4889937" weight="0.50328225" />
+      <window_info anchor="right" id="Maven Projects" order="7" sideWeight="0.49147287" weight="0.24507658" />
       <window_info anchor="right" id="Database" order="8" />
-      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.5110063" side_tool="true" visible="true" weight="0.0" />
+      <window_info anchor="right" id="Coverage" order="9" sideWeight="0.50852716" side_tool="true" visible="true" weight="0.11940298" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -767,51 +842,27 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>358</line>
+          <line>365</line>
           <properties />
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>364</line>
+          <line>371</line>
           <properties />
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>389</line>
+          <line>398</line>
           <properties />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>368</line>
+          <line>375</line>
           <properties />
           <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>197</line>
-          <properties />
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>203</line>
-          <properties />
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>345</line>
-          <properties />
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java</url>
-          <line>349</line>
-          <properties />
-          <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -845,6 +896,72 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1053">
+          <caret line="82" column="23" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="39" lean-forward="true" selection-start-line="39" selection-end-line="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MockSocketChannel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="850">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="410">
+          <caret line="74" column="36" lean-forward="true" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="36" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="305">
+          <caret line="49" column="27" selection-start-line="49" selection-start-column="27" selection-end-line="49" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_181/src.zip!/java/util/Collection.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="642">
@@ -863,121 +980,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/db.txt">
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="7" selection-start-column="7" selection-end-column="7" />
+        <state relative-caret-position="1360">
+          <caret line="104" column="42" selection-start-line="104" selection-start-column="42" selection-end-line="104" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1173">
-          <caret line="69" selection-start-line="69" selection-end-line="69" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="305">
-          <caret line="49" column="27" selection-start-line="49" selection-start-column="27" selection-end-line="49" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="28" column="49" selection-start-line="28" selection-start-column="49" selection-end-line="28" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="367">
-          <caret line="49" column="59" lean-forward="true" selection-start-line="49" selection-start-column="59" selection-end-line="49" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MockSocketChannel.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="14" column="19" lean-forward="true" selection-start-line="14" selection-start-column="19" selection-end-line="14" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/MessageTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-358">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="82" column="20" selection-start-line="82" selection-start-column="20" selection-end-line="82" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1038">
-          <caret line="23" column="42" selection-start-line="23" selection-start-column="42" selection-end-line="23" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="56" lean-forward="true" selection-start-line="14" selection-start-column="56" selection-end-line="14" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="51" column="11" lean-forward="true" selection-start-line="51" selection-start-column="11" selection-end-line="51" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2244">
-          <caret line="148" column="17" lean-forward="true" selection-start-line="148" selection-start-column="17" selection-end-line="148" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="382">
-          <caret line="84" column="53" lean-forward="true" selection-start-line="84" selection-start-column="53" selection-end-line="84" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1445">
-          <caret line="85" column="9" selection-start-line="85" selection-start-column="9" selection-end-line="85" selection-end-column="9" />
+        <state relative-caret-position="289">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -986,36 +1002,73 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
+        <state relative-caret-position="2822">
+          <caret line="179" column="59" selection-start-line="179" selection-start-column="59" selection-end-line="179" selection-end-column="59" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="18" column="14" lean-forward="true" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+        <state relative-caret-position="289">
+          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="82" column="20" selection-start-line="82" selection-start-column="20" selection-end-line="82" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1360">
+          <caret line="241" column="19" selection-start-line="241" selection-start-column="19" selection-end-line="241" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/db.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="563">
+          <caret line="54" column="35" selection-start-line="54" selection-start-column="35" selection-end-line="54" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="24" column="18" lean-forward="true" selection-start-line="24" selection-start-column="18" selection-end-line="24" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/Prattle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="87">
+          <caret line="106" column="74" selection-start-line="106" selection-start-column="74" selection-end-line="106" selection-end-column="74" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2380">
-          <caret line="274" column="24" selection-start-line="274" selection-start-column="24" selection-end-line="274" selection-end-column="24" />
+        <state relative-caret-position="240">
+          <caret line="488" column="44" lean-forward="true" selection-start-line="488" selection-start-column="44" selection-end-line="488" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#17270#17271#0" expanded="true" />
-            <element signature="e#17302#17303#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="458">
-          <caret line="60" column="52" selection-start-line="60" selection-start-column="52" selection-end-line="60" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#17866#17867#0" expanded="true" />
+            <element signature="e#17901#17902#0" expanded="true" />
+            <element signature="e#18544#18545#0" expanded="true" />
+            <element signature="e#18578#18579#0" expanded="true" />
           </folding>
         </state>
       </provider>

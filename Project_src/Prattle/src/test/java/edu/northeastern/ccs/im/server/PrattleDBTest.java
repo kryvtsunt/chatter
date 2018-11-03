@@ -26,6 +26,5 @@ class PrattleDBTest {
         assertEquals("12345", db.retrieve("tim"));
         db.delete("tim", "12345");
         db.create("tim", "timberman_42");
-        assertNull(db.retrieve("annaasdfasdfd"));
     }
 }

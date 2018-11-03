@@ -81,8 +81,15 @@ public class PrintNetNB {
                 attemptsRemaining--;
                 bytesWritten += channel.write(wrapper);
             } catch (IOException e) {
+                // Show that this was unsuccessful
                 return false;
             }
+        }
+        // Check to see if we were successful in our attempt to write the message
+        if (wrapper.hasRemaining()) {
+            LOGGER.log(Level.WARNING, "WARNING: Not all bytes were sent -- dropping this user. ");
+            assert bytesWritten != 0;
+            return false;
         }
         return true;
     }

@@ -239,7 +239,7 @@ public class Message {
 	 * Determine if this message contains text which the recipient should display.
 	 *
 	 * @return True if the message is an actual instant message; false if the
-	 *         message contains data
+	 *         mes sage contains data
 	 */
 	public boolean isDisplayMessage() {
 		return (msgType == MessageType.BROADCAST);
