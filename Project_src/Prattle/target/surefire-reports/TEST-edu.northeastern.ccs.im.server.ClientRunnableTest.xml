@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="edu.northeastern.ccs.im.server.ClientRunnableTest" time="0.004" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="edu.northeastern.ccs.im.server.ClientRunnableTest" time="0.001" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -18,7 +18,7 @@
     <property name="user.country" value="US"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Java\jdk1.8.0_181\jre\bin"/>
-    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter C:\Users\Tim\AppData\Local\Temp\surefire3321077806946654405 2018-11-02T19-47-22_164-jvmRun1 surefire408491003643393004tmp surefire_02107905895580506451tmp"/>
+    <property name="sun.java.command" value="org.apache.maven.surefire.booter.ForkedBooter C:\Users\Tim\AppData\Local\Temp\surefire3504821807726034878 2018-11-02T20-55-31_251-jvmRun1 surefire328858984661813337tmp surefire_02952619526683858964tmp"/>
     <property name="surefire.test.class.path" value="C:\Users\Tim\IdeaProjects\MSDProject\team-105-F18\Project_src\Prattle\target\test-classes;C:\Users\Tim\IdeaProjects\MSDProject\team-105-F18\Project_src\Prattle\target\classes;C:\Users\Tim\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.3.1\junit-jupiter-engine-5.3.1.jar;C:\Users\Tim\.m2\repository\org\apiguardian\apiguardian-api\1.0.0\apiguardian-api-1.0.0.jar;C:\Users\Tim\.m2\repository\org\junit\platform\junit-platform-engine\1.3.1\junit-platform-engine-1.3.1.jar;C:\Users\Tim\.m2\repository\org\junit\platform\junit-platform-commons\1.3.1\junit-platform-commons-1.3.1.jar;C:\Users\Tim\.m2\repository\org\opentest4j\opentest4j\1.1.1\opentest4j-1.1.1.jar;C:\Users\Tim\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.3.1\junit-jupiter-api-5.3.1.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
     <property name="user.home" value="C:\Users\Tim"/>
@@ -60,5 +60,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="52.0"/>
   </properties>
-  <testcase name="testBroadcastMessageIsSpecial" classname="edu.northeastern.ccs.im.server.ClientRunnableTest" time="0.004"/>
+  <testcase name="testBroadcastMessageIsSpecial" classname="edu.northeastern.ccs.im.server.ClientRunnableTest" time="0.001"/>
 </testsuite>

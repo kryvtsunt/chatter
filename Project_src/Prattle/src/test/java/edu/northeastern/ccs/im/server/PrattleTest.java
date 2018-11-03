@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -26,6 +25,7 @@ class PrattleTest {
         server = new PrattleTest().new ServerRunnable();
         serverThread = new Thread(server);
         serverThread.start();
+        Thread.sleep(1000);
     }
     @AfterEach
     void tearDown() throws IOException {
@@ -37,12 +37,11 @@ class PrattleTest {
         Prattle.getServerSocket().close();
 
     }
-
     @Test
     void broadcastMessage() throws IOException, NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException, InterruptedException {
         Message loginmsg = Message.makeSimpleLoginMessage("temp");
-        Message msg = Message.makeBroadcastMessage("test message", "temp");
+        Message msg = Message.makeBroadcastMessage("temp","test message");
         Message quitMsg = Message.makeQuitMessage("temp");
 
         SocketChannel socketChannel = SocketChannel.open();
@@ -52,9 +51,7 @@ class PrattleTest {
         printer.print(loginmsg);
 
         Thread.sleep(1000);
-        Prattle.broadcastMessage(msg);
         Prattle.directMessage(msg, "tim");
-
         printer.print(quitMsg);
         socketChannel.close();
     }

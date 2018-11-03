@@ -27,18 +27,15 @@ class ScanNetNBTest {
     ServerSocketChannel serverSocket;
 
     @BeforeEach
-    protected void setUp() throws Exception {
-        serverSocket = null;
+    public void setUp() throws Exception {
         serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
-        serverSocket.socket().bind(new InetSocketAddress(PORT));
-        // Create the Selector with which our channel is registered.
+        serverSocket.socket().bind(new InetSocketAddress(3030));
         Selector selector = SelectorProvider.provider().openSelector();
-        // Register to receive any incoming connection messages.
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
         SocketChannel socketChannel = SocketChannel.open();
-        SocketAddress socketAddr = new InetSocketAddress("localhost", PORT);
+        SocketAddress socketAddr = new InetSocketAddress("localhost", 3030);
         socketChannel.connect(socketAddr);
 
         String toSend = "HLO 4 temp 2 --";
@@ -54,17 +51,11 @@ class ScanNetNBTest {
                 bytesWritten += socketChannel.write(wrapper);
             }
         }
-
+        serverSocket.socket().close();
+        serverSocket.close();
         socketChannel.close();
     }
 
-//    @AfterEach
-//    void end() throws IOException {
-//        try {
-//            serverSocket.close();
-//        } catch(Exception e) {}
-//
-//    }
 
 
     @Test
@@ -76,7 +67,6 @@ class ScanNetNBTest {
         } catch (Exception e) {
 
         }
-        //List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "\\n");
         List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "BYE 4 temp 2 --");
         try {
             if (client != null) {
@@ -85,14 +75,12 @@ class ScanNetNBTest {
                 while (input.hasNextMessage()) {
                     for (String each : tests) {
                         Message msg = input.nextMessage();
-                        //System.out.println(msg.toString());
                         assertEquals(msg.toString(), each);
                     }
                 }
-                //System.out.println("while loop closed in ScanNetNBTest");
+                input.close();
                 client.close();
                 System.out.println("Scan Net NB closed");
-                //serverSocket.close();
             } else {
                 System.out.println("socket channel is null");
             }
