@@ -137,6 +137,7 @@ public class ClientRunnable implements Runnable {
         initialized = false;
         // Create our queue of special messages
         specialResponse = new LinkedList<>();
+        waitingList = new ConcurrentLinkedQueue<>();
         // Create our queue of message we must respond to immediately
         immediateResponse = new LinkedList<>();
         // Mark that the client is active now and start the timer until we
@@ -356,9 +357,11 @@ public class ClientRunnable implements Runnable {
         if (!initialized) {
             checkForInitialization();
 
-        } else if(!validated){
+        }
+        else if(!validated){
             checkForValidation();
-        } else {
+        }
+        else {
             try {
                 // Client has already been initialized, so we should first check
                 // if there are any input
