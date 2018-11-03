@@ -143,8 +143,6 @@ public abstract class Prattle {
                                     CLIENT_CHECK_DELAY, TimeUnit.MILLISECONDS);
                             tt.setFuture(clientFuture);
                         }
-                    } catch (AssertionError ae) {
-                        LOGGER.info("Caught Assertion: " + ae.toString());
                     } catch (Exception e) {
                         LOGGER.info("Caught Exception: " + e.toString());
                     }

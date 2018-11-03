@@ -12,7 +12,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -73,8 +72,6 @@ public class ScanNetNB {
 			// Register our channel to receive alerts to complete the connection
 			key = channel.register(selector, SelectionKey.OP_READ);
 		} catch (IOException e) {
-			// For the moment we are going to simply cover up that there was a problem.
-			assert false;
 		}
 	}
 
@@ -116,12 +113,6 @@ public class ScanNetNB {
 			seen += 1;
 		}
 		seen += 1;
-		if (length == 0) {
-			// Update our position
-			charBuffer.position(pos);
-			// If the length is 0, this argument is null
-			return null;
-		}
 		String result = charBuffer.subSequence(seen, length + seen).toString();
 		charBuffer.position(pos + length);
 		return result;
@@ -210,14 +201,14 @@ public class ScanNetNB {
 		}
 		Message msg = messages.remove();
 		String str = msg.toString();
+		LOGGER.info(str);
 		return msg;
 	}
 
 	public void close() {
 		try {
 			selector.close();
-		} catch (IOException e) {
-			assert false;
+		} catch (IOException ignored) {
 		}
 	}
 }

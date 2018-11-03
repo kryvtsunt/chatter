@@ -58,6 +58,8 @@ class ClientRunnableTest {
         msgs.add(Message.makeBroadcastMessage("username","broadcast text"));
         msgs.add(Message.makeBroadcastMessage("username","Hello"));
         msgs.add(Message.makeBroadcastMessage("username", "DELETE"));
+        msgs.add(Message.makeAcknowledgeMessage("username"));
+        msgs.add(Message.makeNoAcknowledgeMessage());
         msgs.add(Message.makeQuitMessage("username"));
 
         PrintNetNB printer = new PrintNetNB(socketChannel);
@@ -77,6 +79,7 @@ class ClientRunnableTest {
             client.configureBlocking(false);
             ClientRunnable cl = new ClientRunnable(client);
             int i= 0;
+            assertEquals(0,cl.getUserId());
             cl.run();
             cl.run();
             cl.setValidated();

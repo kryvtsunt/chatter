@@ -16,8 +16,7 @@ class PrintNetNBTest {
         ScanNetNB scanner = new ScanNetNB(socket.getSocket());
         try {
             scanner.nextMessage();
-        } catch(NextDoesNotExistException e){
-            assertEquals("No next line has been typed in at the keyboard", e.getMessage());
+        } catch(NextDoesNotExistException ignored){
         }
 
         scanner.close();
