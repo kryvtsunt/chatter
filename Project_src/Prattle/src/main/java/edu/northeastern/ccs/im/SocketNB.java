@@ -49,11 +49,6 @@ public class SocketNB {
 		final SelectionKey key = channel.register(selector, SelectionKey.OP_CONNECT);
 		// Do nothing but wait until we have a response.
 		selector.select(0);
-		assert key.isConnectable();
-		// Try and complete creating this connection
-		if (!channel.finishConnect()) {
-			throw new IOException("Error, something went wrong and I was unable" + " to finish making this connection");
-		}
 		// We are done, close this selector.
 		selector.close();
 	}

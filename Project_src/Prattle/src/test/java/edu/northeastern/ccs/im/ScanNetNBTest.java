@@ -22,7 +22,7 @@ class ScanNetNBTest {
     /**
      * The port number to listen on.
      */
-    public static final int PORT = 4545;
+    public static final int PORT = 4540;
     ScanNetNB input;
     ServerSocketChannel serverSocket;
 
@@ -54,6 +54,8 @@ class ScanNetNBTest {
                 bytesWritten += socketChannel.write(wrapper);
             }
         }
+
+        socketChannel.close();
     }
 
 //    @AfterEach
@@ -88,7 +90,7 @@ class ScanNetNBTest {
                     }
                 }
                 //System.out.println("while loop closed in ScanNetNBTest");
-                input.close();
+                client.close();
                 System.out.println("Scan Net NB closed");
                 //serverSocket.close();
             } else {

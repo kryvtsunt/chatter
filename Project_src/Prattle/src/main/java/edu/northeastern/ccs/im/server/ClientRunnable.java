@@ -104,7 +104,7 @@ public class ClientRunnable implements Runnable {
     /**
      * Collection of messages queued up to be sent to this client.
      */
-    private Queue<Message> waitingList;
+    private static Queue<Message> waitingList;
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -401,14 +401,16 @@ public class ClientRunnable implements Runnable {
             // Once the communication is done, close this connection.
             input.close();
             socket.close();
-        } catch (IOException e) {
-            // If we have an IOException, ignore the problem
-            e.printStackTrace();
+        } catch (IOException ignored) {
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);
             // And remove the client from our client pool.
             runnableMe.cancel(false);
         }
+    }
+
+    public static Queue<Message> getWaitingList() {
+        return waitingList;
     }
 }
