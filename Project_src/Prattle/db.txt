@@ -1,6 +1,9 @@
+user1-Hello
+new-WTF
 temp-test
 tom-tom
 bob-bob
 papa-papa
 tim-timberman_42
 anna-anna
+username-password
