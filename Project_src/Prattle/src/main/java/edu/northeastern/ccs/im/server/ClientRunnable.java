@@ -278,21 +278,9 @@ public class ClientRunnable implements Runnable {
             userId = hashCode();
             return true;
         }
-        // Clear this name; we cannot use it. *sigh*
-        userId = -1;
         return false;
     }
 
-    private boolean setPassword(String password) {
-        // Now make sure this name is legal.
-        if (password != null) {
-            // Optimistically set this users ID number.
-            setPassword(password);
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * Add the given message to this client to the queue of message to be sent to
@@ -484,6 +472,12 @@ public class ClientRunnable implements Runnable {
         runnableMe = future;
     }
 
+
+    public void setValidated(){
+        validated = true;
+    }
+
+
     /**
      * Terminate a client that we wish to remove. This termination could happen at
      * the client's request or due to system need.
@@ -503,7 +497,4 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public Queue<Message> getWaitingList() {
-        return waitingList;
-    }
 }

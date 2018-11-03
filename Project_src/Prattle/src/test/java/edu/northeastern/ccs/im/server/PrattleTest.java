@@ -52,6 +52,7 @@ class PrattleTest {
 
         Thread.sleep(1000);
         Prattle.directMessage(msg, "tim");
+        Prattle.broadcastMessage(msg);
         printer.print(quitMsg);
         socketChannel.close();
     }
