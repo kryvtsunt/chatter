@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: edu.northeastern.ccs.im.PrintNetNBTest
 -------------------------------------------------------------------------------
-Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.676 s - in edu.northeastern.ccs.im.PrintNetNBTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.932 s - in edu.northeastern.ccs.im.PrintNetNBTest

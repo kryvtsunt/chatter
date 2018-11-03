@@ -210,7 +210,6 @@ public class ScanNetNB {
 		}
 		Message msg = messages.remove();
 		String str = msg.toString();
-		LOGGER.info(str);
 		return msg;
 	}
 

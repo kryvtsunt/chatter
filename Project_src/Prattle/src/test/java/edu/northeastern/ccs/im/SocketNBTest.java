@@ -20,9 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SocketNBTest {
 
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void getSocket() throws IOException {

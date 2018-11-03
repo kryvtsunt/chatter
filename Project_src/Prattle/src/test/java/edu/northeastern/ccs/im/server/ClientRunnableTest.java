@@ -80,6 +80,7 @@ class ClientRunnableTest {
             cl.run();
             cl.run();
             cl.setValidated();
+            assertTrue(cl.isValidated());
             while (i<14) {
                 cl.run();
                 i++;

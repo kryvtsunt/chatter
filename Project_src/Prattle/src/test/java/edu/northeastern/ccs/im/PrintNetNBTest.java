@@ -9,14 +9,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class PrintNetNBTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @Test
-    void print() {
-
-    }
 
     @Test
     void exception() throws IOException {
