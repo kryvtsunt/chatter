@@ -18,31 +18,27 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrattleTest {
-    ServerRunnable server;
-    Thread serverThread;
 
     @Test
     void broadcastMessage() throws IOException, SecurityException,
-            IllegalArgumentException, InterruptedException {
-        server = new PrattleTest().new ServerRunnable();
-        serverThread = new Thread(server);
+            IllegalArgumentException,InterruptedException {
+        ServerRunnable server = new PrattleTest().new ServerRunnable();
+        Thread serverThread = new Thread(server);
         serverThread.start();
-        Message login = Message.makeSimpleLoginMessage("tim");
-        Message login2 = Message.makeSimpleLoginMessage("tom");
+        Message loginmsg = Message.makeSimpleLoginMessage("tim");
         Message msg = Message.makeBroadcastMessage("tim", "test");
+        Message quitMsg = Message.makeQuitMessage("temp");
+
+        Thread.sleep(500);
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
         PrintNetNB printer = new PrintNetNB(socketChannel);
-        printer.print(login);
-        printer.print(login2);
-        printer.print(msg);
+        printer.print(loginmsg);
         socketChannel.close();
-        Thread.sleep(500);
-        Prattle.directMessage(msg, "tom");
-        Prattle.broadcastMessage(msg);
+        Prattle.directMessage(msg, "bob");
+        Prattle.broadcastMessage(quitMsg);
         serverThread.interrupt();
-
     }
 
     private class ServerRunnable implements Runnable {
