@@ -25,19 +25,20 @@ class PrattleTest {
         ServerRunnable server = new PrattleTest().new ServerRunnable();
         Thread serverThread = new Thread(server);
         serverThread.start();
-        Message loginmsg = Message.makeSimpleLoginMessage("tim");
-        Message msg = Message.makeBroadcastMessage("tim", "test");
-        Message quitMsg = Message.makeQuitMessage("temp");
-
-        Thread.sleep(500);
+        Thread.sleep(1500);
+        Message loginmsg = Message.makeSimpleLoginMessage("username");
+        Message passwordmsg = Message.makeBroadcastMessage("username", "password");
+        Message msg = Message.makeBroadcastMessage("username", "test");
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
         PrintNetNB printer = new PrintNetNB(socketChannel);
         printer.print(loginmsg);
+        printer.print(passwordmsg);
         socketChannel.close();
-        Prattle.directMessage(msg, "bob");
-        Prattle.broadcastMessage(quitMsg);
+        Thread.sleep(10000);
+        Prattle.directMessage(msg, "username");
+        Prattle.broadcastMessage(msg);
         serverThread.interrupt();
     }
 
