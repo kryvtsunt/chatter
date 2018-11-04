@@ -40,7 +40,6 @@ class PrattleTest {
         Thread.sleep(1000);
         Prattle.broadcastMessage(msg);
         Prattle.directMessage(msg, "tim");
-        Prattle.broadcastMessage(msg);
         printer.print(quitMsg);
         socketChannel.close();
         serverThread.interrupt();
