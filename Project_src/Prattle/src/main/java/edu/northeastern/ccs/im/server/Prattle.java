@@ -167,8 +167,4 @@ public abstract class Prattle {
             LOGGER.info("Could not find a thread that I tried to remove!\n");
         }
     }
-
-    public static ServerSocketChannel getServerSocket() {
-        return serverSocket;
-    }
 }

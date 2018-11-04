@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.channels.SocketChannel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +15,10 @@ class PrintNetNBTest {
     }
 
     @Test
-    void print() {
-
+    void print() throws IOException {
+        SocketNB socket = new SocketNB("localhost", 1101);
+        PrintNetNB printer = new PrintNetNB(socket.getSocket());
+        printer.print(Message.makeBroadcastMessage("tim", "hello"));
     }
 
     @Test
