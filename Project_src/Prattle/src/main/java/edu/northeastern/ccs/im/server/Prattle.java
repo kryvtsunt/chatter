@@ -76,6 +76,14 @@ public abstract class Prattle {
         }
     }
 
+    /**
+     * Direct a given message to the specific IM client currently on the
+     * system.
+     *
+     * @param message Message that the client sent.
+     * @param client Destination of the message
+     *
+     */
     public static void directMessage(Message message, String client) {
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
