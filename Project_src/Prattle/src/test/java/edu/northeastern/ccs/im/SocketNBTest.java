@@ -1,7 +1,6 @@
 package edu.northeastern.ccs.im;
 
-import edu.northeastern.ccs.im.server.ClientRunnable;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -20,24 +19,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SocketNBTest {
 
-    @BeforeEach
-    void setUp() {
-    }
 
     @Test
     void getSocket() throws IOException {
-
-        ClientRunnable client;
         ServerSocketChannel serverSocket;
         SocketChannel socketChannel;
-        int port = 4547;
+        int port = 4517;
 
         serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port));
         Selector selector = SelectorProvider.provider().openSelector();
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-
 
         socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", port);
@@ -62,14 +55,9 @@ class SocketNBTest {
         SocketNB socketNB= new SocketNB("localhost", port);
         socketNB.getSocket();
         ScanNetNB scanner = new ScanNetNB(socketNB);
-        PrintNetNB printer = new PrintNetNB(socketNB);
-        PrintNetNB printer2 = new PrintNetNB(SocketChannel.open());
         assertFalse(scanner.hasNextMessage());
         socketNB.close();
 
     }
 
-    @Test
-    void close() {
-    }
 }

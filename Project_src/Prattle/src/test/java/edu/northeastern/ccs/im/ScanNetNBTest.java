@@ -22,7 +22,7 @@ class ScanNetNBTest {
     /**
      * The port number to listen on.
      */
-    public static final int PORT = 4520;
+    public static final int PORT = 4510;
     ScanNetNB input;
     ServerSocketChannel serverSocket;
 
