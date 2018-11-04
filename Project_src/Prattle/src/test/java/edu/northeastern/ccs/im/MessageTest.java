@@ -9,11 +9,11 @@ class MessageTest {
     @Test
     void testMakeMessage() {
         Message message = Message.makeBroadcastMessage("tim", "hello");
-        assertEquals("a", message.toString());
+        assertEquals("BCT 3 tim 5 hello", message.toString());
         assertEquals("tim", message.getName());
         assertEquals("hello", message.getText());
         assertTrue(message.isBroadcastMessage());
-        assertFalse(message.isDisplayMessage());
+        assertTrue(message.isDisplayMessage());
         assertFalse(message.isAcknowledge());
         assertFalse(message.isInitialization());
         assertFalse(message.terminate());
