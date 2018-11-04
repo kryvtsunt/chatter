@@ -383,7 +383,9 @@ public class ClientRunnable implements Runnable {
                         }
                     } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         try {
-                            PrattleDB.instance().retrieve(getName());
+                            String password = PrattleDB.instance().retrieve(getName());
+                            Prattle.directMessage(Message.makeBroadcastMessage("Prattle", password), this.getName());
+
                         } catch (IOException ignored) {
                         }
                     } else if (msg.isDisplayMessage()) {

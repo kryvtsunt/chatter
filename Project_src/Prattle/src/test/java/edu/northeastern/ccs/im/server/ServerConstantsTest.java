@@ -15,19 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ServerConstantsTest {
     private GregorianCalendar cal = new GregorianCalendar();
 
-    private String currentTime;
-    private String currentDate;
-
-    public void timeAndDate() {
-        currentTime = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
-        currentDate = (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE) + "/" + cal.get(Calendar.YEAR);
-    }
-
 
     @Test
     void testGetBroadcastResponses() {
-        timeAndDate();
-
+        String currentTime = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
+        String currentDate = (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE) + "/" + cal.get(Calendar.YEAR);
         Message coolMsg = makeBroadcastMessage("Prattle", "OMG ROFL TTYL");
 
 

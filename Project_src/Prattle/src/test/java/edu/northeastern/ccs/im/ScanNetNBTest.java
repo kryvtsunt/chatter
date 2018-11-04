@@ -2,6 +2,7 @@ package edu.northeastern.ccs.im;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SocketChannel;
 import java.net.SocketAddress;
@@ -19,26 +20,22 @@ import java.util.Arrays;
 import java.util.List;
 
 class ScanNetNBTest {
-    /**
-     * The port number to listen on.
-     */
-    public static final int PORT = 4510;
-    ScanNetNB input;
-    ServerSocketChannel serverSocket;
 
-    @BeforeEach
-    protected void setUp() throws Exception {
-        serverSocket = null;
-        serverSocket = ServerSocketChannel.open();
+
+    @Test
+    public void testNextMessage() throws IOException {
+        ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
-        serverSocket.socket().bind(new InetSocketAddress(PORT));
-        // Create the Selector with which our channel is registered.
+        /**
+         * The port number to listen on.
+         */
+        int port = 4510;
+        serverSocket.socket().bind(new InetSocketAddress(port));
         Selector selector = SelectorProvider.provider().openSelector();
-        // Register to receive any incoming connection messages.
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
 
         SocketChannel socketChannel = SocketChannel.open();
-        SocketAddress socketAddr = new InetSocketAddress("localhost", PORT);
+        SocketAddress socketAddr = new InetSocketAddress("localhost", port);
         socketChannel.connect(socketAddr);
 
         String toSend = "HLO 4 temp 2 --";
@@ -56,31 +53,16 @@ class ScanNetNBTest {
         }
 
         socketChannel.close();
-    }
-
-//    @AfterEach
-//    void end() throws IOException {
-//        try {
-//            serverSocket.close();
-//        } catch(Exception e) {}
-//
-//    }
-
-
-    @Test
-    public void testNextMessage() {
         SocketChannel client = null;
         try {
             client = serverSocket.accept();
             client.configureBlocking(false);
-        } catch (Exception e) {
-
+        } catch (Exception ignored) {
         }
-        //List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "\\n");
         List<String> tests = Arrays.asList("HLO 4 temp 2 --", "BCT 4 temp 4 test", "BYE 4 temp 2 --");
         try {
             if (client != null) {
-                input = new ScanNetNB(client);
+                ScanNetNB  input = new ScanNetNB(client);
 
                 while (input.hasNextMessage()) {
                     for (String each : tests) {

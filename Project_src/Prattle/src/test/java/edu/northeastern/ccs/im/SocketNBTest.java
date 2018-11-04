@@ -53,7 +53,7 @@ class SocketNBTest {
         }
 
         SocketNB socketNB= new SocketNB("localhost", port);
-        socketNB.getSocket();
+        assertNotNull(socketNB.getSocket());
         ScanNetNB scanner = new ScanNetNB(socketNB);
         assertFalse(scanner.hasNextMessage());
         socketNB.close();

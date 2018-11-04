@@ -4,7 +4,13 @@
     <list default="true" id="b0adc58a-9296-45d5-bbbe-02a7b77ae2f9" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Prattle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Prattle/README" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/README" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/MessageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/MessageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/SocketNBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -115,8 +121,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/chatter/CommandLineMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
+            <state relative-caret-position="186">
+              <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -326,7 +332,7 @@
     <configuration name="CommandLineMain" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="edu.northeastern.ccs.im.chatter.CommandLineMain" />
       <module name="Chatter" />
-      <option name="PROGRAM_PARAMETERS" value="100.26.75.93 4545" />
+      <option name="PROGRAM_PARAMETERS" value="localhost 4505" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="edu.northeastern.ccs.im.chatter.*" />
@@ -386,10 +392,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="953" y="0" width="974" height="1087" extended-state="1" />
+    <frame x="953" y="0" width="974" height="1087" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.31619257" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31619257" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -398,7 +404,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32633787" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32633787" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39874083" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -537,8 +543,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/chatter/CommandLineMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="237">
-          <caret line="40" column="29" selection-start-line="40" selection-start-column="29" selection-end-line="40" selection-end-column="29" />
+        <state relative-caret-position="186">
+          <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

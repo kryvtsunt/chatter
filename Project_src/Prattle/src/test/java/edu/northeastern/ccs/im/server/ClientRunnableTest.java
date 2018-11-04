@@ -119,7 +119,6 @@ class ClientRunnableTest {
         for (Message msg : msgs2) {
             client2.run();
         }
-
         try {
             client2.run();
         } catch (ClosedSelectorException e){
