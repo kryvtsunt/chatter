@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.channels.NotYetConnectedException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,6 +15,12 @@ class PrintNetNBTest {
     void exception() throws IOException {
         SocketNB socket = new SocketNB("localhost", 1111);
         ScanNetNB scanner = new ScanNetNB(socket.getSocket());
+        PrintNetNB printer = new PrintNetNB(socket);
+        try {
+            printer.print(Message.makeBroadcastMessage("tim", "tam"));
+        } catch (Exception e){
+            assertEquals(NotYetConnectedException.class, e.getClass());
+        }
         try {
             scanner.nextMessage();
         } catch(NextDoesNotExistException e){
