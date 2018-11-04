@@ -23,23 +23,23 @@ class PrattleTest {
 
     @Test
     void broadcastMessage() throws IOException, SecurityException,
-            IllegalArgumentException, InterruptedException {
+            IllegalArgumentException,InterruptedException {
         server = new PrattleTest().new ServerRunnable();
         serverThread = new Thread(server);
         serverThread.start();
-        Message login = Message.makeSimpleLoginMessage("tim");
-        Message login2 = Message.makeSimpleLoginMessage("tom");
+        Message loginmsg = Message.makeSimpleLoginMessage("tim");
         Message msg = Message.makeBroadcastMessage("tim", "test");
+        Message quitMsg = Message.makeQuitMessage("temp");
+
+        Thread.sleep(500);
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
         PrintNetNB printer = new PrintNetNB(socketChannel);
-        printer.print(login);
-        printer.print(login2);
+        printer.print(loginmsg);
         socketChannel.close();
-        Thread.sleep(500);
-        Prattle.directMessage(msg, "tom");
-        Prattle.broadcastMessage(msg);
+        Prattle.directMessage(msg, "bob");
+        Prattle.broadcastMessage(quitMsg);
         serverThread.interrupt();
 
     }
