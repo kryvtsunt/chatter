@@ -27,26 +27,21 @@ class PrattleTest {
         server = new PrattleTest().new ServerRunnable();
         serverThread = new Thread(server);
         serverThread.start();
-        Message loginmsg = Message.makeSimpleLoginMessage("temp");
-        Message msg = Message.makeBroadcastMessage("test message", "temp");
+        Message loginmsg = Message.makeSimpleLoginMessage("tim");
+        Message msg = Message.makeBroadcastMessage("tim", "test");
         Message quitMsg = Message.makeQuitMessage("temp");
 
+        Thread.sleep(500);
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
         PrintNetNB printer = new PrintNetNB(socketChannel);
         printer.print(loginmsg);
-
-        Thread.sleep(1000);
-        Prattle.directMessage(msg, "tim");
-        printer.print(quitMsg);
         socketChannel.close();
+        Prattle.directMessage(msg, "bob");
+        Prattle.broadcastMessage(quitMsg);
         serverThread.interrupt();
-        if(serverThread.isAlive()) {
-            serverThread.stop();
-        }
-        Prattle.getServerSocket().socket().close();
-        Prattle.getServerSocket().close();
+
     }
 
     private class ServerRunnable implements Runnable {
