@@ -18,14 +18,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PrattleTest {
-    ServerRunnable server;
-    Thread serverThread;
 
     @Test
     void broadcastMessage() throws IOException, SecurityException,
             IllegalArgumentException,InterruptedException {
-        server = new PrattleTest().new ServerRunnable();
-        serverThread = new Thread(server);
+        ServerRunnable server = new PrattleTest().new ServerRunnable();
+        Thread serverThread = new Thread(server);
         serverThread.start();
         Message loginmsg = Message.makeSimpleLoginMessage("tim");
         Message msg = Message.makeBroadcastMessage("tim", "test");
@@ -41,7 +39,6 @@ class PrattleTest {
         Prattle.directMessage(msg, "bob");
         Prattle.broadcastMessage(quitMsg);
         serverThread.interrupt();
-
     }
 
     private class ServerRunnable implements Runnable {

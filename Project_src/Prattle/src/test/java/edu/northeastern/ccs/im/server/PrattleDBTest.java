@@ -12,10 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PrattleDBTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void testDB() throws IOException {
         PrattleDB db = PrattleDB.instance();

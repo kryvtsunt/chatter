@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class ServerConstantsTest {
-    ServerConstants serverConstants;
     private GregorianCalendar cal = new GregorianCalendar();
 
     private String currentTime;
@@ -23,7 +22,6 @@ class ServerConstantsTest {
         currentTime = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
         currentDate = (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE) + "/" + cal.get(Calendar.YEAR);
     }
-
 
 
     @Test
@@ -67,9 +65,6 @@ class ServerConstantsTest {
         assertEquals(queryMsg.get(0).toString(), ServerConstants.getBroadcastResponses(QUERY_COMMAND).get(0).toString());
         assertEquals(queryMsg.get(1).toString(), ServerConstants.getBroadcastResponses(QUERY_COMMAND).get(1).toString());
 
-
-
-//        System.out.println(ServerConstants.getBroadcastResponses(COOL_COMMAND).get(0));
 
     }
 }

@@ -1,52 +1,34 @@
 package edu.northeastern.ccs.im.server;
 
-import com.sun.jmx.remote.internal.ArrayQueue;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
-import edu.northeastern.ccs.im.ScanNetNB;
-import edu.northeastern.ccs.im.SocketNB;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
-import static edu.northeastern.ccs.im.server.Prattle.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import edu.northeastern.ccs.im.Message;
 
 class ClientRunnableTest {
     private static final int port = 4548;
     private static final int port2 = 4549;
 
 
-
     @Test
-    void testBroadcastMessageIsSpecial() throws IOException {
+    void test1() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port));
@@ -94,15 +76,11 @@ class ClientRunnableTest {
         client.run();
 
         serverSocket.close();
-
-
-
-
     }
 
 
     @Test
-    public void test2() throws IOException {
+    void test2() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port2));
@@ -149,8 +127,6 @@ class ClientRunnableTest {
         }
 
         serverSocket.close();
-
-
     }
 
 }
