@@ -3,7 +3,26 @@
   <component name="ChangeListManager">
     <list default="true" id="cdf8bb45-eac7-46c9-a917-edf8f8768b16" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Chatter/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Chatter/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/jacoco.exec" beforeDir="false" afterPath="$PROJECT_DIR$/target/jacoco.exec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.MessageTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.MessageTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.PrintNetNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.PrintNetNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.ScanNetNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.ScanNetNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.SocketNBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.SocketNBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ClientRunnableTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ClientRunnableTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleDBTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleDBTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.PrattleTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ServerConstantsTest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-edu.northeastern.ccs.im.server.ServerConstantsTest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.MessageTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.MessageTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.NextDoesNotExistExceptionTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.PrintNetNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.PrintNetNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.ScanNetNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.ScanNetNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.SocketNBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.SocketNBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.ClientRunnableTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.ClientRunnableTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleDBTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleDBTest.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/target/surefire-reports/edu.northeastern.ccs.im.server.PrattleTest.txt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -278,8 +297,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="459">
-              <caret line="42" selection-start-line="42" selection-end-line="42" />
+            <state relative-caret-position="359">
+              <caret line="42" column="30" lean-forward="true" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -505,7 +524,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541366749126" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541367020570" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -1029,8 +1048,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/PrattleTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="42" selection-start-line="42" selection-end-line="42" />
+        <state relative-caret-position="359">
+          <caret line="42" column="30" lean-forward="true" selection-start-line="42" selection-start-column="30" selection-end-line="42" selection-end-column="30" />
         </state>
       </provider>
     </entry>
