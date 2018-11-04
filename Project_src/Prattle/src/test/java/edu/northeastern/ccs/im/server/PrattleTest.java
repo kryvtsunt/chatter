@@ -21,25 +21,12 @@ class PrattleTest {
     ServerRunnable server;
     Thread serverThread;
 
-    @BeforeEach
-    void setUp() throws IOException, InterruptedException {
-        server = new PrattleTest().new ServerRunnable();
-        serverThread = new Thread(server);
-        serverThread.start();
-    }
-    @AfterEach
-    void tearDown() throws IOException {
-        serverThread.interrupt();
-        if(serverThread.isAlive()) {
-            serverThread.stop();
-        }
-        Prattle.getServerSocket().socket().close();
-        Prattle.getServerSocket().close();
-
-    }
     @Test
     void broadcastMessage() throws IOException, NoSuchFieldException, SecurityException,
             IllegalArgumentException, IllegalAccessException, InterruptedException {
+        server = new PrattleTest().new ServerRunnable();
+        serverThread = new Thread(server);
+        serverThread.start();
         Message loginmsg = Message.makeSimpleLoginMessage("temp");
         Message msg = Message.makeBroadcastMessage("test message", "temp");
         Message quitMsg = Message.makeQuitMessage("temp");
@@ -53,11 +40,15 @@ class PrattleTest {
         Thread.sleep(1000);
         Prattle.broadcastMessage(msg);
         Prattle.directMessage(msg, "tim");
-
-        Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
-
+        Prattle.broadcastMessage(msg);
         printer.print(quitMsg);
         socketChannel.close();
+        serverThread.interrupt();
+        if(serverThread.isAlive()) {
+            serverThread.stop();
+        }
+        Prattle.getServerSocket().socket().close();
+        Prattle.getServerSocket().close();
     }
 
     private class ServerRunnable implements Runnable {

@@ -21,8 +21,6 @@ u
 Esrc/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java,9\9\9962f085488decc39ca0fe43a1b813da25a9f7a7
 x
 Hsrc/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java,3\6\3627c36ec27667bd9f04792322d77a4caef919c1
-l
-<src/test/java/edu/northeastern/ccs/im/MockSocketChannel.java,b\7\b7ae32146ba7ad1b3c79ee479682097d86e8f443
 f
 6src/test/java/edu/northeastern/ccs/im/MessageTest.java,e\4\e4dfec7baffe819f8f041551f0b7d5ea3186ceac
 t

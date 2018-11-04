@@ -276,20 +276,9 @@ public class ClientRunnable implements Runnable {
             return true;
         }
         // Clear this name; we cannot use it. *sigh*
-        userId = -1;
         return false;
     }
 
-    private boolean setPassword(String password) {
-        // Now make sure this name is legal.
-        if (password != null) {
-            // Optimistically set this users ID number.
-            setPassword(password);
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * Add the given message to this client to the queue of message to be sent to
@@ -369,7 +358,7 @@ public class ClientRunnable implements Runnable {
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a broadcast message, send it out
-                    if (msg.getText().contains(">")) {
+                    if (msg.getText() != null && msg.getText().contains(">")) {
                         String[] args = msg.getText().split(">");
                         String destination = args[0];
                         String content = args[1];
@@ -377,7 +366,7 @@ public class ClientRunnable implements Runnable {
                         for (String user: to){
                             Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
                         }
-                    } else if (msg.getText().contains("DELETE")) {
+                    } else if (msg.getText() != null && msg.getText().contains("DELETE")) {
                         try {
                             PrattleDB.instance().delete(getName());
                             this.terminateClient();
@@ -385,14 +374,14 @@ public class ClientRunnable implements Runnable {
                         } catch (IOException ignored) {
 
                         }
-                    } else if (msg.getText().contains("UPDATE")) {
+                    } else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
                         try {
                             PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
                             return;
                         } catch (IOException ignored) {
 
                         }
-                    } else if (msg.getText().contains("RETRIEVE")) {
+                    } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         try {
                             PrattleDB.instance().retrieve(getName());
                         } catch (IOException ignored) {
@@ -502,6 +491,6 @@ public class ClientRunnable implements Runnable {
     }
 
     public Queue<Message> getWaitingList() {
-        return waitingList;
+        return new ConcurrentLinkedQueue<>(waitingList);
     }
 }
