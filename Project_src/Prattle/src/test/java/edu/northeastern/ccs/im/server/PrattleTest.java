@@ -22,8 +22,8 @@ class PrattleTest {
     Thread serverThread;
 
     @Test
-    void broadcastMessage() throws IOException, NoSuchFieldException, SecurityException,
-            IllegalArgumentException, IllegalAccessException, InterruptedException {
+    void broadcastMessage() throws IOException, SecurityException,
+            IllegalArgumentException, InterruptedException {
         server = new PrattleTest().new ServerRunnable();
         serverThread = new Thread(server);
         serverThread.start();
@@ -36,7 +36,6 @@ class PrattleTest {
         PrintNetNB printer = new PrintNetNB(socketChannel);
         printer.print(login);
         printer.print(login2);
-        printer.print(msg);
         socketChannel.close();
         Thread.sleep(500);
         Prattle.directMessage(msg, "tom");
