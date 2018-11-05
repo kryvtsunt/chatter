@@ -215,13 +215,13 @@ public class ClientRunnable implements Runnable {
                     LOGGER.info(ae.toString());
                 }
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage(serverName, "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
             if (passwordInput.equals(password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage(serverName, "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
