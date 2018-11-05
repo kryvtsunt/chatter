@@ -50,6 +50,9 @@ public abstract class Prattle {
     /* Collection of threads that are currently being used. */
     private static ConcurrentLinkedQueue<ClientRunnable> active;
 
+    /* Socket on the appropriate port to which this server connects. */
+    private static ServerSocketChannel serverSocket;
+
     /* All of the static initialization occurs in this "method" */
     static {
         // Create the new queue of active threads.
@@ -62,7 +65,7 @@ public abstract class Prattle {
      *
      * @param message Message that the client sent.
      */
-    static void broadcastMessage(Message message) {
+    public static void broadcastMessage(Message message) {
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
@@ -80,7 +83,7 @@ public abstract class Prattle {
      * @param client Destination of the message
      *
      */
-    static void directMessage(Message message, String client) {
+    public static void directMessage(Message message, String client) {
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
@@ -106,8 +109,7 @@ public abstract class Prattle {
     @SuppressWarnings("unchecked")
     public static void main(String[] args) throws IOException {
         // Connect to the socket on the appropriate port to which this server connects.
-        /* Socket on the appropriate port to which this server connects. */
-        ServerSocketChannel serverSocket = ServerSocketChannel.open();
+        serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(ServerConstants.PORT));
         // Create the Selector with which our channel is registered.
@@ -165,7 +167,7 @@ public abstract class Prattle {
      * @param dead Thread which had been handling all the I/O for a client who has
      *             since quit.
      */
-    static void removeClient(ClientRunnable dead) {
+    public static void removeClient(ClientRunnable dead) {
         // Test and see if the thread was in our list of active clients so that we
         // can remove it.
         if (!active.remove(dead)) {
