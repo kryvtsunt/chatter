@@ -105,7 +105,7 @@ public class ClientRunnable implements Runnable {
 
     private boolean validated;
 
-    private final String serverName = "Prattle";
+    private final static String serverName = "Prattle";
 
     /**
      * The future that is used to schedule the client for execution in the thread
