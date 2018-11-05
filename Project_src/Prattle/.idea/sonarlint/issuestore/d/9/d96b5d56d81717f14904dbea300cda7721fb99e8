@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 Lsquid:S3010‚"(Remove this assignment of "waitingList".(ß´¾­øÿÿÿÿ8ÅÚóˆí,
 xsquid:S2293€"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÚİŸı8ÅÚóˆí,
 }squid:S2293‚"YReplace the type specification in this constructor call with the diamond operator ("<>").(ß´¾­øÿÿÿÿ8ÅÚóˆí,
@@ -8,3 +9,11 @@ squid:S106Ø"9Replace this use of System.out or System.err by a logger.(½ÒÖ–ıÿÿ
 W
 squid:S106û"9Replace this use of System.out or System.err by a logger.(è¸Æî8ÅÚóˆí,
 qsquid:S3776£"RRefactor this method to reduce its Cognitive Complexity from 51 to the 15 allowed.(“–ış8ÅÚóˆí,
+=======
+Gsquid:S3010‰"(Remove this assignment of "waitingList".(«şÈ8ÅÚóˆí,
+Usquid:S2629…"7Use the built-in formatting to construct this argument.(ŞáÎ 8½×Ò¬í,
+{squid:S2629ß"\Invoke method(s) only conditionally. Use the built-in formatting to construct this argument.(¤ÌƒĞ8ÑÚĞ¬í,
+qsquid:S3776ª"RRefactor this method to reduce its Cognitive Complexity from 51 to the 15 allowed.(“–ış8ÅÚóˆí,
+Hsquid:S00108")Either remove or fill this block of code.(”ã‰G8°˜åªí,
+jsquid:CommentedOutCodeLine¼"<This block of commented-out lines of code should be removed.(“í¡ê8ÿïù¯í,
+>>>>>>> clientRunnableBranch

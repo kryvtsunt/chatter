@@ -12,15 +12,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class PrattleDBTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
     @Test
     void testDB() throws IOException {
         PrattleDB db = PrattleDB.instance();
         db.create("tim", "1234");
         db.delete("tim");
+        db.delete("bubochka");
+        db.delete("bubochka", "asdf");
+        db.update("bubochka", "bsdbfb");
         db.create("tim", "1234");
         db.update("tim", "12345");
         assertEquals("12345", db.retrieve("tim"));

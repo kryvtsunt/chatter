@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: edu.northeastern.ccs.im.ScanNetNBTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s - in edu.northeastern.ccs.im.ScanNetNBTest
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s - in edu.northeastern.ccs.im.ScanNetNBTest
+>>>>>>> clientRunnableBranch

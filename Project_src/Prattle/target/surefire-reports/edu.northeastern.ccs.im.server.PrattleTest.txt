@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: edu.northeastern.ccs.im.server.PrattleTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.974 s - in edu.northeastern.ccs.im.server.PrattleTest
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.507 s - in edu.northeastern.ccs.im.server.PrattleTest
+>>>>>>> clientRunnableBranch
