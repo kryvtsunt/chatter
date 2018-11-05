@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClientRunnableTest {
     private static final int port = 4548;
-    private static final int port2 = 4549;
+    private static final int port2 = 4556;
 
 
     @Test
