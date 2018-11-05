@@ -46,6 +46,7 @@ class ScanNetNBTest {
             ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
             int bytesWritten = 0;
             while (bytesWritten != s.length()) {
+                System.out.println(wrapper);
                 bytesWritten += socketChannel.write(wrapper);
             }
         }
