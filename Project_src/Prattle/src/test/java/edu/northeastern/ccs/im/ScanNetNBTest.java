@@ -9,7 +9,6 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.channels.spi.SelectorProvider;
@@ -23,11 +22,11 @@ class ScanNetNBTest {
 
 
     @Test
-    public void testNextMessage() throws IOException {
+    void testNextMessage() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
-        /**
-         * The port number to listen on.
+        /*
+          The port number to listen on.
          */
         int port = 4510;
         serverSocket.socket().bind(new InetSocketAddress(port));
@@ -47,7 +46,6 @@ class ScanNetNBTest {
             ByteBuffer wrapper = ByteBuffer.wrap(s.getBytes());
             int bytesWritten = 0;
             while (bytesWritten != s.length()) {
-                System.out.println(wrapper);
                 bytesWritten += socketChannel.write(wrapper);
             }
         }

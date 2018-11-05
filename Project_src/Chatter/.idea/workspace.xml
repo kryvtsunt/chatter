@@ -2,8 +2,22 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b0adc58a-9296-45d5-bbbe-02a7b77ae2f9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Prattle/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Prattle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/MessageTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/MessageTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/db.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/db.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/Message.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/NextDoesNotExistException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/PrintNetNB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/ScanNetNB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/SocketNB.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/SocketNB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/ServerConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -92,7 +106,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="561">
+            <state relative-caret-position="627">
               <caret line="33" column="21" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
               <folding>
                 <element signature="e#6024#6025#0" expanded="true" />
@@ -105,7 +119,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="323">
+            <state relative-caret-position="361">
               <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
             </state>
           </provider>
@@ -115,7 +129,7 @@
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/chatter/CommandLineMain.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="186">
-              <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
+              <caret line="37" column="37" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -126,7 +140,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="407">
+            <state relative-caret-position="760">
               <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
             </state>
           </provider>
@@ -135,7 +149,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/IMConnection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2350">
+            <state relative-caret-position="1178">
               <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -147,7 +161,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/IllegalNameException.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
+            <state relative-caret-position="285">
               <caret line="15" column="40" selection-end-line="22" />
             </state>
           </provider>
@@ -156,7 +170,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/InvalidListenerException.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
+            <state relative-caret-position="285">
               <caret line="15" column="38" selection-end-line="21" />
             </state>
           </provider>
@@ -165,7 +179,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/KeyboardScanner.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
+            <state relative-caret-position="247">
               <caret line="17" column="30" selection-end-line="175" selection-end-column="1" />
             </state>
           </provider>
@@ -174,7 +188,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/LinkListener.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
+            <state relative-caret-position="228">
               <caret line="12" column="23" selection-end-line="44" />
             </state>
           </provider>
@@ -183,7 +197,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/IllegalOperationException.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
+            <state relative-caret-position="266">
               <caret line="14" column="28" selection-end-line="22" />
             </state>
           </provider>
@@ -218,6 +232,12 @@
       </list>
     </option>
   </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
   <component name="MavenProjectNavigator">
     <treeState>
       <expand>
@@ -234,10 +254,11 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds">
-    <option name="x" value="953" />
-    <option name="width" value="974" />
-    <option name="height" value="1087" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1297" />
+    <option name="height" value="697" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -245,7 +266,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -292,8 +314,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -385,9 +406,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="953" y="0" width="974" height="1087" extended-state="0" />
+    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.31619257" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15704697" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -396,7 +418,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32633787" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32624114" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39874083" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -413,7 +435,7 @@
       <window_info anchor="right" id="Capture Analysis" order="4" />
       <window_info anchor="right" id="Theme Preview" order="5" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
-      <window_info anchor="right" id="Maven Projects" order="7" sideWeight="0.49845678" visible="true" weight="0.07768053" />
+      <window_info anchor="right" id="Maven Projects" order="7" sideWeight="0.49845678" visible="true" weight="0.03691275" />
       <window_info anchor="right" id="Coverage" order="8" sideWeight="0.5015432" side_tool="true" visible="true" weight="0.16044776" />
     </layout>
   </component>
@@ -465,7 +487,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/Message.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="561">
+        <state relative-caret-position="627">
           <caret line="33" column="21" selection-start-line="33" selection-start-column="21" selection-end-line="33" selection-end-column="21" />
           <folding>
             <element signature="e#6024#6025#0" expanded="true" />
@@ -476,56 +498,56 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/SocketNB.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
+        <state relative-caret-position="361">
           <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/IllegalNameException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
+        <state relative-caret-position="285">
           <caret line="15" column="40" selection-end-line="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/InvalidListenerException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
+        <state relative-caret-position="285">
           <caret line="15" column="38" selection-end-line="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/KeyboardScanner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
+        <state relative-caret-position="247">
           <caret line="17" column="30" selection-end-line="175" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/LinkListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
+        <state relative-caret-position="228">
           <caret line="12" column="23" selection-end-line="44" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/IllegalOperationException.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
+        <state relative-caret-position="266">
           <caret line="14" column="28" selection-end-line="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="407">
+        <state relative-caret-position="760">
           <caret line="40" column="20" selection-start-line="40" selection-start-column="20" selection-end-line="40" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/IMConnection.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2350">
+        <state relative-caret-position="1178">
           <caret line="67" column="11" selection-start-line="67" selection-start-column="11" selection-end-line="67" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -536,7 +558,7 @@
     <entry file="file://$PROJECT_DIR$/src/main/java/edu/northeastern/ccs/im/chatter/CommandLineMain.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="186">
-          <caret line="37" column="37" lean-forward="true" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
+          <caret line="37" column="37" selection-start-line="37" selection-start-column="37" selection-end-line="37" selection-end-column="37" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

@@ -42,7 +42,7 @@ public class Message {
 		 *
 		 * @param abbrev Short name of this message type, as a String.
 		 */
-		private MessageType(String abbrev) {
+		MessageType(String abbrev) {
 			tla = abbrev;
 		}
 
@@ -151,7 +151,7 @@ public class Message {
 	 * @return Instance of Message (or its subclasses) representing the handle,
 	 *         name, & text.
 	 */
-	protected static Message makeMessage(String handle, String srcName, String text) {
+	static Message makeMessage(String handle, String srcName, String text) {
 		Message result = null;
 		if (handle.compareTo(MessageType.QUIT.toString()) == 0) {
 			result = makeQuitMessage(srcName);
@@ -172,7 +172,7 @@ public class Message {
 	 *
 	 * @return Instance of Message that rejects the bad login attempt.
 	 */
-	public static Message makeNoAcknowledgeMessage() {
+	static Message makeNoAcknowledgeMessage() {
 		return new Message(MessageType.NO_ACKNOWLEDGE);
 	}
 
@@ -221,7 +221,7 @@ public class Message {
 	 *
 	 * @return True if the message is an acknowledgement message; false otherwise.
 	 */
-	public boolean isAcknowledge() {
+	boolean isAcknowledge() {
 		return (msgType == MessageType.ACKNOWLEDGE);
 	}
 
@@ -245,7 +245,7 @@ public class Message {
 		return (msgType == MessageType.BROADCAST);
 	}
 
-	public boolean isDirectMessage() {
+	boolean isDirectMessage() {
 		return (msgType == MessageType.DIRECT);
 	}
 
@@ -254,7 +254,7 @@ public class Message {
 	 *
 	 * @return True if the message is an initialization message; false otherwise
 	 */
-	public boolean isInitialization() {
+	boolean isInitialization() {
 		return (msgType == MessageType.HELLO);
 	}
 

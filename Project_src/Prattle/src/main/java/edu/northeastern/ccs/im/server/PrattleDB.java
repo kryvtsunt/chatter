@@ -40,7 +40,7 @@ public class PrattleDB {
      * @throws FileNotFoundException if file is not found
      */
     private void readDB() throws FileNotFoundException {
-        String str = "";
+        String str;
         String key;
         String value;
         File file = new File("db.txt");
