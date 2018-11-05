@@ -14,6 +14,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import edu.northeastern.ccs.im.Message;
 
@@ -22,7 +23,7 @@ import edu.northeastern.ccs.im.Message;
  * version of the server spawns a new thread to handle each client that connects
  * to it. At this point, messages are broadcast to all of the other clients.
  * It does not send a response when the user has gone off-line.
- *
+ * <p>
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
@@ -32,6 +33,10 @@ import edu.northeastern.ccs.im.Message;
  * @version 1.3
  */
 public abstract class Prattle {
+
+    /* Logger */
+    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+
 
     /* Amount of time we should wait for a signal to arrive. */
     private static final int DELAY_IN_MS = 50;
@@ -65,6 +70,24 @@ public abstract class Prattle {
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized()) {
+                tt.enqueueMessage(message);
+            }
+        }
+    }
+
+    /**
+     * Direct a given message to the specific IM client currently on the
+     * system.
+     *
+     * @param message Message that the client sent.
+     * @param client Destination of the message
+     *
+     */
+    public static void directMessage(Message message, String client) {
+        // Loop through all of our active threads
+        for (ClientRunnable tt : active) {
+            // Do not send the message to any clients that are not ready to receive it.
+            if (tt.isInitialized() && tt.getName().equals(client)) {
                 tt.enqueueMessage(message);
             }
         }
@@ -128,9 +151,9 @@ public abstract class Prattle {
                             tt.setFuture(clientFuture);
                         }
                     } catch (AssertionError ae) {
-                        System.err.println("Caught Assertion: " + ae.toString());
+                        LOGGER.info("Caught Assertion: " + ae.toString());
                     } catch (Exception e) {
-                        System.err.println("Caught Exception: " + e.toString());
+                        LOGGER.info("Caught Exception: " + e.toString());
                     }
                 }
             }
@@ -148,11 +171,7 @@ public abstract class Prattle {
         // Test and see if the thread was in our list of active clients so that we
         // can remove it.
         if (!active.remove(dead)) {
-            System.out.println("Could not find a thread that I tried to remove!\n");
+            LOGGER.info("Could not find a thread that I tried to remove!\n");
         }
-    }
-
-    public static ServerSocketChannel getServerSocket() {
-        return serverSocket;
     }
 }

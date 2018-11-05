@@ -1,14 +1,18 @@
 package edu.northeastern.ccs.im.server;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
+
 
 /**
  * Instances of this class handle all of the incoming communication from a
@@ -26,6 +30,10 @@ import edu.northeastern.ccs.im.ScanNetNB;
  * @version 1.3
  */
 public class ClientRunnable implements Runnable {
+
+    /* Logger */
+    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+
     /**
      * Number of milliseconds that special responses are delayed before being sent.
      */
@@ -95,6 +103,8 @@ public class ClientRunnable implements Runnable {
      */
     private boolean initialized;
 
+    private boolean validated;
+
     /**
      * The future that is used to schedule the client for execution in the thread
      * pool.
@@ -125,11 +135,11 @@ public class ClientRunnable implements Runnable {
         // Mark that we are not initialized
         initialized = false;
         // Create our queue of special messages
-        specialResponse = new LinkedList<Message>();
+        specialResponse = new LinkedList<>();
         // Create the queue of messages to be sent
-        waitingList = new ConcurrentLinkedQueue<Message>();
+        waitingList = new ConcurrentLinkedQueue<>();
         // Create our queue of message we must respond to immediately
-        immediateResponse = new LinkedList<Message>();
+        immediateResponse = new LinkedList<>();
         // Mark that the client is active now and start the timer until we
         // terminate for inactivity.
         terminateInactivity = new GregorianCalendar();
@@ -174,8 +184,42 @@ public class ClientRunnable implements Runnable {
                         new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
                 // Set that the client is initialized.
                 initialized = true;
+
             } else {
                 initialized = false;
+            }
+        }
+    }
+
+    private void checkForValidation() {
+        String password = null;
+
+        // Check if there are any input messages to read
+        if (input.hasNextMessage()) {
+            // If a message exists, try to use it to initialize the connection
+            Message msg = input.nextMessage();
+            String passwordInput = msg.getText();
+
+            try {
+                password = PrattleDB.instance().retrieve(this.getName());
+            } catch (FileNotFoundException ignored) {
+            }
+
+            if (password == null) {
+                try {
+                    PrattleDB.instance().create(getName(), passwordInput);
+                } catch (IOException ignored) {
+                }
+                validated = true;
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                return;
+            }
+
+            if (passwordInput.equals(password)) {
+                validated = true;
+                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+            } else {
+                validated = false;
             }
         }
     }
@@ -213,7 +257,7 @@ public class ClientRunnable implements Runnable {
      * @return True if we sent the message successfully; false otherwise.
      */
     private boolean sendMessage(Message message) {
-        System.out.println("\t" + message);
+        LOGGER.log(Level.INFO, "\t" + message.toString());
         return output.print(message);
     }
 
@@ -232,9 +276,9 @@ public class ClientRunnable implements Runnable {
             return true;
         }
         // Clear this name; we cannot use it. *sigh*
-        userId = -1;
         return false;
     }
+
 
     /**
      * Add the given message to this client to the queue of message to be sent to
@@ -283,6 +327,10 @@ public class ClientRunnable implements Runnable {
         return initialized;
     }
 
+    public boolean isValidated() {
+        return validated;
+    }
+
     /**
      * Perform the periodic actions needed to work with this client.
      *
@@ -290,9 +338,13 @@ public class ClientRunnable implements Runnable {
      */
     public void run() {
         boolean terminate = false;
+
         // The client must be initialized before we can do anything else
         if (!initialized) {
             checkForInitialization();
+
+        } else if (!validated) {
+            checkForValidation();
         } else {
             try {
                 // Client has already been initialized, so we should first check
@@ -306,7 +358,37 @@ public class ClientRunnable implements Runnable {
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a broadcast message, send it out
-                    if (msg.isDisplayMessage()) {
+                    if (msg.getText() != null && msg.getText().contains(">")) {
+                        String[] args = msg.getText().split(">");
+                        String destination = args[0];
+                        String content = args[1];
+                        String[] to = destination.split(",");
+                        for (String user: to){
+                            Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
+                        }
+                    } else if (msg.getText() != null && msg.getText().contains("DELETE")) {
+                        try {
+                            PrattleDB.instance().delete(getName());
+                            this.terminateClient();
+                            return;
+                        } catch (IOException ignored) {
+
+                        }
+                    } else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
+                        try {
+                            PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
+                            return;
+                        } catch (IOException ignored) {
+
+                        }
+                    } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
+                        try {
+                            String password = PrattleDB.instance().retrieve(getName());
+                            Prattle.directMessage(Message.makeBroadcastMessage("Prattle", password), this.getName());
+
+                        } catch (IOException ignored) {
+                        }
+                    } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
                         if (messageChecks(msg)) {
                             // Check for our "special messages"
@@ -376,7 +458,7 @@ public class ClientRunnable implements Runnable {
         // when they have, terminate
         // the client.
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
-            System.err.println("Timing out or forcing off a user " + name);
+            LOGGER.log(Level.INFO, "Timing out or forcing off a user " + name);
             terminateClient();
         }
     }
@@ -410,7 +492,7 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public static Queue<Message> getWaitingList() {
-        return waitingList;
+    public Queue<Message> getWaitingList() {
+        return new ConcurrentLinkedQueue<>(waitingList);
     }
 }

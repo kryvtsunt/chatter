@@ -1,65 +1,38 @@
 package edu.northeastern.ccs.im.server;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
-import edu.northeastern.ccs.im.SocketNB;
-import org.junit.jupiter.api.AfterEach;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 class PrattleTest {
-    ServerRunnable server;
-    Thread serverThread;
 
-    @BeforeEach
-    void setUp() throws IOException, InterruptedException {
-        server = new PrattleTest().new ServerRunnable();
-        serverThread = new Thread(server);
-        serverThread.start();
-        Thread.sleep(1000);
-    }
-    @AfterEach
-    void tearDown() throws IOException {
-        serverThread.interrupt();
-        if(serverThread.isAlive()) {
-            serverThread.stop();
-        }
-        Prattle.getServerSocket().socket().close();
-        Prattle.getServerSocket().close();
-
-    }
     @Test
-    void broadcastMessage() throws IOException, NoSuchFieldException, SecurityException,
-            IllegalArgumentException, IllegalAccessException, InterruptedException {
-        Message loginmsg = Message.makeSimpleLoginMessage("temp");
-        Message msg = Message.makeBroadcastMessage("test message", "temp");
-        Message quitMsg = Message.makeQuitMessage("temp");
-
+    void broadcastMessage() throws IOException, SecurityException,
+            IllegalArgumentException,InterruptedException {
+        ServerRunnable server = new PrattleTest().new ServerRunnable();
+        Thread serverThread = new Thread(server);
+        serverThread.start();
+        Thread.sleep(1500);
+        Message loginmsg = Message.makeSimpleLoginMessage("username");
+        Message passwordmsg = Message.makeBroadcastMessage("username", "password");
+        Message msg = Message.makeBroadcastMessage("username", "test");
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
-        //SocketNB sc2 = new SocketNB("localhost",ServerConstants.PORT);
         PrintNetNB printer = new PrintNetNB(socketChannel);
         printer.print(loginmsg);
-
-        Thread.sleep(1000);
-        Prattle.broadcastMessage(msg);
-
-        Queue<Message> waitingList = new ConcurrentLinkedQueue<Message>();
-        waitingList = ClientRunnable.getWaitingList();
-        assertEquals(msg.getText(), waitingList.poll().getText());
-
-        printer.print(quitMsg);
+        printer.print(passwordmsg);
         socketChannel.close();
+        Thread.sleep(10000);
+        Prattle.directMessage(msg, "username");
+        Prattle.broadcastMessage(msg);
+        serverThread.interrupt();
     }
 
     private class ServerRunnable implements Runnable {

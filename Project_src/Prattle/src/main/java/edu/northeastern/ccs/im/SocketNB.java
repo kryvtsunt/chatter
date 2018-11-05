@@ -47,6 +47,7 @@ public class SocketNB {
 		final Selector selector = Selector.open();
 		// Register our channel to receive alerts to complete the connection
 		final SelectionKey key = channel.register(selector, SelectionKey.OP_CONNECT);
+		assert key != null;
 		// Do nothing but wait until we have a response.
 		selector.select(0);
 		// We are done, close this selector.

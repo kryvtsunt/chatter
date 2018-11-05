@@ -1,0 +1,20 @@
+Description.
+
+First, when tou start conversation with the Prattle,
+you need to input your credentials (username and password).
+If you are a new user you can type any combination. If it is free,
+it will become your new credentials.
+(When you log in you user is either CREATEd or RETRIVEd from the db)
+
+When you successfully log in, you can:
+-communicate with the server by typing special messages like "Hello"
+-send messages to everyone by simply typing your message.
+-send direct messages by typing user>your_message (where user is the name of the user you want to talk to)
+-send messages to a group of users by typing user1,user2,user3>your_message (same logic)
+
+You can also manipulate the data of your user by typing:
+-UPDATE new_password (updates the password of the current user)
+-DELETE (deletes currently logged in user and ends the session)
+-RETRIEVE (tells current user's password)
+
+For this sprint, the DB is implemented simply as a text file db.txt.

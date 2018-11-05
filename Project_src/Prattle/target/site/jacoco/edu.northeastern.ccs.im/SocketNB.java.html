@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SocketNB.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Prattle</a> &gt; <a href="index.source.html" class="el_package">edu.northeastern.ccs.im</a> &gt; <span class="el_source">SocketNB.java</span></div><h1>SocketNB.java</h1><pre class="source lang-java linenums">package edu.northeastern.ccs.im;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.SocketChannel;
+
+/**
+ * This class resembles the traditional Socket, but is designed to be used by my
+ * non-blocking I/O classes. Instances of this class must be constructed before
+ * it is used to drive the input and output of non-blocking network traffic
+ * classes.
+ * 
+ * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+ * International License. To view a copy of this license, visit
+ * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
+ * originally written by Matthew Hertz and has been adapted for use in a class
+ * assignment at Northeastern University.
+ * 
+ * @version 1.3
+ */
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">public class SocketNB {</span>
+	/**
+	 * This class merely acts as a wrapper for Java's SocketChannel class; this is
+	 * the actual instance of SocketChannel.
+	 */
+	private SocketChannel channel;
+
+	/**
+	 * Creates a new network connection that connects to the specified port number
+	 * on the named host.
+	 *
+	 * @param host Hostname of the computer to which we are connecting
+	 * @param port Number of the port on the other computer which we use to connect
+	 * @throws IOException If an I/O error occurs when creating the socket, this
+	 *                     will be thrown.
+	 */
+<span class="fc" id="L39">	public SocketNB(String host, int port) throws IOException {</span>
+		// Open a new channel
+<span class="fc" id="L41">		channel = SocketChannel.open();</span>
+		// Make this channel a non-blocking channel
+<span class="fc" id="L43">		channel.configureBlocking(false);</span>
+		// Connect the channel to the remote port
+<span class="fc" id="L45">		channel.connect(new InetSocketAddress(host, port));</span>
+		// Open the selector to handle our non-blocking I/O
+<span class="fc" id="L47">		final Selector selector = Selector.open();</span>
+		// Register our channel to receive alerts to complete the connection
+<span class="fc" id="L49">		final SelectionKey key = channel.register(selector, SelectionKey.OP_CONNECT);</span>
+<span class="pc bpc" id="L50" title="2 of 4 branches missed.">		assert key != null;</span>
+		// Do nothing but wait until we have a response.
+<span class="fc" id="L52">		selector.select(0);</span>
+		// We are done, close this selector.
+<span class="fc" id="L54">		selector.close();</span>
+<span class="fc" id="L55">	}</span>
+
+	/**
+	 * Get the SocketChannel that this class is designed to hide. Using this
+	 * SocketChannel allows us to write classes that perform non-blocking I/O in a
+	 * manner similar to how we perform blocking I/O.
+	 *
+	 * @return Returns the SocketChannel for which this class acts as a wrapper.
+	 */
+	public SocketChannel getSocket() {
+<span class="fc" id="L65">		return channel;</span>
+	}
+
+	/**
+	 * &lt;p&gt;
+	 * Closes this non-blocking socket.
+	 * &lt;p&gt;
+	 * Once a SocketNB has been closed, it is not available for further networking
+	 * use (i.e. can't be reconnected or rebound). A new SocketNB needs to be
+	 * created.
+	 *
+	 * @throws IOException Exception thrown when an I/O error occurs closing this
+	 *                     socket.
+	 */
+	public void close() throws IOException {
+<span class="fc" id="L80">		channel.close();</span>
+<span class="fc" id="L81">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
