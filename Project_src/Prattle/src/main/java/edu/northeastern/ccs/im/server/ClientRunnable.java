@@ -105,6 +105,8 @@ public class ClientRunnable implements Runnable {
 
     private boolean validated;
 
+    private final static String serverName = "Prattle";
+
     /**
      * The future that is used to schedule the client for execution in the thread
      * pool.
@@ -124,7 +126,7 @@ public class ClientRunnable implements Runnable {
      * @throws IOException Exception thrown if we have trouble completing this
      *                     connection
      */
-    public ClientRunnable(SocketChannel client) throws IOException {
+    ClientRunnable(SocketChannel client) throws IOException {
         // Set up the SocketChannel over which we will communicate.
         socket = client;
         socket.configureBlocking(false);
@@ -202,22 +204,24 @@ public class ClientRunnable implements Runnable {
 
             try {
                 password = PrattleDB.instance().retrieve(this.getName());
-            } catch (FileNotFoundException ignored) {
+            } catch (FileNotFoundException ae) {
+                LOGGER.info(ae.toString());
             }
 
             if (password == null) {
                 try {
                     PrattleDB.instance().create(getName(), passwordInput);
-                } catch (IOException ignored) {
+                } catch (IOException ae) {
+                    LOGGER.info(ae.toString());
                 }
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage(serverName, "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
             if (passwordInput.equals(password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage(serverName, "Welcocme back " + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
@@ -257,7 +261,7 @@ public class ClientRunnable implements Runnable {
      * @return True if we sent the message successfully; false otherwise.
      */
     private boolean sendMessage(Message message) {
-        LOGGER.log(Level.INFO, "\t" + message.toString());
+        LOGGER.log(Level.INFO,  message.toString());
         return output.print(message);
     }
 
@@ -286,7 +290,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param message Complete message to be sent.
      */
-    public void enqueueMessage(Message message) {
+    void enqueueMessage(Message message) {
         waitingList.add(message);
     }
 
@@ -295,7 +299,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return Returns the name of this client.
      */
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -304,7 +308,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param name The name for which this ClientRunnable.
      */
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -313,7 +317,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return Returns the current value of userName.
      */
-    public int getUserId() {
+    int getUserId() {
         return userId;
     }
 
@@ -323,11 +327,11 @@ public class ClientRunnable implements Runnable {
      *
      * @return True if this thread's client should be considered; false otherwise.
      */
-    public boolean isInitialized() {
+    boolean isInitialized() {
         return initialized;
     }
 
-    public boolean isValidated() {
+    boolean isValidated() {
         return validated;
     }
 
@@ -363,7 +367,7 @@ public class ClientRunnable implements Runnable {
                         String destination = args[0];
                         String content = args[1];
                         String[] to = destination.split(",");
-                        for (String user: to){
+                        for (String user : to) {
                             Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
                         }
                     } else if (msg.getText() != null && msg.getText().contains("DELETE")) {
@@ -371,22 +375,23 @@ public class ClientRunnable implements Runnable {
                             PrattleDB.instance().delete(getName());
                             this.terminateClient();
                             return;
-                        } catch (IOException ignored) {
-
+                        } catch (IOException ae) {
+                            LOGGER.info(ae.toString());
                         }
                     } else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
                         try {
                             PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
                             return;
-                        } catch (IOException ignored) {
-
+                        } catch (IOException ae) {
+                            LOGGER.info( ae.toString());
                         }
                     } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         try {
                             String password = PrattleDB.instance().retrieve(getName());
-                            Prattle.directMessage(Message.makeBroadcastMessage("Prattle", password), this.getName());
+                            Prattle.directMessage(Message.makeBroadcastMessage(serverName, password), this.getName());
 
-                        } catch (IOException ignored) {
+                        } catch (IOException ae) {
+                            LOGGER.info(ae.toString());
                         }
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
@@ -470,7 +475,7 @@ public class ClientRunnable implements Runnable {
      * @param future Instance controlling when the runnable is executed from within
      *               the thread pool.
      */
-    public void setFuture(ScheduledFuture<ClientRunnable> future) {
+    void setFuture(ScheduledFuture<ClientRunnable> future) {
         runnableMe = future;
     }
 
@@ -478,12 +483,13 @@ public class ClientRunnable implements Runnable {
      * Terminate a client that we wish to remove. This termination could happen at
      * the client's request or due to system need.
      */
-    public void terminateClient() {
+    private void terminateClient() {
         try {
             // Once the communication is done, close this connection.
             input.close();
             socket.close();
-        } catch (IOException ignored) {
+        } catch (IOException ae) {
+            LOGGER.info( ae.toString());
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);
@@ -492,7 +498,7 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public Queue<Message> getWaitingList() {
+    Queue<Message> getWaitingList() {
         return new ConcurrentLinkedQueue<>(waitingList);
     }
 }

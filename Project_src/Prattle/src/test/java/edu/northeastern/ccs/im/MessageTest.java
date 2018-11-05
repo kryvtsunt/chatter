@@ -27,6 +27,8 @@ class MessageTest {
 
         Message msg3 = Message.makeAcknowledgeMessage("usr");
         assertEquals("ACK 3 usr 2 --", msg3.toString());
+
+        assertEquals("HLO 2 -- 5 Hello", Message.makeHelloMessage().toString());
     }
 
 }
