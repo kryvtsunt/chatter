@@ -15,7 +15,7 @@ pipeline {
    stage('Build') {
      steps {
        echo "Building Chatter"
-       sh 'mvn -f Project_src/Chatter/pom.xml compile'
+       sh 'mvn -f Project_src/Chatter/pom.xml install'
        echo "Building Prattle"
        sh 'mvn -f Project_src/Prattle/pom.xml compile'
      }
