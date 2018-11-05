@@ -204,7 +204,8 @@ public class ClientRunnable implements Runnable {
 
             try {
                 password = PrattleDB.instance().retrieve(this.getName());
-            } catch (FileNotFoundException ignored) {
+            } catch (FileNotFoundException ae) {
+                LOGGER.info(ae.toString());
             }
 
             if (password == null) {
@@ -375,14 +376,14 @@ public class ClientRunnable implements Runnable {
                             this.terminateClient();
                             return;
                         } catch (IOException ae) {
-                            LOGGER.info("Caught exception: " + ae.toString());
+                            LOGGER.info(ae.toString());
                         }
                     } else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
                         try {
                             PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
                             return;
                         } catch (IOException ae) {
-                            LOGGER.info("Caught exception: " + ae.toString());
+                            LOGGER.info( ae.toString());
                         }
                     } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         try {
@@ -390,7 +391,7 @@ public class ClientRunnable implements Runnable {
                             Prattle.directMessage(Message.makeBroadcastMessage(serverName, password), this.getName());
 
                         } catch (IOException ae) {
-                            LOGGER.info("Caught exception: "+ ae.toString());
+                            LOGGER.info(ae.toString());
                         }
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
@@ -488,7 +489,7 @@ public class ClientRunnable implements Runnable {
             input.close();
             socket.close();
         } catch (IOException ae) {
-            LOGGER.info("Caught exception: "+ ae.toString());
+            LOGGER.info( ae.toString());
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);
