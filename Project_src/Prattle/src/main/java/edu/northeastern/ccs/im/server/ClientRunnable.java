@@ -104,6 +104,8 @@ public class ClientRunnable implements Runnable {
 
     private boolean validated;
 
+    private final static String serverName = "Prattle";
+
     /**
      * The future that is used to schedule the client for execution in the thread
      * pool.
@@ -123,7 +125,7 @@ public class ClientRunnable implements Runnable {
      * @throws IOException Exception thrown if we have trouble completing this
      *                     connection
      */
-    public ClientRunnable(SocketChannel client) throws IOException {
+    ClientRunnable(SocketChannel client) throws IOException {
         // Set up the SocketChannel over which we will communicate.
         socket = client;
         socket.configureBlocking(false);
@@ -281,7 +283,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param message Complete message to be sent.
      */
-    public void enqueueMessage(Message message) {
+    void enqueueMessage(Message message) {
         waitingList.add(message);
     }
 
@@ -290,7 +292,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return Returns the name of this client.
      */
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -299,7 +301,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param name The name for which this ClientRunnable.
      */
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -308,7 +310,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return Returns the current value of userName.
      */
-    public int getUserId() {
+    int getUserId() {
         return userId;
     }
 
@@ -318,7 +320,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return True if this thread's client should be considered; false otherwise.
      */
-    public boolean isInitialized() {
+    boolean isInitialized() {
         return initialized;
     }
 
@@ -390,7 +392,6 @@ public class ClientRunnable implements Runnable {
                     else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         String password = PrattleDB.instance().retrieve(getName());
                         Prattle.directMessage(Message.makeBroadcastMessage("YOUR_PASSWORD_IS", password), this.getName());
-
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
                         if (messageChecks(msg)) {
@@ -474,7 +475,7 @@ public class ClientRunnable implements Runnable {
      * @param future Instance controlling when the runnable is executed from within
      *               the thread pool.
      */
-    public void setFuture(ScheduledFuture<ClientRunnable> future) {
+    void setFuture(ScheduledFuture<ClientRunnable> future) {
         runnableMe = future;
     }
 
@@ -482,12 +483,13 @@ public class ClientRunnable implements Runnable {
      * Terminate a client that we wish to remove. This termination could happen at
      * the client's request or due to system need.
      */
-    public void terminateClient() {
+    private void terminateClient() {
         try {
             // Once the communication is done, close this connection.
             input.close();
             socket.close();
-        } catch (IOException ignored) {
+        } catch (IOException ae) {
+            LOGGER.info( ae.toString());
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);
@@ -496,7 +498,7 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public Queue<Message> getWaitingList() {
+    Queue<Message> getWaitingList() {
         return new ConcurrentLinkedQueue<>(waitingList);
     }
 }

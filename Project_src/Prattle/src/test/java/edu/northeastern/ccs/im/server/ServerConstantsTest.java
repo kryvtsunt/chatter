@@ -38,8 +38,6 @@ class ServerConstantsTest {
         queryMsg.add(makeBroadcastMessage(SERVER_NAME,"Why are you asking me this?"));
         queryMsg.add(makeBroadcastMessage(SERVER_NAME,"I am a computer program. I run."));
 
-        Message emptyMsg = makeBroadcastMessage(NIST_NAME, "test");
-
         String IMPATIENT_COMMAND = "What time is it Mr. Fox?";
         String COOL_COMMAND = "WTF";
         assertEquals(coolMsg.toString(), ServerConstants.getBroadcastResponses(COOL_COMMAND).get(0).toString());

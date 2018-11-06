@@ -9,8 +9,13 @@ pipeline {
         }
     }
  options {
+<<<<<<< HEAD
       timeout(time: 10, unit: 'MINUTES')
   }
+=======
+      timeout(time: 10, unit: 'MINUTES') 
+  }  
+>>>>>>> master
  stages {
    stage('Build') {
      steps {

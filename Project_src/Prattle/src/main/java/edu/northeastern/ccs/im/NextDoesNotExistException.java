@@ -12,7 +12,7 @@ package edu.northeastern.ccs.im;
  * 
  * @version 1.3
  */
-public class NextDoesNotExistException extends RuntimeException {
+class NextDoesNotExistException extends RuntimeException {
 	/** Generated serial version uid. */
 	private static final long serialVersionUID = -2822265714929473142L;
 
@@ -22,7 +22,7 @@ public class NextDoesNotExistException extends RuntimeException {
 	 *
 	 * @param message Reason for which the program throws the exception.
 	 */
-	public NextDoesNotExistException(String message) {
+	NextDoesNotExistException(String message) {
 		super(message);
 	}
 }
