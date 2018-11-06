@@ -1,12 +1,8 @@
 package edu.northeastern.ccs.im;
 
-import edu.northeastern.ccs.im.server.Prattle;
-
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -83,9 +79,6 @@ public class PrintNetNB {
             }
         }
         // Check to see if we were successful in our attempt to write the message
-        if (wrapper.hasRemaining()) {
-            return false;
-        }
-        return true;
+        return !wrapper.hasRemaining();
     }
 }
