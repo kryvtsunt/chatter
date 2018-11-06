@@ -18,6 +18,20 @@
   <component name="CoverageViewManager">
     <option name="myElementSize" value="123" />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="1659619084">
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="java" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JAVA" value="1" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
@@ -47,8 +61,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="133" column="1" lean-forward="true" selection-start-line="133" selection-start-column="1" selection-end-line="133" selection-end-column="1" />
+            <state relative-caret-position="370">
+              <caret line="120" column="40" lean-forward="true" selection-start-line="120" selection-start-column="40" selection-end-line="120" selection-end-column="40" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -133,10 +147,18 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>to_old</find>
+      <find>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java" />
+      </list>
+    </option>
   </component>
   <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
@@ -159,6 +181,17 @@
               <item name="prattle" type="b2602c69:ProjectViewProjectNode" />
               <item name="Prattle" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="prattle" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Prattle" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="prattle" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Prattle" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -167,7 +200,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541478267808" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1541478444438" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -234,7 +267,7 @@
       <workItem from="1541043409823" duration="15830000" />
       <workItem from="1541106980795" duration="274000" />
       <workItem from="1541377457333" duration="830000" />
-      <workItem from="1541477182802" duration="975000" />
+      <workItem from="1541477182802" duration="1354000" />
     </task>
     <servers />
   </component>
@@ -250,11 +283,10 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="957000" />
+    <option name="totallyTimeSpent" value="1336000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.33087248" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -451,8 +483,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/java/edu/northeastern/ccs/im/server/ClientRunnableTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="133" column="1" lean-forward="true" selection-start-line="133" selection-start-column="1" selection-end-line="133" selection-end-column="1" />
+        <state relative-caret-position="370">
+          <caret line="120" column="40" lean-forward="true" selection-start-line="120" selection-start-column="40" selection-end-line="120" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
