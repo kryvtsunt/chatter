@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b0adc58a-9296-45d5-bbbe-02a7b77ae2f9" name="Default Changelist" comment="" />
+    <list default="true" id="b0adc58a-9296-45d5-bbbe-02a7b77ae2f9" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/../../Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/ClientRunnable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/Prattle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Prattle/src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

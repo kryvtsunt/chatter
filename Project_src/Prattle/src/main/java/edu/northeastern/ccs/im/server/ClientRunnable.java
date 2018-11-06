@@ -199,17 +199,9 @@ public class ClientRunnable implements Runnable {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
             String passwordInput = msg.getText();
-
-            try {
-                password = PrattleDB.instance().retrieve(this.getName());
-            } catch (FileNotFoundException ignored) {
-            }
-
+            password = PrattleDB.instance().retrieve(this.getName());
             if (password == null) {
-                try {
-                    PrattleDB.instance().create(getName(), passwordInput);
-                } catch (IOException ignored) {
-                }
+                PrattleDB.instance().create(getName(), passwordInput);
                 validated = true;
                 Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
@@ -364,31 +356,25 @@ public class ClientRunnable implements Runnable {
                         String destination = args[0];
                         String content = args[1];
                         String[] to = destination.split(",");
-                        for (String user: to){
+                        for (String user : to) {
                             Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
                         }
                     } else if (msg.getText() != null && msg.getText().contains("DELETE")) {
-                        try {
-                            PrattleDB.instance().delete(getName());
-                            this.terminateClient();
-                            return;
-                        } catch (IOException ignored) {
+                        PrattleDB.instance().delete(getName());
+                        this.terminateClient();
+                        return;
 
-                        }
+
                     } else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
-                        try {
-                            PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
-                            return;
-                        } catch (IOException ignored) {
 
-                        }
+                        PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
+                        return;
+
+
                     } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
-                        try {
-                            String password = PrattleDB.instance().retrieve(getName());
-                            Prattle.directMessage(Message.makeBroadcastMessage("Prattle", password), this.getName());
+                        String password = PrattleDB.instance().retrieve(getName());
+                        Prattle.directMessage(Message.makeBroadcastMessage("Prattle", password), this.getName());
 
-                        } catch (IOException ignored) {
-                        }
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
                         if (messageChecks(msg)) {
