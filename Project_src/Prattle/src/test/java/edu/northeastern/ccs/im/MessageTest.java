@@ -18,6 +18,7 @@ class MessageTest {
         assertFalse(message.isInitialization());
         assertFalse(message.terminate());
 
+<<<<<<< HEAD
         Message message2 = Message.makeAcknowledgeMessage("tim");
         assertTrue(message2.isAcknowledge());
         Message message3 = Message.makeNoAcknowledgeMessage();
@@ -34,6 +35,17 @@ class MessageTest {
         assertFalse(message6.isBroadcastMessage());
         assertEquals("NAK 2 -- 2 --", message5.toString());
 
+=======
+        Message msg1 = Message.makeBroadcastMessage("Usr","Hello");
+        assertEquals("BCT 3 Usr 5 Hello", msg1.toString());
+
+        Message msg2 = Message.makeNoAcknowledgeMessage();
+        assertEquals("NAK 2 -- 2 --",msg2.toString());
+        assertFalse(msg2.isDirectMessage());
+
+        Message msg3 = Message.makeAcknowledgeMessage("usr");
+        assertEquals("ACK 3 usr 2 --", msg3.toString());
+>>>>>>> master
     }
 
 }

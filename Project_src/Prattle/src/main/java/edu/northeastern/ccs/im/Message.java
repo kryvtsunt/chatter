@@ -131,15 +131,15 @@ public class Message {
 		return new Message(MessageType.BROADCAST, myName, text);
 	}
 
-	/**
-	 * Create a new message stating the name with which the user would like to
-	 * login.
-	 *
-	 * @return Instance of Message that can be sent to the server to try and login.
-	 */
-	protected static Message makeHelloMessage() {
-		return new Message(MessageType.HELLO, null, "Hello");
-	}
+//	/**
+//	 * Create a new message stating the name with which the user would like to
+//	 * login.
+//	 *
+//	 * @return Instance of Message that can be sent to the server to try and login.
+//	 */
+//	protected static Message makeHelloMessage() {
+//		return new Message(MessageType.HELLO, null, "Hello");
+//	}
 
 	/**
 	 * Given a handle, name and text, return the appropriate message instance or an
