@@ -13,7 +13,7 @@ import java.nio.channels.SocketChannel;
 class PrattleTest {
 
     @Test
-    void broadcastMessage() throws IOException, SecurityException,
+    void testMain() throws IOException, SecurityException,
             IllegalArgumentException,InterruptedException {
         ServerRunnable server = new PrattleTest().new ServerRunnable();
         Thread serverThread = new Thread(server);
@@ -28,7 +28,7 @@ class PrattleTest {
         printer.print(loginmsg);
         printer.print(passwordmsg);
         socketChannel.close();
-        Thread.sleep(8000);
+        Thread.sleep(10000);
         Prattle.directMessage(msg, "username");
         Prattle.broadcastMessage(msg);
         serverThread.interrupt();
