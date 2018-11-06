@@ -1,23 +1,31 @@
 package edu.northeastern.ccs.im.server;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
+import edu.northeastern.ccs.im.SocketNB;
+import org.junit.jupiter.api.AfterEach;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
+import static org.junit.jupiter.api.Assertions.*;
 
 class PrattleTest {
 
     @Test
-    void testMain() throws IOException, SecurityException,
+    void broadcastMessage() throws IOException, SecurityException,
             IllegalArgumentException,InterruptedException {
         ServerRunnable server = new PrattleTest().new ServerRunnable();
         Thread serverThread = new Thread(server);
         serverThread.start();
+        Thread.sleep(1500);
         Message loginmsg = Message.makeSimpleLoginMessage("username");
         Message passwordmsg = Message.makeBroadcastMessage("username", "password");
         Message msg = Message.makeBroadcastMessage("username", "test");
