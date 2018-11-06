@@ -23,7 +23,7 @@ public class ServerConstants {
 	private ServerConstants(){};
 
 	/** The port number to listen on. */
-	protected static final int PORT = 4505;
+	protected static final int PORT = 4545;
 
 	/** Name of the private user who responds to interesting queries. */
 	protected static final String NIST_NAME = "NIST";

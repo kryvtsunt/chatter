@@ -17,6 +17,24 @@ class MessageTest {
         assertFalse(message.isAcknowledge());
         assertFalse(message.isInitialization());
         assertFalse(message.terminate());
+
+        Message message2 = Message.makeAcknowledgeMessage("tim");
+        assertTrue(message2.isAcknowledge());
+        Message message3 = Message.makeNoAcknowledgeMessage();
+        assertFalse(message3.isBroadcastMessage());
+        assertFalse(message3.isDisplayMessage());
+        assertFalse(message3.isDirectMessage());
+        assertFalse(message3.isInitialization());
+
+        Message message4 = Message.makeMessage("ACK", "tim", null);
+        Message message5 = Message.makeMessage("NAK", null, null);
+        assertTrue(message4.isAcknowledge());
+        assertFalse(message5.isDisplayMessage());
+
+        Message message6 = Message.makeHelloMessage();
+        assertFalse(message6.isBroadcastMessage());
+        assertEquals("NAK 2 -- 2 --", message5.toString());
+
     }
 
 }

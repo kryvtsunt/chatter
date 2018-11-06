@@ -107,7 +107,6 @@ public abstract class Prattle {
      * @throws IOException Exception thrown if the server cannot connect to the port
      *                     to which it is supposed to listen.
      */
-    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws IOException {
         // Connect to the socket on the appropriate port to which this server connects.
         serverSocket = ServerSocketChannel.open();
@@ -146,7 +145,6 @@ public abstract class Prattle {
                             // Add the thread to the queue of active threads
                             active.add(tt);
                             // Have the client executed by our pool of threads.
-                            @SuppressWarnings("rawtypes")
                             ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(tt, CLIENT_CHECK_DELAY,
                                     CLIENT_CHECK_DELAY, TimeUnit.MILLISECONDS);
                             tt.setFuture(clientFuture);
