@@ -245,10 +245,6 @@ public class Message {
 		return (msgType == MessageType.BROADCAST);
 	}
 
-	public boolean isDirectMessage() {
-		return (msgType == MessageType.DIRECT);
-	}
-
 	/**
 	 * Determine if this message is sent by a new client to log-in to the server.
 	 *

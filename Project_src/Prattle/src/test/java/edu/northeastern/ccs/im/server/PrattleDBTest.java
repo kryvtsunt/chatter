@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class PrattleDBTest {
 
     @Test
-    void testDB() throws IOException {
+    void testPrattleDB() {
         PrattleDB db = PrattleDB.instance();
         assertTrue(db.create("tim", "1234"));
         assertTrue(db.delete("tim"));
@@ -35,7 +35,6 @@ class PrattleDBTest {
         assertFalse(db.create("tim", "1234"));
 
         db.reset("db.txt");
-
 
     }
 }

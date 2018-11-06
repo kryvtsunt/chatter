@@ -12,7 +12,7 @@ class PrintNetNBTest {
 
 
     @Test
-    void exception() throws IOException {
+    void testException() throws IOException {
         SocketNB socket = new SocketNB("localhost", 1111);
         ScanNetNB scanner = new ScanNetNB(socket.getSocket());
         PrintNetNB printer = new PrintNetNB(socket);

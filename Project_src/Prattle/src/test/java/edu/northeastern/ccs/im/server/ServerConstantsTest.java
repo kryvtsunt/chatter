@@ -15,9 +15,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ServerConstantsTest {
     private GregorianCalendar cal = new GregorianCalendar();
 
-
     @Test
-    void testGetBroadcastResponses() {
+    void testServerConstants() {
         String currentTime = cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE);
         String currentDate = (cal.get(Calendar.MONTH) + 1) + "/" + cal.get(Calendar.DATE) + "/" + cal.get(Calendar.YEAR);
         Message coolMsg = makeBroadcastMessage("Prattle", "OMG ROFL TTYL");

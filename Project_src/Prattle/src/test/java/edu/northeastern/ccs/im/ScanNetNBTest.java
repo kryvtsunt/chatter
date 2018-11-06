@@ -21,9 +21,8 @@ import java.util.List;
 
 class ScanNetNBTest {
 
-
     @Test
-    public void testNextMessage() throws IOException {
+    public void testScanNetNB() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         /**

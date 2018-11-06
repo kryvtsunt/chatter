@@ -1,6 +1,5 @@
 package edu.northeastern.ccs.im.server;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
 import java.util.*;
@@ -191,6 +190,9 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * Check is the user is validate (if the new user - save his credentials in db)
+     */
     private void checkForValidation() {
         String password = null;
 
@@ -203,13 +205,13 @@ public class ClientRunnable implements Runnable {
             if (password == null) {
                 PrattleDB.instance().create(getName(), passwordInput);
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage("TO_NEW_USER", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
             if (passwordInput.equals(password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeBroadcastMessage("Prattle", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeBroadcastMessage("TO_OLD_USER", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
@@ -312,7 +314,7 @@ public class ClientRunnable implements Runnable {
 
     /**
      * Return if this thread has completed the initialization process with its
-     * client and is read to receive messages.
+     * client and is read to validate.
      *
      * @return True if this thread's client should be considered; false otherwise.
      */
@@ -320,6 +322,12 @@ public class ClientRunnable implements Runnable {
         return initialized;
     }
 
+    /**
+     * Return if this thread has completed the validation process with its
+     * client and is read to receive messages.
+     *
+     * @return True if this thread's client should be considered; false otherwise.
+     */
     public boolean isValidated() {
         return validated;
     }
@@ -336,7 +344,9 @@ public class ClientRunnable implements Runnable {
         if (!initialized) {
             checkForInitialization();
 
-        } else if (!validated) {
+        }
+        // The client must be validated before we can do anything else
+        else if (!validated) {
             checkForValidation();
         } else {
             try {
@@ -350,7 +360,7 @@ public class ClientRunnable implements Runnable {
                     // inactivity.
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
-                    // If the message is a broadcast message, send it out
+                    // If the message is a direct message, send it out
                     if (msg.getText() != null && msg.getText().contains(">")) {
                         String[] args = msg.getText().split(">");
                         String destination = args[0];
@@ -359,21 +369,27 @@ public class ClientRunnable implements Runnable {
                         for (String user : to) {
                             Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
                         }
-                    } else if (msg.getText() != null && msg.getText().contains("DELETE")) {
+                    }
+                    // If the message is a DELETE user
+                    else if (msg.getText() != null && msg.getText().contains("DELETE")) {
                         PrattleDB.instance().delete(getName());
                         this.terminateClient();
                         return;
 
 
-                    } else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
+                    }
+                    // If the message is a UPDATE user
+                    else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
 
                         PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
                         return;
 
 
-                    } else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
+                    }
+                    // If the message is a RETRIEVE user
+                    else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         String password = PrattleDB.instance().retrieve(getName());
-                        Prattle.directMessage(Message.makeBroadcastMessage("Prattle", password), this.getName());
+                        Prattle.directMessage(Message.makeBroadcastMessage("YOUR_PASSWORD_IS", password), this.getName());
 
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted

@@ -34,8 +34,6 @@ public class PrintNetNB {
      */
     private static final int MAXIMUM_TRIES_SENDING = 100;
 
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
-
     /**
      * Creates a new instance of this class. Since, by definition, this class sends
      * output over the network, we need to supply the non-blocking Socket instance
@@ -74,12 +72,11 @@ public class PrintNetNB {
     public boolean print(Message msg) {
         String str = msg.toString();
         ByteBuffer wrapper = ByteBuffer.wrap(str.getBytes());
-        int bytesWritten = 0;
         int attemptsRemaining = MAXIMUM_TRIES_SENDING;
         while (wrapper.hasRemaining() && (attemptsRemaining > 0)) {
             try {
                 attemptsRemaining--;
-                bytesWritten += channel.write(wrapper);
+                channel.write(wrapper);
             } catch (IOException e) {
                 // Show that this was unsuccessful
                 return false;
@@ -87,8 +84,6 @@ public class PrintNetNB {
         }
         // Check to see if we were successful in our attempt to write the message
         if (wrapper.hasRemaining()) {
-            LOGGER.log(Level.WARNING, "WARNING: Not all bytes were sent -- dropping this user. ");
-            assert bytesWritten != 0;
             return false;
         }
         return true;

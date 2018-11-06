@@ -23,7 +23,6 @@ class MessageTest {
         Message message3 = Message.makeNoAcknowledgeMessage();
         assertFalse(message3.isBroadcastMessage());
         assertFalse(message3.isDisplayMessage());
-        assertFalse(message3.isDirectMessage());
         assertFalse(message3.isInitialization());
 
         Message message4 = Message.makeMessage("ACK", "tim", null);
