@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class NextDoesNotExistExceptionTest {
 
     @Test
-    public void testException(){
+    void testException(){
         try{
             throw new NextDoesNotExistException("No next!");
         } catch(NextDoesNotExistException e){
