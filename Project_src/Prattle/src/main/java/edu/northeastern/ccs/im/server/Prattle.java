@@ -51,9 +51,6 @@ public abstract class Prattle {
     private static ConcurrentLinkedQueue<ClientRunnable> active;
 
 
-    /* Socket on the appropriate port to which this server connects. */
-    private static ServerSocketChannel serverSocket;
-
     /* All of the static initialization occurs in this "method" */
     static {
         // Create the new queue of active threads.
@@ -109,7 +106,7 @@ public abstract class Prattle {
      */
     public static void main(String[] args) throws IOException {
         // Connect to the socket on the appropriate port to which this server connects.
-        serverSocket = ServerSocketChannel.open();
+        ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(ServerConstants.PORT));
         // Create the Selector with which our channel is registered.

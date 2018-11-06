@@ -257,7 +257,8 @@ public class ClientRunnable implements Runnable {
      * @return True if we sent the message successfully; false otherwise.
      */
     private boolean sendMessage(Message message) {
-        LOGGER.log(Level.INFO, "\t" + message.toString());
+        String str = "\t" + message.toString();
+        LOGGER.log(Level.INFO, str);
         return output.print(message);
     }
 
@@ -458,7 +459,8 @@ public class ClientRunnable implements Runnable {
         // when they have, terminate
         // the client.
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
-            LOGGER.log(Level.INFO, "Timing out or forcing off a user " + name);
+            String str = "Timing out or forcing off a user " + name;
+            LOGGER.log(Level.INFO, str);
             terminateClient();
         }
     }

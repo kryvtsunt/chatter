@@ -1,9 +1,12 @@
 package edu.northeastern.ccs.im;
 
+import edu.northeastern.ccs.im.server.Prattle;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -30,6 +33,8 @@ public class PrintNetNB {
      * Number of times to try sending a message before we give up in frustration.
      */
     private static final int MAXIMUM_TRIES_SENDING = 100;
+
+    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
     /**
      * Creates a new instance of this class. Since, by definition, this class sends
@@ -81,6 +86,11 @@ public class PrintNetNB {
             }
         }
         // Check to see if we were successful in our attempt to write the message
-        return !wrapper.hasRemaining();
+        if (wrapper.hasRemaining()) {
+            LOGGER.log(Level.WARNING, "WARNING: Not all bytes were sent -- dropping this user. ");
+            assert bytesWritten != 0;
+            return false;
+        }
+        return true;
     }
 }
