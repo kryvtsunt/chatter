@@ -18,33 +18,44 @@ public class PrattleDB {
     /**
      * A Data Structure that contatins a mapping of usernames to the user passwords.
      */
-    private static Map<String, String> users = new HashMap<>();
 
     private static PrattleDB instance;
 
-    private PrattleDB(){ }
+    private Map<String, String> users = new HashMap<>();
+
+    private String name = "db.txt";
+
+    private PrattleDB() {
+    }
 
     /**
      * get the instance of the state
+     *
      * @return instance of the state (create new if it does not exist);
      */
-    public static PrattleDB  instance(){
+    public static PrattleDB instance() {
         if (instance == null) {
-            instance = new  PrattleDB();
+            instance = new PrattleDB();
         }
         return instance;
     }
 
     /**
      * Read DB from the file
+     *
      * @throws FileNotFoundException if file is not found
      */
-    private void readDB() throws FileNotFoundException {
-        String str;
+    private boolean readDB() {
+        String str = "";
         String key;
         String value;
-        File file = new File("db.txt");
-        Scanner scanner = new Scanner(file);
+        File file = new File(name);
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (FileNotFoundException e) {
+            return false;
+        }
         while (scanner.hasNextLine()) {
             str = scanner.nextLine();
             String[] args = str.split("-");
@@ -55,30 +66,34 @@ public class PrattleDB {
             }
         }
         scanner.close();
+        return true;
     }
 
     /**
      * Write DB into the file
-     * @throws IOException when not able to write
      */
-    private void writeDB() throws IOException {
+    private boolean writeDB() {
         StringBuilder data = new StringBuilder();
         for (Map.Entry<String, String> entry : users.entrySet()) {
             data.append(entry.getKey()).append("-").append(entry.getValue()).append('\n');
         }
-        Files.write(Paths.get("db.txt"), data.toString().getBytes());
+        try {
+            Files.write(Paths.get(name), data.toString().getBytes());
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
     }
 
     /**
      * Retrieves the user's password
+     *
      * @param username username of the user to retrieve
      * @return password of the user
-     * @throws FileNotFoundException when file to read from is not found
      */
-    public String retrieve(String username) throws FileNotFoundException {
-        readDB();
-        if (users.containsKey(username)){
-            return users.get(username);
+    public String retrieve(String username) {
+        if (readDB() && (users.containsKey(username))) {
+                return users.get(username);
         }
         return null;
     }
@@ -86,58 +101,72 @@ public class PrattleDB {
 
     /**
      * Delete entry
+     *
      * @param username username of the user to delete
-     * @throws IOException when not able to write
+     * @return true if operation is successful, false otherwise
      */
-    public void delete(String username) throws IOException {
-        readDB();
-        if (users.containsKey(username)) {
-            users.remove(username);
+    public boolean delete(String username) {
+        if (readDB()) {
+            if (users.containsKey(username)) {
+                users.remove(username);
+            }
+            return writeDB();
         }
-        writeDB();
+        return false;
 
     }
 
     /**
      * Update entry
+     *
      * @param username user's username
      * @param password new user's password
-     * @throws IOException when not able to write
+     * @return true if operation is successful, false otherwise
      */
-    public void update(String username, String password) throws IOException {
-        readDB();
-        if (users.containsKey(username)) {
-            users.put(username, password);
+    public boolean update(String username, String password) {
+        if (readDB()) {
+            if (users.containsKey(username)) {
+                users.put(username, password);
+            }
+            return writeDB();
         }
-        writeDB();
+        return false;
     }
 
     /**
      * Delete entry
+     *
      * @param username user's username
      * @param password user's password
-     * @throws IOException when not able to write
      */
-    public void delete(String username, String password) throws IOException {
-        readDB();
-        if (users.containsKey(username) && users.get(username).equals(password)) {
-            users.remove(username, password);
+    public boolean delete(String username, String password) {
+        if (readDB()) {
+            if (users.containsKey(username) && users.get(username).equals(password)) {
+                users.remove(username, password);
+            }
+            return writeDB();
         }
-        writeDB();
+        return false;
     }
 
     /**
-     *
      * Create entry
+     *
      * @param username user's username
      * @param password user's password
-     * @throws IOException when not able to write
+     * @return true if operation is successful, false otherwise
      */
-    public void create(String username, String password) throws IOException {
-        readDB();
-        if (!users.containsKey(username)) {
-            users.put(username, password);
+    public boolean create(String username, String password) {
+        if (readDB()) {
+            if (!users.containsKey(username)) {
+                users.put(username, password);
+            }
+            return writeDB();
         }
-        writeDB();
+        return false;
+    }
+
+    public void reset(String str){
+        name = str;
     }
 }

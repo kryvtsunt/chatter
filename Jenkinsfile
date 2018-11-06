@@ -9,8 +9,8 @@ pipeline {
         }
     }
  options {
-      timeout(time: 10, unit: 'MINUTES') 
-  }  
+      timeout(time: 10, unit: 'MINUTES')
+  }
  stages {
    stage('Build') {
      steps {
@@ -29,7 +29,7 @@ pipeline {
       }
 
       sh 'sleep 30'
-      timeout(time: 10, unit: 'SECONDS') {
+      timeout(time: 30, unit: 'SECONDS') {
        retry(5) {
         script {
           def qg = waitForQualityGate()
@@ -40,7 +40,7 @@ pipeline {
       }
     }
   }
-} //SONAR 
+} //SONAR
 
 } // STAGES
 
@@ -48,11 +48,11 @@ pipeline {
  post {
      always {
             archive 'target/**/*.jar'
-            }       
+            }
     success {
            slackSend (baseUrl: "https://cs5500.slack.com/services/hooks/jenkins-ci/", token: "KMCs4FgzEHNwyv9ioFqIwO4m", channel: "#cs5500-team-105-f18", color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME}")
             }
-    failure {  
+    failure {
            slackSend (baseUrl: "https://cs5500.slack.com/services/hooks/jenkins-ci/", token: "KMCs4FgzEHNwyv9ioFqIwO4m", channel: "#cs5500-team-105-f18", color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME}")
             }
        } //POST

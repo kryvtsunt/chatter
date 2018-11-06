@@ -13,17 +13,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class PrattleDBTest {
 
     @Test
-    void testDB() throws IOException {
+    void testPrattleDB() {
         PrattleDB db = PrattleDB.instance();
-        db.create("tim", "1234");
-        db.delete("tim");
-        db.delete("bubochka");
-        db.delete("bubochka", "asdf");
-        db.update("bubochka", "bsdbfb");
-        db.create("tim", "1234");
-        db.update("tim", "12345");
+        assertTrue(db.create("tim", "1234"));
+        assertTrue(db.delete("tim"));
+        assertTrue(db.delete("bubochka"));
+        assertTrue(db.delete("bubochka", "asdf"));
+        assertTrue(db.update("bubochka", "bsdbfb"));
+        assertTrue(db.create("tim", "1234"));
+        assertTrue(db.update("tim", "12345"));
         assertEquals("12345", db.retrieve("tim"));
-        db.delete("tim", "12345");
-        db.create("tim", "timberman_42");
+        assertTrue(db.delete("tim", "12345"));
+        assertTrue(db.create("tim", "timberman_42"));
+
+        db.reset("db2.txt");
+        assertFalse(db.create("tim", "1234"));
+        assertFalse(db.update("tim", "1234"));
+        assertFalse(db.delete("tim", "1234"));
+        assertFalse(db.delete("tim"));
+        assertNull(db.retrieve("tim"));
+        assertFalse(db.create("tim", "1234"));
+
+        db.reset("db.txt");
+
     }
 }

@@ -17,10 +17,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SocketNBTest {
-
-
     @Test
-    void getSocket() throws IOException {
+    void testSocketNB() throws IOException {
         ServerSocketChannel serverSocket;
         SocketChannel socketChannel;
         int port = 4517;

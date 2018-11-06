@@ -5,7 +5,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
 
-
 /**
  * This class is similar to the java.io.PrintWriter class, but this class's
  * methods work with our non-blocking Socket classes. This class could easily be
@@ -69,12 +68,11 @@ public class PrintNetNB {
     public boolean print(Message msg) {
         String str = msg.toString();
         ByteBuffer wrapper = ByteBuffer.wrap(str.getBytes());
-        int bytesWritten = 0;
         int attemptsRemaining = MAXIMUM_TRIES_SENDING;
         while (wrapper.hasRemaining() && (attemptsRemaining > 0)) {
             try {
                 attemptsRemaining--;
-                bytesWritten += channel.write(wrapper);
+                channel.write(wrapper);
             } catch (IOException e) {
                 // Show that this was unsuccessful
                 return false;

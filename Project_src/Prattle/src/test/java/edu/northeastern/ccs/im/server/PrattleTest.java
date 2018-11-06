@@ -12,8 +12,10 @@ import java.nio.channels.SocketChannel;
 
 class PrattleTest {
 
+
+    // Runs the main function in parallel thread to test server communication
     @Test
-    void broadcastMessage() throws IOException, SecurityException,
+    void testMain() throws IOException, SecurityException,
             IllegalArgumentException,InterruptedException {
         ServerRunnable server = new PrattleTest().new ServerRunnable();
         Thread serverThread = new Thread(server);
@@ -35,6 +37,7 @@ class PrattleTest {
         serverThread.interrupt();
     }
 
+    // Creates a runnable main function
     private class ServerRunnable implements Runnable {
         public void run()
         {

@@ -29,9 +29,9 @@ class ClientRunnableTest {
     private static final int port = 4548;
     private static final int port2 = 4556;
 
-
+    // tests user brodcast and dirrect messages
     @Test
-    void test1() throws IOException {
+    void testClientRunnable() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port));
@@ -49,6 +49,7 @@ class ClientRunnableTest {
         msgs.add(Message.makeBroadcastMessage("username", "password"));
         msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
         msgs.add(Message.makeBroadcastMessage("username", "receiverUser> Hello"));
+        msgs.add(Message.makeBroadcastMessage("username", "receiverUser1,recieverUser2> Hello"));
         msgs.add(Message.makeBroadcastMessage("username", "Hello"));
 
         for (Message msg : msgs) {
@@ -82,8 +83,9 @@ class ClientRunnableTest {
     }
 
 
+    // tests new user CRUD operations
     @Test
-    void test2() throws IOException {
+    void testCRUDinteraction() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port2));
@@ -102,7 +104,7 @@ class ClientRunnableTest {
         msgs2.add(Message.makeSimpleLoginMessage("username2"));
         msgs2.add(Message.makeBroadcastMessage("username2", "password"));
         msgs2.add(Message.makeBroadcastMessage("username2", "broadcast text"));
-        msgs2.add(Message.makeBroadcastMessage("username2", "receiverUser1,recieverUser2> Hello"));
+        msgs2.add(Message.makeBroadcastMessage("username2", "receiverUser> Hello"));
         msgs2.add(Message.makeBroadcastMessage("username2", "UPDATE newPassword"));
         msgs2.add(Message.makeBroadcastMessage("username2", "RETRIEVE"));
         msgs2.add(Message.makeBroadcastMessage("username2", "DELETE"));
