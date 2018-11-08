@@ -45,7 +45,7 @@ class ClientRunnableTest {
         PrintNetNB printer = new PrintNetNB(socketChannel);
 
 
-        msgs.add(Message.makeLoginMessage("username"));
+        msgs.add(Message.makeSimpleLoginMessage("username"));
         msgs.add(Message.makeBroadcastMessage("username", "password"));
         msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
         msgs.add(Message.makeBroadcastMessage("username", "receiverUser> Hello"));
@@ -101,7 +101,7 @@ class ClientRunnableTest {
 
         List<Message> msgs2 = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs2.add(Message.makeLoginMessage("username2"));
+        msgs2.add(Message.makeSimpleLoginMessage("username2"));
         msgs2.add(Message.makeBroadcastMessage("username2", "password"));
         msgs2.add(Message.makeBroadcastMessage("username2", "broadcast text"));
         msgs2.add(Message.makeBroadcastMessage("username2", "receiverUser> Hello"));
