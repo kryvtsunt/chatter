@@ -15,18 +15,18 @@ import java.util.Scanner;
  */
 public class PrattleDB {
 
+    private static String NAME;
+
+    private static PrattleDB instance;
+
+
     /**
      * A Data Structure that contatins a mapping of usernames to the user passwords.
      */
 
-    private static PrattleDB instance;
-
     private Map<String, String> users = new HashMap<>();
 
-    private String name = "db.txt";
-
-    private PrattleDB() {
-    }
+    private PrattleDB() { }
 
     /**
      * get the instance of the state
@@ -37,6 +37,21 @@ public class PrattleDB {
         if (instance == null) {
             instance = new PrattleDB();
         }
+        NAME = "db.txt";
+        return instance;
+    }
+
+    /**
+     * get the instance of the state
+     *
+     * @param name of the db
+     * @return instance of the state (create new if it does not exist);
+     */
+    public static PrattleDB instance(String name) {
+        if (instance == null) {
+            instance = new PrattleDB();
+        }
+        NAME = name;
         return instance;
     }
 
@@ -49,7 +64,7 @@ public class PrattleDB {
         String str = "";
         String key;
         String value;
-        File file = new File(name);
+        File file = new File(NAME);
         Scanner scanner = null;
         try {
             scanner = new Scanner(file);
@@ -78,7 +93,7 @@ public class PrattleDB {
             data.append(entry.getKey()).append("-").append(entry.getValue()).append('\n');
         }
         try {
-            Files.write(Paths.get(name), data.toString().getBytes());
+            Files.write(Paths.get(NAME), data.toString().getBytes());
         } catch (IOException e) {
             return false;
         }
@@ -166,7 +181,4 @@ public class PrattleDB {
         return false;
     }
 
-    public void reset(String str){
-        name = str;
-    }
 }

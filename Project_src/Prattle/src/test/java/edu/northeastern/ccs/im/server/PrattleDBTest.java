@@ -26,15 +26,13 @@ class PrattleDBTest {
         assertTrue(db.delete("tim", "12345"));
         assertTrue(db.create("tim", "timberman_42"));
 
-        db.reset("db2.txt");
+        db = PrattleDB.instance("db2.txt");
         assertFalse(db.create("tim", "1234"));
         assertFalse(db.update("tim", "1234"));
         assertFalse(db.delete("tim", "1234"));
         assertFalse(db.delete("tim"));
         assertNull(db.retrieve("tim"));
         assertFalse(db.create("tim", "1234"));
-
-        db.reset("db.txt");
 
     }
 }

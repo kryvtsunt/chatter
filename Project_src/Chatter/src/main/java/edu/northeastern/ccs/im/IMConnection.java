@@ -193,8 +193,19 @@ public class IMConnection {
 		if (!connectionActive()) {
 			throw new IllegalOperationException("Cannot send a message if you are not connected to a server!\n");
 		}
-		Message bctMessage = Message.makeBroadcastMessage(userName, message);
-		socketConnection.print(bctMessage);
+		if (message.contains(">")) {
+			String[] args = message.split(">");
+			String destination = args[0];
+			String content = args[1];
+			String[] to = destination.split(",");
+			for (String directTo : to) {
+				Message dctMessage = Message.makeDirectMessage(userName, directTo, content);
+				socketConnection.print(dctMessage);
+			}
+		} else {
+			Message bctMessage = Message.makeBroadcastMessage(userName, message);
+			socketConnection.print(bctMessage);
+		}
 	}
 
 	/**

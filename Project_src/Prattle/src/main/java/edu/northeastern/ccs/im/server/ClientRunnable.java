@@ -177,7 +177,7 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            if (setUserName(msg.getName())) {
+            if (setUserName(msg.getSender())) {
                 // Update the time until we terminate this client due to inactivity.
                 terminateInactivity.setTimeInMillis(
                         new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
@@ -240,7 +240,7 @@ public class ClientRunnable implements Runnable {
      */
     private boolean messageChecks(Message msg) {
         // Check that the message name matches.
-        return (msg.getName() != null) && (msg.getName().compareToIgnoreCase(getName()) == 0);
+        return (msg.getSender() != null) && (msg.getSender().compareToIgnoreCase(getName()) == 0);
     }
 
     /**
@@ -361,14 +361,8 @@ public class ClientRunnable implements Runnable {
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a direct message, send it out
-                    if (msg.getText() != null && msg.getText().contains(">")) {
-                        String[] args = msg.getText().split(">");
-                        String destination = args[0];
-                        String content = args[1];
-                        String[] to = destination.split(",");
-                        for (String user : to) {
-                            Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
-                        }
+                    if (msg.isDirectMessage()){
+                        Prattle.directMessage(msg, msg.getReceiver());
                     }
                     // If the message is a DELETE user
                     else if (msg.getText() != null && msg.getText().contains("DELETE")) {
