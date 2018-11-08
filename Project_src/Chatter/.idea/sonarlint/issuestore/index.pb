@@ -21,3 +21,9 @@ g
 7src/main/java/edu/northeastern/ccs/im/LinkListener.java,3\f\3fd249306539f0c072113d8c5f9fe849e9cb1cf2
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
+c
+3src/main/java/edu/northeastern/ccs/im/SocketNB.java,8\7\870305f3ce8e02e5084bec0543e78a8f76272124
+i
+9src/main/java/edu/northeastern/ccs/im/MessageScanner.java,4\7\47edb56f5ae5f18c7de3f66636ddf12deae1434c
+p
+@src/main/java/edu/northeastern/ccs/im/ScanForMessagesWorker.java,2\7\2777fcab8eb236e56c26babcd93c63fc93fac6fe
