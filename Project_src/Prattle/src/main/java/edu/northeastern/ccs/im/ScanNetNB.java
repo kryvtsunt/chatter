@@ -86,7 +86,7 @@ public class ScanNetNB {
 	 * @param connection Non-blocking Socket instance from which we will receive
 	 *                   communications.
 	 */
-	public ScanNetNB(SocketNB connection) {
+	ScanNetNB(SocketNB connection) {
 		// Get the socket channel from the SocketNB instance and go.
 		this(connection.getSocket());
 	}

@@ -20,7 +20,7 @@ import java.nio.channels.SocketChannel;
  * 
  * @version 1.3
  */
-public class SocketNB {
+class SocketNB {
 	/**
 	 * This class merely acts as a wrapper for Java's SocketChannel class; this is
 	 * the actual instance of SocketChannel.
@@ -36,7 +36,7 @@ public class SocketNB {
 	 * @throws IOException If an I/O error occurs when creating the socket, this
 	 *                     will be thrown.
 	 */
-	public SocketNB(String host, int port) throws IOException {
+	SocketNB(String host, int port) throws IOException {
 		// Open a new channel
 		channel = SocketChannel.open();
 		// Make this channel a non-blocking channel
@@ -60,8 +60,8 @@ public class SocketNB {
 	 * manner similar to how we perform blocking I/O.
 	 *
 	 * @return Returns the SocketChannel for which this class acts as a wrapper.
-	 */
-	public SocketChannel getSocket() {
+     */
+	SocketChannel getSocket() {
 		return channel;
 	}
 
@@ -76,7 +76,7 @@ public class SocketNB {
 	 * @throws IOException Exception thrown when an I/O error occurs closing this
 	 *                     socket.
 	 */
-	public void close() throws IOException {
+	void close() throws IOException {
 		channel.close();
 	}
 }

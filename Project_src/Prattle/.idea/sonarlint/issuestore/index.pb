@@ -21,6 +21,11 @@ u
 Esrc/test/java/edu/northeastern/ccs/im/server/ServerConstantsTest.java,9\9\9962f085488decc39ca0fe43a1b813da25a9f7a7
 x
 Hsrc/test/java/edu/northeastern/ccs/im/NextDoesNotExistExceptionTest.java,3\6\3627c36ec27667bd9f04792322d77a4caef919c1
+<<<<<<< HEAD
+l
+<src/test/java/edu/northeastern/ccs/im/MockSocketChannel.java,b\7\b7ae32146ba7ad1b3c79ee479682097d86e8f443
+=======
+>>>>>>> clientRunnableBranch
 f
 6src/test/java/edu/northeastern/ccs/im/MessageTest.java,e\4\e4dfec7baffe819f8f041551f0b7d5ea3186ceac
 t
@@ -32,8 +37,12 @@ m
 i
 9src/test/java/edu/northeastern/ccs/im/PrintNetNBTest.java,0\3\03732b31381e6f82d8b434a8fed98adc70b4e2e7
 h
+<<<<<<< HEAD
+8src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java,1\a\1aef5987bd10ac6f838a2ed8a04c161dd7b12c9d
+=======
 8src/test/java/edu/northeastern/ccs/im/ScanNetNBTest.java,1\a\1aef5987bd10ac6f838a2ed8a04c161dd7b12c9d
 k
 ;src/main/java/edu/northeastern/ccs/im/server/PrattleDB.java,9\b\9b4e65d7a9adcf7a9e19f5b0e5682ae692ac8aeb
 o
 ?src/test/java/edu/northeastern/ccs/im/server/PrattleDBTest.java,1\e\1e5d2d006757046c8810226fc43f65cf3cf02fb9
+>>>>>>> clientRunnableBranch

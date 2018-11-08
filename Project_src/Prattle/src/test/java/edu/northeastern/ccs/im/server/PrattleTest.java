@@ -31,7 +31,7 @@ class PrattleTest {
         printer.print(loginmsg);
         printer.print(passwordmsg);
         socketChannel.close();
-        Thread.sleep(10000);
+        Thread.sleep(1000);
         Prattle.directMessage(msg, "username");
         Prattle.broadcastMessage(msg);
         serverThread.interrupt();
