@@ -206,10 +206,10 @@ public class ClientRunnable implements Runnable {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
             password = msg.getText();
-            DBUtility db = DBUtility.getInstance();
+            SQLDB db = SQLDB.getInstance();
             boolean valid = db.validateCredentials(getName(), password);
             if (!valid) {
-                DBUtility.getInstance().create(getUserId(), getName(), password);
+                SQLDB.getInstance().create(getUserId(), getName(), password);
                 validated = true;
                 Prattle.directMessage(Message.makeBroadcastMessage("TO_NEW_USER", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
@@ -378,7 +378,7 @@ public class ClientRunnable implements Runnable {
                     }
                     // If the message is a DELETE user
                     else if (msg.getText() != null && msg.getText().contains("DELETE")) {
-                        DBUtility.getInstance().delete(getName());
+                        SQLDB.getInstance().delete(getName());
                         this.terminateClient();
                         return;
 
@@ -387,7 +387,7 @@ public class ClientRunnable implements Runnable {
                     // If the message is a UPDATE user
                     else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
                         password = msg.getText().split("UPDATE ")[1];
-                        DBUtility.getInstance().update(getName(), password);
+                        SQLDB.getInstance().update(getName(), password);
                         return;
                     }
                     // If the message is a RETRIEVE user
