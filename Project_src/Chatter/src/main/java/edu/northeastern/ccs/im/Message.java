@@ -42,7 +42,13 @@ public class Message {
         /**
          * Message whose contents is directed to specific user.
          */
-        DIRECT("DIR");
+        DIRECT("DIR"),
+
+        RETRIEVE("RET"),
+
+        UPDATE("UPD"),
+
+        DELETE("DEL");
         /**
          * Store the short name of this message type.
          */
@@ -165,6 +171,39 @@ public class Message {
      */
     public static Message makeDirectMessage(String myName, String directTo, String text) {
         return new Message(MessageType.DIRECT, myName, directTo, text);
+    }
+
+    /**
+     * Create a new message directed to a certain user.
+     *
+     * @param myName   Name of the sender of this very important missive.
+     * @param text     Text of the message that will be sent to all users
+     * @return Instance of Message that transmits text to all logged in users.
+     */
+    public static Message makeRetrieveMessage(String myName, String text) {
+        return new Message(MessageType.RETRIEVE, myName, null, text);
+    }
+
+    /**
+     * Create a new message directed to a certain user.
+     *
+     * @param myName   Name of the sender of this very important missive.
+     * @param text     Text of the message that will be sent to all users
+     * @return Instance of Message that transmits text to all logged in users.
+     */
+    public static Message makeDeleteMessage(String myName, String text) {
+        return new Message(MessageType.DELETE, myName, null, text);
+    }
+
+    /**
+     * Create a new message directed to a certain user.
+     *
+     * @param myName   Name of the sender of this very important missive.
+     * @param text     Text of the message that will be sent to all users
+     * @return Instance of Message that transmits text to all logged in users.
+     */
+    public static Message makeUpdateMessage(String myName, String text) {
+        return new Message(MessageType.UPDATE, myName, null, text);
     }
 
     /**

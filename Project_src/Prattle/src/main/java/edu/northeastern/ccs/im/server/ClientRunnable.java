@@ -97,6 +97,11 @@ public class ClientRunnable implements Runnable {
     private String name;
 
     /**
+     * Password the client used when connecting to the server
+     */
+    private String password;
+
+    /**
      * Whether this client has been initialized, set its user name, and is ready to
      * receive messages.
      */
@@ -194,22 +199,21 @@ public class ClientRunnable implements Runnable {
      * Check is the user is validate (if the new user - save his credentials in db)
      */
     private void checkForValidation() {
-        String password = null;
-
         // Check if there are any input messages to read
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            String passwordInput = msg.getText();
-            password = PrattleDB.instance().retrieve(this.getName());
-            if (password == null) {
-                PrattleDB.instance().create(getName(), passwordInput);
+            password = msg.getText();
+            DBUtility db = DBUtility.getInstance();
+            boolean valid = db.validateCredentials(getName(), password);
+            if (!valid) {
+                DBUtility.getInstance().create(getUserId(), getName(), password);
                 validated = true;
                 Prattle.directMessage(Message.makeBroadcastMessage("TO_NEW_USER", "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
-            if (passwordInput.equals(password)) {
+            if (valid) {
                 validated = true;
                 Prattle.directMessage(Message.makeBroadcastMessage("TO_OLD_USER", "Welcocme back " + getName() + "! You are successfully logged in."), getName());
             } else {
@@ -366,7 +370,7 @@ public class ClientRunnable implements Runnable {
                     }
                     // If the message is a DELETE user
                     else if (msg.getText() != null && msg.getText().contains("DELETE")) {
-                        PrattleDB.instance().delete(getName());
+                        DBUtility.getInstance().delete(getName());
                         this.terminateClient();
                         return;
 
@@ -374,15 +378,12 @@ public class ClientRunnable implements Runnable {
                     }
                     // If the message is a UPDATE user
                     else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
-
-                        PrattleDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
+                        password = msg.getText().split("UPDATE ")[1];
+                        DBUtility.getInstance().update(getName(), password);
                         return;
-
-
                     }
                     // If the message is a RETRIEVE user
                     else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
-                        String password = PrattleDB.instance().retrieve(getName());
                         Prattle.directMessage(Message.makeBroadcastMessage("YOUR_PASSWORD_IS", password), this.getName());
 
                     } else if (msg.isDisplayMessage()) {
