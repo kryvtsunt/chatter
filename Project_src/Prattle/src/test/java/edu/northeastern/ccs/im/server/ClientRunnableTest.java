@@ -22,9 +22,12 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * tests for the class client runnable
+ */
 class ClientRunnableTest {
     private static final int port = 4548;
-    private static final int port2 = 4549;
+    private static final int port2 = 4556;
 
     // tests user brodcast and dirrect messages
     @Test
@@ -42,7 +45,7 @@ class ClientRunnableTest {
         PrintNetNB printer = new PrintNetNB(socketChannel);
 
 
-        msgs.add(Message.makeLoginMessage("username"));
+        msgs.add(Message.makeSimpleLoginMessage("username"));
         msgs.add(Message.makeBroadcastMessage("username", "password"));
         msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
         msgs.add(Message.makeBroadcastMessage("username", "receiverUser> Hello"));
@@ -66,7 +69,7 @@ class ClientRunnableTest {
         assertFalse(client.isInitialized());
         assertEquals(0, client.getUserId());
         assertTrue(client.getWaitingList().isEmpty());
-        for (Message msg : msgs) {
+        for (int i = 0; i < msgs.size(); i++) {
             client.run();
         }
         assertTrue(client.isValidated());
@@ -92,15 +95,13 @@ class ClientRunnableTest {
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", port2);
         socketChannel.connect(socketAddr);
-        List<Message> msgs = new ArrayList<>();
-        PrintNetNB printer = new PrintNetNB(socketChannel);
 
         SocketChannel socketChannel2 = SocketChannel.open();
         socketChannel2.connect(socketAddr);
 
         List<Message> msgs2 = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs2.add(Message.makeLoginMessage("username2"));
+        msgs2.add(Message.makeSimpleLoginMessage("username2"));
         msgs2.add(Message.makeBroadcastMessage("username2", "password"));
         msgs2.add(Message.makeBroadcastMessage("username2", "broadcast text"));
         msgs2.add(Message.makeBroadcastMessage("username2", "receiverUser> Hello"));
@@ -118,12 +119,12 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
-        for (Message msg : msgs2) {
+        for (int i = 0; i < msgs2.size(); i++) {
             client2.run();
         }
         try {
             client2.run();
-        } catch (ClosedSelectorException e){
+        } catch (ClosedSelectorException e) {
             assertNull(e.getMessage());
         }
 

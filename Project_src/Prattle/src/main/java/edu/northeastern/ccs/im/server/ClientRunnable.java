@@ -109,6 +109,8 @@ public class ClientRunnable implements Runnable {
 
     private boolean validated;
 
+    private final static String serverName = "Prattle";
+
     /**
      * The future that is used to schedule the client for execution in the thread
      * pool.
@@ -118,7 +120,7 @@ public class ClientRunnable implements Runnable {
     /**
      * Collection of messages queued up to be sent to this client.
      */
-    private Queue<Message> waitingList;
+    private static Queue<Message> waitingList;
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -128,7 +130,7 @@ public class ClientRunnable implements Runnable {
      * @throws IOException Exception thrown if we have trouble completing this
      *                     connection
      */
-    public ClientRunnable(SocketChannel client) throws IOException {
+    ClientRunnable(SocketChannel client) throws IOException {
         // Set up the SocketChannel over which we will communicate.
         socket = client;
         socket.configureBlocking(false);
@@ -182,7 +184,7 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            if (setUserName(msg.getSender())) {
+            if (setUserName(msg.getName())) {
                 // Update the time until we terminate this client due to inactivity.
                 terminateInactivity.setTimeInMillis(
                         new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
@@ -244,7 +246,7 @@ public class ClientRunnable implements Runnable {
      */
     private boolean messageChecks(Message msg) {
         // Check that the message name matches.
-        return (msg.getSender() != null) && (msg.getSender().compareToIgnoreCase(getName()) == 0);
+        return (msg.getName() != null) && (msg.getName().compareToIgnoreCase(getName()) == 0);
     }
 
     /**
@@ -285,7 +287,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param message Complete message to be sent.
      */
-    public void enqueueMessage(Message message) {
+    void enqueueMessage(Message message) {
         waitingList.add(message);
     }
 
@@ -294,7 +296,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return Returns the name of this client.
      */
-    public String getName() {
+    String getName() {
         return name;
     }
 
@@ -303,7 +305,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param name The name for which this ClientRunnable.
      */
-    public void setName(String name) {
+    private void setName(String name) {
         this.name = name;
     }
 
@@ -312,7 +314,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return Returns the current value of userName.
      */
-    public int getUserId() {
+    int getUserId() {
         return userId;
     }
 
@@ -322,7 +324,7 @@ public class ClientRunnable implements Runnable {
      *
      * @return True if this thread's client should be considered; false otherwise.
      */
-    public boolean isInitialized() {
+    boolean isInitialized() {
         return initialized;
     }
 
@@ -365,8 +367,14 @@ public class ClientRunnable implements Runnable {
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a direct message, send it out
-                    if (msg.isDirectMessage()){
-                        Prattle.directMessage(msg, msg.getReceiver());
+                    if (msg.getText() != null && msg.getText().contains(">")) {
+                        String[] args = msg.getText().split(">");
+                        String destination = args[0];
+                        String content = args[1];
+                        String[] to = destination.split(",");
+                        for (String user : to) {
+                            Prattle.directMessage(Message.makeBroadcastMessage(msg.getName(), content), user);
+                        }
                     }
                     // If the message is a DELETE user
                     else if (msg.getText() != null && msg.getText().contains("DELETE")) {
@@ -385,7 +393,6 @@ public class ClientRunnable implements Runnable {
                     // If the message is a RETRIEVE user
                     else if (msg.getText() != null && msg.getText().contains("RETRIEVE")) {
                         Prattle.directMessage(Message.makeBroadcastMessage("YOUR_PASSWORD_IS", password), this.getName());
-
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
                         if (messageChecks(msg)) {
@@ -469,7 +476,7 @@ public class ClientRunnable implements Runnable {
      * @param future Instance controlling when the runnable is executed from within
      *               the thread pool.
      */
-    public void setFuture(ScheduledFuture<ClientRunnable> future) {
+    void setFuture(ScheduledFuture<ClientRunnable> future) {
         runnableMe = future;
     }
 
@@ -477,12 +484,13 @@ public class ClientRunnable implements Runnable {
      * Terminate a client that we wish to remove. This termination could happen at
      * the client's request or due to system need.
      */
-    public void terminateClient() {
+    private void terminateClient() {
         try {
             // Once the communication is done, close this connection.
             input.close();
             socket.close();
-        } catch (IOException ignored) {
+        } catch (IOException ae) {
+            LOGGER.info( ae.toString());
         } finally {
             // Remove the client from our client listing.
             Prattle.removeClient(this);
@@ -491,7 +499,7 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    public Queue<Message> getWaitingList() {
+    Queue<Message> getWaitingList() {
         return new ConcurrentLinkedQueue<>(waitingList);
     }
 }

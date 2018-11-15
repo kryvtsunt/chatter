@@ -86,7 +86,7 @@ public class ScanNetNB {
 	 * @param connection Non-blocking Socket instance from which we will receive
 	 *                   communications.
 	 */
-	public ScanNetNB(SocketNB connection) {
+	ScanNetNB(SocketNB connection) {
 		// Get the socket channel from the SocketNB instance and go.
 		this(connection.getSocket());
 	}
@@ -174,14 +174,10 @@ public class ScanNetNB {
 				final String sender = readArgument(charBuffer);
 				// Skip past the leading space
 				charBuffer.position(charBuffer.position() + 2);
-				final String receiver = readArgument(charBuffer);
-				charBuffer.position(charBuffer.position() + 2);
 				// Read in the second argument containing the message
 				final String message = readArgument(charBuffer);
 				// Add this message into our queue
-
-				// Add this message into our queue
-				Message newMsg = Message.makeMessage(handle, sender, receiver, message);
+				Message newMsg = Message.makeMessage(handle, sender, message);
 				messages.add(newMsg);
 				// And move the position to the start of the next character
 				start = charBuffer.position() + 1;

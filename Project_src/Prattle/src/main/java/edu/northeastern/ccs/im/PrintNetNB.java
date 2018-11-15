@@ -51,7 +51,7 @@ public class PrintNetNB {
      * @param connection Non-blocking Socket instance to which we will send all
      *                   communication.
      */
-    public PrintNetNB(SocketNB connection) {
+    PrintNetNB(SocketNB connection) {
         // Remember the channel that we will be using.
         channel = connection.getSocket();
     }

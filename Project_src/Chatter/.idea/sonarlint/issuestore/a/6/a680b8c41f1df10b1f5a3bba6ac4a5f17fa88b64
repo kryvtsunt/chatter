@@ -1,13 +1,0 @@
-
-psquid:S2293H"YReplace the type specification in this constructor call with the diamond operator ("<>").(½€¾°
-squid:S1149#"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ğÉŒ›úÿÿÿÿ
-squid:S1149)"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(œ¯“Ûıÿÿÿÿ
-‚squid:S1149÷"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(«äÇûÿÿÿÿ
-‚squid:S1149ì"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ºÒŠûÿÿÿÿ
-tsquid:S14507"XRemove the "workerBee" field and declare it as a local variable in the relevant methods.(õş˜ìıÿÿÿÿ
-U
-squid:S106Ø"9Replace this use of System.out or System.err by a logger.(Ûœ´ıúÿÿÿÿ
-usquid:S2293I"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ï»Ñüÿÿÿÿ
-U
-squid:S106Ù"9Replace this use of System.out or System.err by a logger.(„Ó±âûÿÿÿÿ
-Wsquid:S3516Ğ"9Refactor this method to not always return the same value.( ç‡8çÖæ¯í,

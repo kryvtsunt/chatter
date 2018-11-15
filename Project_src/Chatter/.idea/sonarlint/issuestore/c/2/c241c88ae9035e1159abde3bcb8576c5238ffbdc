@@ -1,9 +1,0 @@
-
-psquid:S2293G"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ş…¿œ
-Psquid:S2168B"9Remove this dangerous instance of double-checked locking.(‰€ù¯
-ssquid:S1488­"[Immediately return this expression instead of assigning it to the temporary variable "msg".(¬ş˜×
-Ssquid:S2589O"7Remove this expression which always evaluates to "true"(ƒÁœÄıÿÿÿÿ
-Ssquid:S2589l"7Remove this expression which always evaluates to "true"(ƒÁœÄıÿÿÿÿ
-Tsquid:CallToDeprecatedMethod4",Remove this use of "stop"; it is deprecated.(²ÅÊ
-Dsquid:S1604J"(Make this anonymous inner class a lambda(®´²´úÿÿÿÿ
-Dsquid:S1604g"(Make this anonymous inner class a lambda(®´²´úÿÿÿÿ
