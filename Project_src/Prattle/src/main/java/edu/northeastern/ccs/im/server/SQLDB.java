@@ -382,21 +382,53 @@ public class SQLDB {
     public String getAllMessagesForUser(String user) {
         int userID = getUserID(user);
         String msgInformation = "";
-        SortedMap<Timestamp,String> hmap = new TreeMap<Timestamp,String>(Collections.reverseOrder());
+        SortedMap<Timestamp,String> userHashMap = new TreeMap<Timestamp,String>();
+        SortedMap<Timestamp,String> groupHashMap = new TreeMap<Timestamp,String>();
+        SortedMap<Timestamp,String> broadcastHashMap = new TreeMap<Timestamp,String>();
         try {
-            String sql = "SELECT toUser, message, creationTime FROM message_details WHERE fromUser = '" + userID + "'";
+            String sql = "SELECT toUser, IsGroupMsg, message, creationTime, IsBroadcast FROM message_details WHERE fromUser = '" + userID + "'";
             Statement pStatement = connection.createStatement();
             ResultSet rs = pStatement.executeQuery(sql);
             while(rs.next()) {
                 String to = rs.getString("toUser");
+                boolean groupMsg = rs.getBoolean("IsGroupMsg");
                 String msg = rs.getString("message");
                 Timestamp t = rs.getTimestamp("creationTime");
-                System.out.println("TimeStamp:" + t.toString() + " => To:" + to + ", Message:" + msg);
-                hmap.put(t,"TimeStamp:" + t.toString() + " => To:" + to + ", Message:" + msg + "\n");
+                boolean broadcastMsg = rs.getBoolean("IsBroadcast");
+                if(groupMsg) {
+                    groupHashMap.put(t,"TimeStamp:" + t.toString() + " => Group:" + to + ", Message:" + msg + "\n");
+                    System.out.println("TimeStamp:" + t.toString() + " => Group:" + to + ", Message:" + msg + "\n");
+                } else if(broadcastMsg) {
+                    broadcastHashMap.put(t,"TimeStamp:" + t.toString() + " => Broadcast to all users, Message:" + msg + "\n");
+                    System.out.println("TimeStamp:" + t.toString() + " => Broadcast to all users, Message:" + msg + "\n");
+                } else {
+                    userHashMap.put(t,"TimeStamp:" + t.toString() + " => User:" + to + ", Message:" + msg + "\n");
+                    System.out.println("TimeStamp:" + t.toString() + " => User:" + to + ", Message:" + msg + "\n");
+                }
             }
         } catch(Exception e) {System.out.println(e.toString());}
 
-        Iterator i = hmap.entrySet().iterator();
+        // for all messages which are broadcast
+        msgInformation = msgInformation + "------------------BROADCAST MESSAGES------------------" + "\n";
+        Iterator i = broadcastHashMap.entrySet().iterator();
+        while (i.hasNext())
+        {
+            Map.Entry m = (Map.Entry)i.next();
+            msgInformation = msgInformation + m.getValue();
+        }
+
+        // for all messages which are broadcast
+        msgInformation = msgInformation + "------------------GROUP MESSAGES------------------" + "\n";
+        i = groupHashMap.entrySet().iterator();
+        while (i.hasNext())
+        {
+            Map.Entry m = (Map.Entry)i.next();
+            msgInformation = msgInformation + m.getValue();
+        }
+
+        // for all messages which are broadcast
+        msgInformation = msgInformation + "------------------USER MESSAGES------------------" + "\n";
+        i = userHashMap.entrySet().iterator();
         while (i.hasNext())
         {
             Map.Entry m = (Map.Entry)i.next();

@@ -378,6 +378,18 @@ public class Message {
 		return (msgType == MessageType.DIRECT);
 	}
 
+
+
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isUpdateMessage() {
+		return (msgType == MessageType.UPDATE);
+	}
+
+
 	/**
 	 * Determine if this message is directing text to specific users.
 	 *
@@ -404,6 +416,15 @@ public class Message {
 	 */
 	public boolean isCreateMessage() {
 		return (msgType == MessageType.CREATE);
+	}
+
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isDeleteMessage() {
+		return (msgType == MessageType.DELETE);
 	}
 
 	/**

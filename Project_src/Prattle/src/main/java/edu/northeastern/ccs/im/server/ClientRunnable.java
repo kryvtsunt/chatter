@@ -369,6 +369,7 @@ public class ClientRunnable implements Runnable {
                     if (msg.isDirectMessage()) {
                         SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
                         Prattle.directMessage(msg, msg.getReceiver());
+                        return;
                     }
                     // If the message is a direct message, send it out
                     if (msg.isGroupMessage()) {
@@ -382,57 +383,51 @@ public class ClientRunnable implements Runnable {
                             }
                         }
                         Prattle.directMessage(msg, msg.getReceiver());
+                        return;
                     }
                     // If the message is a RETRIEVE
                     else if (msg.isRetrieveMessage()) {
-                        if (msg.getText().equals("PASSWORD")) {
+                        if (msg.getText().equals("EPASSWORD")) {
                             String password = SQLDB.getInstance().retrieve(getName());
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "your encrypted password is " + password), this.getName());
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "your encrypted password is " + password), getName());
+                        } else if (msg.getText().equals("PASSWORD")) {
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "your password is " + password), getName());
                         } else if (msg.getText().equals("MESSAGES")) {
                             String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
-                        } else if (msg.getText().contains("GROUP-MESSAGES")) {
-                            if (SQLDB.getInstance().checkGroup(msg.getText().split("GROUP-MESSAGES ")[1])){
-                                String logs = SQLDB.getInstance().getAllMessagesForGroup(msg.getText().split("GROUP-MESSAGES ")[1]);
-                                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
-                            }
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), getName());
                         } else if (msg.getText().equals("USERS")) {
                             String users = SQLDB.getInstance().retrieveAllUsers().toString();
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), this.getName());
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), getName());
                         } else if (msg.getText().equals("GROUPS")) {
                             String groups = SQLDB.getInstance().retrieveAllGroups().toString();
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), groups), this.getName());
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), groups), getName());
                         } else if (msg.getText().contains("GROUP ")) {
                             String group = SQLDB.getInstance().retrieveGroupMembers(msg.getText().split("GROUP ")[1]).toString();
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), group), this.getName());
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), group), getName());
                         }
+                        return;
 
                     }
                     // If the message is a RETRIEVE user
                     else if (msg.isCreateMessage()) {
-                        String group = msg.getText().split(" ")[0];
-                        String user = msg.getText().split(" ")[1];
+                        String group = msg.getText();
                         SQLDB db = SQLDB.getInstance();
                         if (!db.checkGroup(group)) {
                             db.createGroup(group);
                         }
-                        db.addGroupMember(group, user);
+                        db.addGroupMember(group, getName());
                     }
                     // If the message is a DELETE user
-                    else if (msg.getText() != null && msg.getText().contains("DELETE")) {
-                        FileDB.instance().delete(getName());
+                    else if (msg.isDeleteMessage()) {
+                        SQLDB.getInstance().delete(getName());
                         this.terminateClient();
                         return;
-
-
                     }
                     // If the message is a UPDATE user
-                    else if (msg.getText() != null && msg.getText().contains("UPDATE")) {
-
-                        FileDB.instance().update(getName(), msg.getText().split("UPDATE ")[1]);
+                    else if (msg.isUpdateMessage()) {
+                        password = msg.getText();
+                        SQLDB.getInstance().update(getName(), msg.getText());
                         return;
-
-
                     } else if (msg.isDisplayMessage()) {
                         // Check if the message is legal formatted
                         if (messageChecks(msg)) {

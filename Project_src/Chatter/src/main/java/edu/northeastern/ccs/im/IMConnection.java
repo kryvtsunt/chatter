@@ -216,12 +216,21 @@ public class IMConnection {
 			String content = args[1];
 			Message rtrMessage = Message.makeRetrieveMessage(userName, content);
 			socketConnection.print(rtrMessage);
-		} else if (message.contains("ADD ")) {
-			String[] args = message.split("ADD ");
+		} else if (message.contains("JOIN ")) {
+			String[] args = message.split("JOIN ");
 			String content = args[1];
 			Message crtMessage = Message.makeCreateMessage(userName, content);
 			socketConnection.print(crtMessage);
-		} else {
+		} else if (message.contains("DELETE")) {
+			Message dltMessage = Message.makeDeleteMessage(userName, null);
+			socketConnection.print(dltMessage);
+		}else if (message.contains("UPDATE")) {
+			String[] args = message.split("UPDATE ");
+			String content = args[1];
+			Message crtMessage = Message.makeUpdateMessage(userName, content);
+			socketConnection.print(crtMessage);
+		}
+		else {
 			Message bctMessage = Message.makeBroadcastMessage(userName, message);
 			socketConnection.print(bctMessage);
 		}
