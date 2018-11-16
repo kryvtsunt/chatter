@@ -7,7 +7,9 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
@@ -91,6 +93,18 @@ public abstract class Prattle {
                 tt.enqueueMessage(message);
             }
         }
+    }
+
+    public static List<String> getOnline() {
+        List<String> users = new ArrayList<>();
+        // Loop through all of our active threads
+        for (ClientRunnable tt : active) {
+            // Do not send the message to any clients that are not ready to receive it.
+            if (tt.isInitialized() && tt.isValidated()) {
+                users.add(tt.getName());
+            }
+        }
+        return users;
     }
 
     /**
