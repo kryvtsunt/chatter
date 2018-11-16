@@ -1,5 +1,10 @@
 package edu.northeastern.ccs.im.chatter;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Base64;
 import java.util.Scanner;
 
 import edu.northeastern.ccs.im.IMConnection;
@@ -68,7 +73,19 @@ public class CommandLineMain {
 			if (mess.hasNext()) {
 				Message message = mess.next();
 				if (!message.getSender().equals(connect.getUserName())) {
-					System.out.println(message.getSender() + ": " + message.getText());
+					if (message.getText().contains("jpg") || message.getText().contains("txt")  || message.getText().contains("png")){
+						System.out.println("File was received");
+						String file = message.getText().split(" ")[0];
+						String type = message.getText().split(" ")[1];
+						byte[] data = Base64.getDecoder().decode(file);
+						try (OutputStream stream = new FileOutputStream("resources/receive/file."+type)) {
+							stream.write(data);
+						}catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println(message.getSender() + ": " + message.getText());
+					}
 				}
 			}
 		}

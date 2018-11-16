@@ -3,9 +3,11 @@ package edu.northeastern.ccs.im;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
@@ -212,16 +214,16 @@ public class IMConnection {
 			String[] args = message.split(">");
 			String destination = args[0];
 			String content = args[1];
-			if (content.contains("IMG")){
+			if (content.contains("jpg") || content.contains("txt") || content.contains("png")){
 				try {
-					String src = content.split("IMG ")[1];
-					URL urlin = new URL("https://www.zamzar.com/images/filetypes/jpg.png");
-					BufferedImage image = ImageIO.read(urlin);
-					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-					ImageIO.write(image, "jpg", byteArrayOutputStream);
-					String url = "resources/send/test.jpg";
-					ImageIO.write(image, "jpg", new File(url));
-					content = byteArrayOutputStream.toString();
+					System.out.println(content);
+					String type = content.split("\\.")[1];
+					File file = new File("resources/send/" + content);
+					FileInputStream fileInputStreamReader = new FileInputStream(file);
+					byte[] bytes = new byte[(int)file.length()];
+					fileInputStreamReader.read(bytes);
+					String encodedfile = new String(Base64.getEncoder().encode(bytes), "UTF-8");
+					content = encodedfile + " " + type;
 				} catch (Exception e){
 					e.printStackTrace();
 				}
