@@ -240,7 +240,7 @@ public class IMConnection {
 		} else if (message.contains("JOIN ")) {
 			String[] args = message.split("JOIN ");
 			String content = args[1];
-			Message crtMessage = Message.makeCreateMessage(userName, content);
+			Message crtMessage = Message.makeJoinMessage(userName, content);
 			socketConnection.print(crtMessage);
 		} else if (message.contains("DELETE")) {
 			Message dltMessage = Message.makeDeleteMessage(userName, null);
@@ -291,7 +291,6 @@ public class IMConnection {
 		return true;
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	protected void fireSendMessages(List<Message> mess) {
 		Vector<MessageListener> targets;
 		synchronized (this) {
@@ -302,7 +301,6 @@ public class IMConnection {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void fireStatusChange(String userName) {
 		Vector<LinkListener> targets;
 		synchronized (this) {

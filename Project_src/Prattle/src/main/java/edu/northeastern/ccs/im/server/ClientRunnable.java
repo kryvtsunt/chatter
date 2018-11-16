@@ -8,8 +8,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.mysql.cj.ParseInfo;
-import com.mysql.cj.xdevapi.SqlDataResult;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
@@ -210,13 +208,13 @@ public class ClientRunnable implements Runnable {
             if (db.retrieve(getName()) == null) {
                 SQLDB.getInstance().create(getUserId(), getName(), password);
                 validated = true;
-                Prattle.directMessage(Message.makeDirectMessage("Server: ", getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
             if (db.validateCredentials(getName(), password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeDirectMessage("Server: ", getName(), "Welcocme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "Welcocme back " + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
@@ -375,14 +373,13 @@ public class ClientRunnable implements Runnable {
                     if (msg.isGroupMessage()) {
                         SQLDB db = SQLDB.getInstance();
                         String group = msg.getReceiver();
-                        if (db.checkGroup(group)) {
+                        if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
                             SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
                             List<String> users = db.retrieveGroupMembers(group);
                             for (String user : users) {
                                 Prattle.directMessage(msg, user);
                             }
                         }
-                        Prattle.directMessage(msg, msg.getReceiver());
                         return;
                     }
                     // If the message is a RETRIEVE
@@ -395,10 +392,13 @@ public class ClientRunnable implements Runnable {
                         } else if (msg.getText().equals("MESSAGES")) {
                             String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), getName());
-                        } else if (msg.getText().contains("GROUP-MESSAGES")) {
-                            if (SQLDB.getInstance().checkGroup(msg.getText().split("GROUP-MESSAGES ")[1])){
-                                String logs = SQLDB.getInstance().getAllMessagesForGroup(msg.getText().split("GROUP-MESSAGES ")[1]);
+                        } else if (msg.getText().contains("GROUP-MESSAGES ")) {
+                            String group = msg.getText().split("GROUP-MESSAGES ")[1];
+                            if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())){
+                                String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split("GROUP-MESSAGES ")[1]);
                                 Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
+                            } else {
+                                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "You do not have access to the group!"), this.getName());
                             }
                         }
                         else if (msg.getText().equals("USERS")) {
@@ -415,7 +415,7 @@ public class ClientRunnable implements Runnable {
 
                     }
                     // If the message is a RETRIEVE user
-                    else if (msg.isCreateMessage()) {
+                    else if (msg.isJoinMessage()) {
                         String group = msg.getText();
                         SQLDB db = SQLDB.getInstance();
                         if (!db.checkGroup(group)) {

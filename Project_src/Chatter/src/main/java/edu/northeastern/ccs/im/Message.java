@@ -44,8 +44,6 @@ public class Message {
 		 */
 		DIRECT("DIR"),
 
-		IMAGE("IMG"),
-
 		GROUP("GRP"),
 
 		RETRIEVE("RET"),
@@ -54,7 +52,7 @@ public class Message {
 
 		DELETE("DEL"),
 
-		CREATE("CRE");
+		JOIN("JIN");
 		/**
 		 * Store the short name of this message type.
 		 */
@@ -168,17 +166,6 @@ public class Message {
 	}
 
 	/**
-	 * Create a new message broadcasting an announcement to the world.
-	 *
-	 * @param myName Name of the sender of this very important missive.
-	 * @param text   Text of the message that will be sent to all users
-	 * @return Instance of Message that transmits text to all logged in users.
-	 */
-	public static Message makeImageMessage(String myName,String directTo, String text) {
-		return new Message(MessageType.IMAGE, myName, directTo, text);
-	}
-
-	/**
 	 * Create a new message directed to a certain user.
 	 *
 	 * @param myName   Name of the sender of this very important missive.
@@ -232,8 +219,8 @@ public class Message {
 	 * @param text     Text of the message that will be sent to all users
 	 * @return Instance of Message that transmits text to all logged in users.
 	 */
-	public static Message makeCreateMessage(String myName, String text) {
-		return new Message(MessageType.CREATE, myName, null, text);
+	public static Message makeJoinMessage(String myName, String text) {
+		return new Message(MessageType.JOIN, myName, null, text);
 	}
 
 
@@ -283,9 +270,7 @@ public class Message {
 			result = makeNoAcknowledgeMessage();
 		} else if (handle.compareTo(MessageType.DIRECT.toString()) == 0) {
 			result = makeDirectMessage(srcName, dstName, text);
-		} else if (handle.compareTo(MessageType.IMAGE.toString()) == 0) {
-			result = makeImageMessage(srcName, dstName, text);
-		} else if (handle.compareTo(MessageType.GROUP.toString()) == 0) {
+		}  else if (handle.compareTo(MessageType.GROUP.toString()) == 0) {
 			result = makeGroupMessage(srcName, dstName, text);
 		} else if (handle.compareTo(MessageType.RETRIEVE.toString()) == 0) {
 			result = makeRetrieveMessage(srcName, text);
@@ -293,8 +278,8 @@ public class Message {
 			result = makeDeleteMessage(srcName, text);
 		} else if (handle.compareTo(MessageType.UPDATE.toString()) == 0) {
 			result = makeUpdateMessage(srcName, text);
-		}  else if (handle.compareTo(MessageType.CREATE.toString()) == 0) {
-			result = makeCreateMessage(srcName, text);
+		}  else if (handle.compareTo(MessageType.JOIN.toString()) == 0) {
+			result = makeJoinMessage(srcName, text);
 		}
 		return result;
 	}
@@ -393,15 +378,6 @@ public class Message {
 		return (msgType == MessageType.DIRECT);
 	}
 
-	/**
-	 * Determine if this message is directing text to specific users.
-	 *
-	 * @return True if the message is a broadcast message; false otherwise.
-	 */
-	public boolean isImageMessage() {
-		return (msgType == MessageType.IMAGE);
-	}
-
 
 
 	/**
@@ -438,8 +414,8 @@ public class Message {
 	 *
 	 * @return True if the message is a broadcast message; false otherwise.
 	 */
-	public boolean isCreateMessage() {
-		return (msgType == MessageType.CREATE);
+	public boolean isJoinMessage() {
+		return (msgType == MessageType.JOIN);
 	}
 
 	/**

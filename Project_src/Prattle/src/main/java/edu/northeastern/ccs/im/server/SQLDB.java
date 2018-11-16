@@ -437,10 +437,13 @@ public class SQLDB {
         return msgInformation;
     }
 
-    public String getAllMessagesForGroup(String group) {
+    public String getAllMessagesForGroup(String userName, String group) {
         //NOTE: write code to check if user belongs to that group
+        if(!isGroupMember(group,userName)) {
+            return "User not a member of group";
+        }
         String msgInformation = "";
-        SortedMap<Timestamp,String> hmap = new TreeMap<Timestamp,String>(Collections.reverseOrder());
+        SortedMap<Timestamp,String> hmap = new TreeMap<Timestamp,String>();
         try {
             // check whether user belongs to specific group or not
             String sql = "SELECT fromUser, message, creationTime FROM message_details WHERE toUser='" + group + "' AND IsGroupMsg = " + true;

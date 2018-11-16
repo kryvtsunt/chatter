@@ -52,7 +52,7 @@ public class Message {
 
 		DELETE("DEL"),
 
-		CREATE("CRE");
+		JOIN("JIN");
 		/**
 		 * Store the short name of this message type.
 		 */
@@ -219,8 +219,8 @@ public class Message {
 	 * @param text     Text of the message that will be sent to all users
 	 * @return Instance of Message that transmits text to all logged in users.
 	 */
-	public static Message makeCreateMessage(String myName, String text) {
-		return new Message(MessageType.CREATE, myName, null, text);
+	public static Message makeJoinMessage(String myName, String text) {
+		return new Message(MessageType.JOIN, myName, null, text);
 	}
 
 
@@ -278,8 +278,8 @@ public class Message {
 			result = makeDeleteMessage(srcName, text);
 		} else if (handle.compareTo(MessageType.UPDATE.toString()) == 0) {
 			result = makeUpdateMessage(srcName, text);
-		}  else if (handle.compareTo(MessageType.CREATE.toString()) == 0) {
-			result = makeCreateMessage(srcName, text);
+		}  else if (handle.compareTo(MessageType.JOIN.toString()) == 0) {
+			result = makeJoinMessage(srcName, text);
 		}
 		return result;
 	}
@@ -414,8 +414,8 @@ public class Message {
 	 *
 	 * @return True if the message is a broadcast message; false otherwise.
 	 */
-	public boolean isCreateMessage() {
-		return (msgType == MessageType.CREATE);
+	public boolean isJoinMessage() {
+		return (msgType == MessageType.JOIN);
 	}
 
 	/**
