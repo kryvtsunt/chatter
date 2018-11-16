@@ -1,10 +1,16 @@
 package edu.northeastern.ccs.im;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
 /**
@@ -206,6 +212,21 @@ public class IMConnection {
 			String[] args = message.split(">");
 			String destination = args[0];
 			String content = args[1];
+			if (content.contains("IMG")){
+				try {
+					String src = content.split("IMG ")[1];
+					URL urlin = new URL("https://www.zamzar.com/images/filetypes/jpg.png");
+					BufferedImage image = ImageIO.read(urlin);
+					ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+					ImageIO.write(image, "jpg", byteArrayOutputStream);
+					String url = "resources/send/test.jpg";
+					ImageIO.write(image, "jpg", new File(url));
+					content = byteArrayOutputStream.toString();
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+
+			}
 			String[] to = destination.split(",");
 			for (String directTo : to) {
 				Message dctMessage = Message.makeDirectMessage(userName, directTo, content);

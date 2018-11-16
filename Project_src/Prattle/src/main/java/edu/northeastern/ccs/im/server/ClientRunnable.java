@@ -208,7 +208,7 @@ public class ClientRunnable implements Runnable {
             password = msg.getText();
             SQLDB db = SQLDB.getInstance();
             if (db.retrieve(getName()) == null) {
-                FileDB.instance().create(getName(), password);
+                SQLDB.getInstance().create(getUserId(), getName(), password);
                 validated = true;
                 Prattle.directMessage(Message.makeDirectMessage("Server: ", getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
@@ -395,7 +395,13 @@ public class ClientRunnable implements Runnable {
                         } else if (msg.getText().equals("MESSAGES")) {
                             String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), getName());
-                        } else if (msg.getText().equals("USERS")) {
+                        } else if (msg.getText().contains("GROUP-MESSAGES")) {
+                            if (SQLDB.getInstance().checkGroup(msg.getText().split("GROUP-MESSAGES ")[1])){
+                                String logs = SQLDB.getInstance().getAllMessagesForGroup(msg.getText().split("GROUP-MESSAGES ")[1]);
+                                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
+                            }
+                        }
+                        else if (msg.getText().equals("USERS")) {
                             String users = SQLDB.getInstance().retrieveAllUsers().toString();
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), getName());
                         } else if (msg.getText().equals("GROUPS")) {

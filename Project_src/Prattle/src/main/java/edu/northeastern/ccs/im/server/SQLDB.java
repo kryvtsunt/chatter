@@ -501,7 +501,6 @@ public class SQLDB {
             System.out.println(e.toString());
         }
         return userInformation;
-
     }
 
     public List<String> retrieveAllGroups(){
@@ -519,6 +518,43 @@ public class SQLDB {
             System.out.println(e.toString());
         }
         return groupInformation;
+
+    }
+
+    public boolean deleteGroupMember(String groupName, String username) {
+        boolean flag = false;
+        try {
+            int userId = getUserID(username);
+            int groupId = getGroupID(groupName);
+            String sqlDeleteUser = "DELETE FROM groupMembers WHERE userId=? AND groupId=?";
+            PreparedStatement pStatement = connection.prepareStatement(sqlDeleteUser);
+            pStatement.setInt(1, userId);
+            pStatement.setInt(2, groupId);
+            int userCount = pStatement.executeUpdate();
+            flag =  (userCount > 0);
+        }
+        catch(SQLException e) {
+        }
+        return flag;
+    }
+
+    public boolean isGroupMember(String groupName, String userName){
+        boolean flag = false;
+        try {
+            int userId = getUserID(userName);
+            int groupId = getGroupID(groupName);
+            String sqlCheckUser = "SELECT COUNT(*) FROM groupMembers WHERE userId=? AND groupId=?";
+            PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser);
+            pStatement.setInt(1,userId);
+            pStatement.setInt(2,groupId);
+            ResultSet userSet = pStatement.executeQuery();
+            while(userSet.next()) {
+                flag = (userSet.getInt(1) > 0);
+            }
+        }
+        catch(SQLException e) {
+        }
+        return flag;
 
     }
 }
