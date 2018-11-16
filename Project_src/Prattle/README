@@ -1,23 +1,37 @@
 Description.
 
 First, when tou start conversation with the Prattle,
-you need to input your credentials (username and password).
-If you are a new user you can type any combination. If it is free,
-it will become your new credentials.
-(When you log in you user is either CREATEd or RETRIVEd from the db)
+you need to input your credentials (username \n password).
+If you are a new user you can type any combination. If it is not taken,
+it will become your new credentials. If you are old user, you will have to type your password
+until it is correct.
+(When you log in you user is either CREATED or RETRIVED from the db)
 
 When you successfully log in, you can:
 -communicate with the server by typing special messages like "Hello"
 -send messages to everyone by simply typing your message.
 -send direct messages by typing user>your_message (where user is the name of the user you want to talk to)
--send messages to a group of users by typing user1,user2,user3>your_message (same logic)
+-send same messages to many users by typing user1,user2,user3>your_message
+-send group messages by typing group>>your_message
 
-You can also manipulate the data of your user by typing:
+CRUD functionality:
 -UPDATE new_password (updates the password of the current user)
--DELETE (deletes currently logged in user and ends the session)
--RETRIEVE (tells current user's password)
+-DELETE (deletes currently logged in user)
+-JOIN group (adds current user to the group. creates group if there is no one)
+-LEAVE group (removes current user from the group. deletes group if it is empty)
 
-For this sprint, the DB is implemented simply as a text file db.txt.
+-RETRIEVE PASSWORD(tells current user's password)
+-RETRIEVE EPASSWORD(tells current user's encrypted password)
+-RETRIEVE GROUPS (displays the name of all existing groups)
+-RETRIEVE GROUP group (displays the users that are part of the group) *only if you are part of the group*
+-RETRIEVE MESSAGES (displays all messages sent by the user ordered by time)
+-RETRIEVE GROUP-MESSAGES (displays all messages for a particular group) *only if you are part of the group*
+-RETRIEVE USERS (all users in the database)
+-RETRIEVE ONLINE (only online users)
+
+
+For the last sprint DB was implemented simply as a text file db.txt.
+For this sprint remote MySQL database is used.
 
 
 THE IP address OF THE PRATTLE AT AWS is 100.26.75.93.
