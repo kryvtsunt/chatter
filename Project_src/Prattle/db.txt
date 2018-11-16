@@ -9,5 +9,6 @@ bob-bob
 ama-ama
 papa-papa
 tim-timberman_42
+username2-broadcast text
 qwe-qwe
 username-password
