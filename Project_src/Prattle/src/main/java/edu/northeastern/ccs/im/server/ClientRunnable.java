@@ -216,7 +216,7 @@ public class ClientRunnable implements Runnable {
 
             if (db.validateCredentials(getName(), password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeDirectMessage("Server: ", getName(),"Welcocme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeDirectMessage("Server: ", getName(), "Welcocme back " + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
@@ -366,16 +366,18 @@ public class ClientRunnable implements Runnable {
                     terminateInactivity.setTimeInMillis(
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a direct message, send it out
-                    if (msg.isDirectMessage()){
+                    if (msg.isDirectMessage()) {
+                        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
                         Prattle.directMessage(msg, msg.getReceiver());
                     }
                     // If the message is a direct message, send it out
-                    if (msg.isGroupMessage()){
+                    if (msg.isGroupMessage()) {
                         SQLDB db = SQLDB.getInstance();
                         String group = msg.getReceiver();
-                        if (db.checkGroup(group)){
+                        if (db.checkGroup(group)) {
+                            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
                             List<String> users = db.retrieveGroupMembers(group);
-                            for (String user: users){
+                            for (String user : users) {
                                 Prattle.directMessage(msg, user);
                             }
                         }
@@ -385,10 +387,15 @@ public class ClientRunnable implements Runnable {
                     else if (msg.isRetrieveMessage()) {
                         if (msg.getText().equals("PASSWORD")) {
                             String password = SQLDB.getInstance().retrieve(getName());
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "your password is " + password), this.getName());
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "your encrypted password is " + password), this.getName());
                         } else if (msg.getText().equals("MESSAGES")) {
                             String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
+                        } else if (msg.getText().contains("GROUP-MESSAGES")) {
+                            if (SQLDB.getInstance().checkGroup(msg.getText().split("GROUP-MESSAGES ")[1])){
+                                String logs = SQLDB.getInstance().getAllMessagesForGroup(msg.getText().split("GROUP-MESSAGES ")[1]);
+                                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
+                            }
                         } else if (msg.getText().equals("USERS")) {
                             String users = SQLDB.getInstance().retrieveAllUsers().toString();
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), this.getName());
@@ -406,7 +413,7 @@ public class ClientRunnable implements Runnable {
                         String group = msg.getText().split(" ")[0];
                         String user = msg.getText().split(" ")[1];
                         SQLDB db = SQLDB.getInstance();
-                        if (!db.checkGroup(group)){
+                        if (!db.checkGroup(group)) {
                             db.createGroup(group);
                         }
                         db.addGroupMember(group, user);
