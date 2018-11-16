@@ -9,7 +9,7 @@ class MessageTest {
     @Test
     void testMakeMessage() {
         Message message = Message.makeBroadcastMessage("tim", "hello");
-        assertEquals("BCT 3 tim 5 hello", message.toString());
+        assertEquals("BCT 3 tim 2 -- 5 hello", message.toString());
         assertEquals("tim", message.getSender());
         assertEquals("hello", message.getText());
         assertTrue(message.isBroadcastMessage());
@@ -32,7 +32,7 @@ class MessageTest {
 
         Message message6 = Message.makeHelloMessage("Hello");
         assertFalse(message6.isBroadcastMessage());
-        assertEquals("NAK 2 -- 2 --", message5.toString());
+        assertEquals("NAK 2 -- 2 -- 2 --", message5.toString());
 
     }
 

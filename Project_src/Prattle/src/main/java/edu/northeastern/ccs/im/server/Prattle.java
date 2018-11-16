@@ -100,7 +100,7 @@ public abstract class Prattle {
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
-            if (tt.isInitialized() && tt.isValidated()) {
+            if (tt.isInitialized()) {
                 users.add(tt.getName());
             }
         }

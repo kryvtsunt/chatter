@@ -395,7 +395,7 @@ public class ClientRunnable implements Runnable {
                         } else if (msg.getText().contains("GROUP_MESSAGES ")) {
                             String group = msg.getText().split("GROUP_MESSAGES ")[1];
                             if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())){
-                                String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split("GROUP-MESSAGES ")[1]);
+                                String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split("GROUP_MESSAGES ")[1]);
                                 Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
                             } else {
                                 Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "You do not have access to the group!"), this.getName());
