@@ -471,4 +471,22 @@ public class SQLDB {
         return userInformation;
 
     }
+
+    public List<String> retrieveAllGroups(){
+        List<String> groupInformation = new ArrayList<>();
+        try {
+            // '*' in case we require more fields in future
+            String sqlRetrieveAllUsers = "SELECT * FROM groups";
+            PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveAllUsers);
+            ResultSet userSet = pStatement.executeQuery();
+            while(userSet.next()) {
+                groupInformation.add(userSet.getString("groupName"));
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.toString());
+        }
+        return groupInformation;
+
+    }
 }

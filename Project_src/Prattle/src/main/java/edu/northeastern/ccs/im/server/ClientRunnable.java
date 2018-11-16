@@ -393,7 +393,10 @@ public class ClientRunnable implements Runnable {
                             String users = SQLDB.getInstance().retrieveAllUsers().toString();
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), this.getName());
                         } else if (msg.getText().equals("GROUPS")) {
-                            String group = SQLDB.getInstance().retrieveGroupMembers("friends").toString();
+                            String groups = SQLDB.getInstance().retrieveAllGroups().toString();
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), groups), this.getName());
+                        } else if (msg.getText().contains("GROUP ")) {
+                            String group = SQLDB.getInstance().retrieveGroupMembers(msg.getText().split("GROUP ")[1]).toString();
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), group), this.getName());
                         }
 
