@@ -122,7 +122,10 @@ class SQLDBTest2 {
 
     @Test
     void getAllMessagesForGroup() {
-        System.out.println(sqldb.getAllMessagesForGroup("retrieveGroup"));
+//        sqldb.create(111,"105","pass");
+//        sqldb.addGroupMember("retrieveGroup","mockUser");
+
+        assertNotNull(sqldb.getAllMessagesForGroup("mockUser","retrieveGroup"));
     }
 
     @Test
@@ -138,5 +141,12 @@ class SQLDBTest2 {
     @Test
     void retrieveAllGroups() {
         assertTrue(sqldb.retrieveAllGroups().size()>0);
+    }
+
+    @Test
+    void deleteGroupMember(){
+        sqldb.addGroupMember("newMockGroup2","mockUser");
+        assertTrue(sqldb.deleteGroupMember("newMockGroup2","mockUser"));
+
     }
 }
