@@ -242,6 +242,11 @@ public class IMConnection {
 			String content = args[1];
 			Message crtMessage = Message.makeJoinMessage(userName, content);
 			socketConnection.print(crtMessage);
+		} else if (message.contains("LEAVE ")) {
+			String[] args = message.split("LEAVE ");
+			String content = args[1];
+			Message lvMessage = Message.makeLeaveMessage(userName, content);
+			socketConnection.print(lvMessage);
 		} else if (message.contains("DELETE")) {
 			Message dltMessage = Message.makeDeleteMessage(userName, null);
 			socketConnection.print(dltMessage);

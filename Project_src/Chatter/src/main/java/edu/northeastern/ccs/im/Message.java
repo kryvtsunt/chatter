@@ -52,7 +52,9 @@ public class Message {
 
 		DELETE("DEL"),
 
-		JOIN("JIN");
+		JOIN("JIN"),
+
+		LEAVE("LVE");
 		/**
 		 * Store the short name of this message type.
 		 */
@@ -223,6 +225,17 @@ public class Message {
 		return new Message(MessageType.JOIN, myName, null, text);
 	}
 
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeLeaveMessage(String myName, String text) {
+		return new Message(MessageType.LEAVE, myName, null, text);
+	}
+
 
 	/**
 	 * Create a new message directed to a certain user.
@@ -280,6 +293,8 @@ public class Message {
 			result = makeUpdateMessage(srcName, text);
 		}  else if (handle.compareTo(MessageType.JOIN.toString()) == 0) {
 			result = makeJoinMessage(srcName, text);
+		}  else if (handle.compareTo(MessageType.LEAVE.toString()) == 0) {
+			result = makeLeaveMessage(srcName, text);
 		}
 		return result;
 	}
@@ -416,6 +431,15 @@ public class Message {
 	 */
 	public boolean isJoinMessage() {
 		return (msgType == MessageType.JOIN);
+	}
+
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isLeavenMessage() {
+		return (msgType == MessageType.LEAVE);
 	}
 
 	/**

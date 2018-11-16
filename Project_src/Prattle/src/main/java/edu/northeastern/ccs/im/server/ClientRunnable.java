@@ -392,8 +392,8 @@ public class ClientRunnable implements Runnable {
                         } else if (msg.getText().equals("MESSAGES")) {
                             String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), getName());
-                        } else if (msg.getText().contains("GROUP-MESSAGES ")) {
-                            String group = msg.getText().split("GROUP-MESSAGES ")[1];
+                        } else if (msg.getText().contains("GROUP_MESSAGES ")) {
+                            String group = msg.getText().split("GROUP_MESSAGES ")[1];
                             if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())){
                                 String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split("GROUP-MESSAGES ")[1]);
                                 Prattle.directMessage(Message.makeDirectMessage("Server", getName(), logs), this.getName());
@@ -404,12 +404,20 @@ public class ClientRunnable implements Runnable {
                         else if (msg.getText().equals("USERS")) {
                             String users = SQLDB.getInstance().retrieveAllUsers().toString();
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), getName());
+                        }else if (msg.getText().equals("ONLINE")) {
+                            String users = Prattle.getOnline().toString();
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), users), getName());
                         } else if (msg.getText().equals("GROUPS")) {
                             String groups = SQLDB.getInstance().retrieveAllGroups().toString();
                             Prattle.directMessage(Message.makeDirectMessage("Server", getName(), groups), getName());
                         } else if (msg.getText().contains("GROUP ")) {
-                            String group = SQLDB.getInstance().retrieveGroupMembers(msg.getText().split("GROUP ")[1]).toString();
-                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), group), getName());
+                            String group = msg.getText().split("GROUP ")[1];
+                            if (SQLDB.getInstance().checkGroup(group)) {
+                                String members = SQLDB.getInstance().retrieveGroupMembers(group).toString();
+                                Prattle.directMessage(Message.makeDirectMessage("Server", getName(), members), getName());
+                            } else {
+                            Prattle.directMessage(Message.makeDirectMessage("Server", getName(), "The group does not exist!"), this.getName());
+                        }
                         }
                         return;
 
@@ -422,6 +430,16 @@ public class ClientRunnable implements Runnable {
                             db.createGroup(group);
                         }
                         db.addGroupMember(group, getName());
+                    }  else if (msg.isLeavenMessage()) {
+                        String group = msg.getText();
+                        SQLDB db = SQLDB.getInstance();
+                        if (db.checkGroup(group)) {
+                            db.deleteGroupMember(group, getName());
+                            if (db.retrieveGroupMembers(group).isEmpty()){
+                                db.deleteGroup(group);
+                            }
+                        }
+
                     }
                     // If the message is a DELETE user
                     else if (msg.isDeleteMessage()) {
