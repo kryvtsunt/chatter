@@ -87,6 +87,9 @@ public final class ScanForMessagesWorker extends SwingWorker<Void, Message> {
 				case DIRECT:
 					publishList.add(m);
 					break;
+				case GROUP:
+					publishList.add(m);
+					break;
 				case NO_ACKNOWLEDGE:
 					cancel(false);
 					realConnection = null;

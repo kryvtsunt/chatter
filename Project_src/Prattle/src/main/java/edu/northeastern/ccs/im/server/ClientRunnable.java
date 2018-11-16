@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.mysql.cj.ParseInfo;
 import com.mysql.cj.xdevapi.SqlDataResult;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
@@ -366,6 +367,18 @@ public class ClientRunnable implements Runnable {
                             new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
                     // If the message is a direct message, send it out
                     if (msg.isDirectMessage()){
+                        Prattle.directMessage(msg, msg.getReceiver());
+                    }
+                    // If the message is a direct message, send it out
+                    if (msg.isGroupMessage()){
+                        SQLDB db = SQLDB.getInstance();
+                        String group = msg.getReceiver();
+                        if (db.checkGroup(group)){
+                            List<String> users = db.retrieveGroupMembers(group);
+                            for (String user: users){
+                                Prattle.directMessage(msg, user);
+                            }
+                        }
                         Prattle.directMessage(msg, msg.getReceiver());
                     }
                     // If the message is a RETRIEVE
