@@ -43,7 +43,6 @@ public class FileDB {
     /**
      * Read DB from the file
      *
-     * @throws FileNotFoundException if file is not found
      */
     private boolean readDB() {
         String str = "";

@@ -3,7 +3,7 @@ package edu.northeastern.ccs.im;
 /**
  * Each instance of this class represents a single transmission by our IM
  * clients.
- *
+ * <p>
  * This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
  * International License. To view a copy of this license, visit
  * http://creativecommons.org/licenses/by-sa/4.0/. It is based on work
@@ -17,24 +17,45 @@ public class Message {
 	 * List of the different possible message types.
 	 */
 	protected enum MessageType {
-	/**
-	 * Message sent by the user attempting to login using a specified username.
-	 */
-	HELLO("HLO"),
-	/** Message sent by the server acknowledging a successful log in. */
-	ACKNOWLEDGE("ACK"),
-	/** Message sent by the server rejecting a login attempt. */
-	NO_ACKNOWLEDGE("NAK"),
-	/**
-	 * Message sent by the user to start the logging out process and sent by the
-	 * server once the logout process completes.
-	 */
-	QUIT("BYE"),
-	/** Message whose contents is broadcast to all connected users. */
-	BROADCAST("BCT"),
+		/**
+		 * Message sent by the user attempting to login using a specified username.
+		 */
+		HELLO("HLO"),
+		/**
+		 * Message sent by the server acknowledging a successful log in.
+		 */
+		ACKNOWLEDGE("ACK"),
+		/**
+		 * Message sent by the server rejecting a login attempt.
+		 */
+		NO_ACKNOWLEDGE("NAK"),
+		/**
+		 * Message sent by the user to start the logging out process and sent by the
+		 * server once the logout process completes.
+		 */
+		QUIT("BYE"),
+		/**
+		 * Message whose contents is broadcast to all connected users.
+		 */
+		BROADCAST("BCT"),
 
-	DIRECT("DIR");
-		/** Store the short name of this message type. */
+		/**
+		 * Message whose contents is directed to specific user.
+		 */
+		DIRECT("DIR"),
+
+		GROUP("GRP"),
+
+		RETRIEVE("RET"),
+
+		UPDATE("UPD"),
+
+		DELETE("DEL"),
+
+		CREATE("CRE");
+		/**
+		 * Store the short name of this message type.
+		 */
 		private String tla;
 
 		/**
@@ -57,10 +78,14 @@ public class Message {
 		}
 	}
 
-	/** The string sent when a field is null. */
+	/**
+	 * The string sent when a field is null.
+	 */
 	private static final String NULL_OUTPUT = "--";
 
-	/** The handle of the message. */
+	/**
+	 * The handle of the message.
+	 */
 	private MessageType msgType;
 
 	/**
@@ -68,7 +93,14 @@ public class Message {
 	 */
 	private String msgSender;
 
-	/** The second argument used in the message. */
+	/**
+	 * The second argument used in the message. This will be the receiver's identifier.
+	 */
+	private String msgReceiver;
+
+	/**
+	 * The second argument used in the message.
+	 */
 	private String msgText;
 
 	/**
@@ -80,11 +112,13 @@ public class Message {
 	 * @param srcName Name of the individual sending this message
 	 * @param text    Text of the instant message
 	 */
-	private Message(MessageType handle, String srcName, String text) {
+	private Message(MessageType handle, String srcName, String dstName, String text) {
 		msgType = handle;
 		// Save the properly formatted identifier for the user sending the
 		// message.
 		msgSender = srcName;
+
+		msgReceiver = dstName;
 		// Save the text of the message.
 		msgText = text;
 	}
@@ -95,7 +129,7 @@ public class Message {
 	 * @param handle Handle for the type of message being created.
 	 */
 	private Message(MessageType handle) {
-		this(handle, null, null);
+		this(handle, null, null, null);
 	}
 
 	/**
@@ -108,7 +142,7 @@ public class Message {
 	 *                log-in to the IM server.
 	 */
 	private Message(MessageType handle, String srcName) {
-		this(handle, srcName, null);
+		this(handle, srcName, null, null);
 	}
 
 	/**
@@ -117,7 +151,7 @@ public class Message {
 	 * @return Instance of Message that specifies the process is logging out.
 	 */
 	public static Message makeQuitMessage(String myName) {
-		return new Message(MessageType.QUIT, myName, null);
+		return new Message(MessageType.QUIT, myName, null, null);
 	}
 
 	/**
@@ -128,17 +162,88 @@ public class Message {
 	 * @return Instance of Message that transmits text to all logged in users.
 	 */
 	public static Message makeBroadcastMessage(String myName, String text) {
-		return new Message(MessageType.BROADCAST, myName, text);
+		return new Message(MessageType.BROADCAST, myName, null, text);
+	}
+
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param directTo Name of the destination user
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeDirectMessage(String myName, String directTo, String text) {
+		return new Message(MessageType.DIRECT, myName, directTo, text);
+	}
+
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param directTo Name of the destination user
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeGroupMessage(String myName, String directTo, String text) {
+		return new Message(MessageType.GROUP, myName, directTo, text);
+	}
+
+
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeRetrieveMessage(String myName, String text) {
+		return new Message(MessageType.RETRIEVE, myName, null, text);
+	}
+
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeDeleteMessage(String myName, String text) {
+		return new Message(MessageType.DELETE, myName, null, text);
+	}
+
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeCreateMessage(String myName, String text) {
+		return new Message(MessageType.CREATE, myName, null, text);
+	}
+
+
+	/**
+	 * Create a new message directed to a certain user.
+	 *
+	 * @param myName   Name of the sender of this very important missive.
+	 * @param text     Text of the message that will be sent to all users
+	 * @return Instance of Message that transmits text to all logged in users.
+	 */
+	public static Message makeUpdateMessage(String myName, String text) {
+		return new Message(MessageType.UPDATE, myName, null, text);
 	}
 
 	/**
 	 * Create a new message stating the name with which the user would like to
 	 * login.
 	 *
+	 * @param text Name the user wishes to use as their screen name.
 	 * @return Instance of Message that can be sent to the server to try and login.
 	 */
-	protected static Message makeHelloMessage() {
-		return new Message(MessageType.HELLO, null, "Hello");
+	protected static Message makeHelloMessage(String text) {
+		return new Message(MessageType.HELLO, null, null, text);
 	}
 
 	/**
@@ -149,20 +254,32 @@ public class Message {
 	 * @param srcName Name of the originator of the message (may be null)
 	 * @param text    Text sent in this message (may be null)
 	 * @return Instance of Message (or its subclasses) representing the handle,
-	 *         name, & text.
+	 * name, & text.
 	 */
-	protected static Message makeMessage(String handle, String srcName, String text) {
+	protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
 		Message result = null;
 		if (handle.compareTo(MessageType.QUIT.toString()) == 0) {
 			result = makeQuitMessage(srcName);
 		} else if (handle.compareTo(MessageType.HELLO.toString()) == 0) {
-			result = makeSimpleLoginMessage(srcName);
+			result = makeLoginMessage(srcName);
 		} else if (handle.compareTo(MessageType.BROADCAST.toString()) == 0) {
 			result = makeBroadcastMessage(srcName, text);
 		} else if (handle.compareTo(MessageType.ACKNOWLEDGE.toString()) == 0) {
 			result = makeAcknowledgeMessage(srcName);
 		} else if (handle.compareTo(MessageType.NO_ACKNOWLEDGE.toString()) == 0) {
 			result = makeNoAcknowledgeMessage();
+		} else if (handle.compareTo(MessageType.DIRECT.toString()) == 0) {
+			result = makeDirectMessage(srcName, dstName, text);
+		}  else if (handle.compareTo(MessageType.GROUP.toString()) == 0) {
+			result = makeGroupMessage(srcName, dstName, text);
+		} else if (handle.compareTo(MessageType.RETRIEVE.toString()) == 0) {
+			result = makeRetrieveMessage(srcName, text);
+		} else if (handle.compareTo(MessageType.DELETE.toString()) == 0) {
+			result = makeDeleteMessage(srcName, text);
+		} else if (handle.compareTo(MessageType.UPDATE.toString()) == 0) {
+			result = makeUpdateMessage(srcName, text);
+		}  else if (handle.compareTo(MessageType.CREATE.toString()) == 0) {
+			result = makeCreateMessage(srcName, text);
 		}
 		return result;
 	}
@@ -194,8 +311,17 @@ public class Message {
 	 * @param myName Name of the user who has just logged in.
 	 * @return Instance of Message specifying a new friend has just logged in.
 	 */
-	public static Message makeSimpleLoginMessage(String myName) {
+	public static Message makeLoginMessage(String myName) {
 		return new Message(MessageType.HELLO, myName);
+	}
+
+	/**
+	 * Return the type of this message.
+	 *
+	 * @return MessageType for this message.
+	 */
+	public MessageType getType() {
+		return msgType;
 	}
 
 	/**
@@ -203,8 +329,17 @@ public class Message {
 	 *
 	 * @return String specifying the name of the message originator.
 	 */
-	public String getName() {
+	public String getSender() {
 		return msgSender;
+	}
+
+	/**
+	 * Return the name of the receiver of this message.
+	 *
+	 * @return String specifying the name of the message originator.
+	 */
+	public String getReceiver() {
+		return msgReceiver;
 	}
 
 	/**
@@ -234,12 +369,48 @@ public class Message {
 		return (msgType == MessageType.BROADCAST);
 	}
 
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isDirectMessage() {
+		return (msgType == MessageType.DIRECT);
+	}
+
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isGroupMessage() {
+		return (msgType == MessageType.GROUP);
+	}
+
+
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isRetrieveMessage() {
+		return (msgType == MessageType.RETRIEVE);
+	}
+
+	/**
+	 * Determine if this message is directing text to specific users.
+	 *
+	 * @return True if the message is a broadcast message; false otherwise.
+	 */
+	public boolean isCreateMessage() {
+		return (msgType == MessageType.CREATE);
+	}
 
 	/**
 	 * Determine if this message contains text which the recipient should display.
 	 *
 	 * @return True if the message is an actual instant message; false if the
-	 *         mes sage contains data
+	 * message contains data
 	 */
 	public boolean isDisplayMessage() {
 		return (msgType == MessageType.BROADCAST);
@@ -275,6 +446,11 @@ public class Message {
 		String result = msgType.toString();
 		if (msgSender != null) {
 			result += " " + msgSender.length() + " " + msgSender;
+		} else {
+			result += " " + NULL_OUTPUT.length() + " " + NULL_OUTPUT;
+		}
+		if (msgReceiver != null) {
+			result += " " + msgReceiver.length() + " " + msgReceiver;
 		} else {
 			result += " " + NULL_OUTPUT.length() + " " + NULL_OUTPUT;
 		}

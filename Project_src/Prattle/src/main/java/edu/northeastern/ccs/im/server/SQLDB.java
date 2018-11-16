@@ -3,8 +3,7 @@ package edu.northeastern.ccs.im.server;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SQLDB {
     final static String CONNECTION_URL = "aaw5ywu4d6dc4k.c7ohnssvtfpy.us-east-1.rds.amazonaws.com";
@@ -34,7 +33,7 @@ public class SQLDB {
         return instance;
     }
 
-    public boolean checkUser(String username) throws SQLException {
+    public boolean checkUser(String username) {
         try {
             String sqlCheckUser = "SELECT COUNT(*) FROM users WHERE username=?";
             PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser);
@@ -51,7 +50,7 @@ public class SQLDB {
     }
 
     public String retrieve(String username) {
-        String userInformation = "";
+        String userInformation = null;
         try {
             if(checkUser(username)) {
                 String sqlCreateUser = "SELECT * FROM users WHERE username=?";
@@ -327,5 +326,149 @@ public class SQLDB {
         }
 
         return false;
+    }
+
+    public boolean storeMessageIndividual(String from, String to, String text) {
+        int userID = getUserID(from);
+        try {
+            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pStatement = connection.prepareStatement(sql);
+            pStatement.setInt(1, userID);
+            pStatement.setString(2, to);
+            pStatement.setBoolean(3, false);
+            pStatement.setBoolean(4, false);
+            pStatement.setString(5, text);
+            pStatement.setBoolean(6, false);
+            int msgCount = pStatement.executeUpdate();
+            return (msgCount > 0);
+        }catch(Exception e) {System.out.println(e.toString());}
+        return false;
+    }
+
+    public boolean storeMessageGroup(String from, String group, String text) {
+        int userID = getUserID(from);
+        try {
+            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pStatement = connection.prepareStatement(sql);
+            pStatement.setInt(1, userID);
+            pStatement.setString(2, group);
+            pStatement.setBoolean(3, false);
+            pStatement.setBoolean(4, true);
+            pStatement.setString(5, text);
+            pStatement.setBoolean(6, false);
+            int msgCount = pStatement.executeUpdate();
+            return (msgCount > 0);
+        }catch(Exception e) {}
+        return false;
+    }
+
+    public boolean storeMessageBroadcast(String from, String text) {
+        int userID = getUserID(from);
+        try {
+            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement pStatement = connection.prepareStatement(sql);
+            pStatement.setInt(1, userID);
+            pStatement.setString(2, "BROADCAST");
+            pStatement.setBoolean(3, false);
+            pStatement.setBoolean(4, false);
+            pStatement.setString(5, text);
+            pStatement.setBoolean(6, true);
+            int msgCount = pStatement.executeUpdate();
+            return (msgCount > 0);
+        }catch(Exception e) {}
+        return false;
+    }
+
+    public String getAllMessagesForUser(String user) {
+        int userID = getUserID(user);
+        String msgInformation = "";
+        SortedMap<Timestamp,String> hmap = new TreeMap<Timestamp,String>(Collections.reverseOrder());
+        try {
+            String sql = "SELECT toUser, message, creationTime FROM message_details WHERE fromUser = '" + userID + "'";
+            Statement pStatement = connection.createStatement();
+            ResultSet rs = pStatement.executeQuery(sql);
+            while(rs.next()) {
+                String to = rs.getString("toUser");
+                String msg = rs.getString("message");
+                Timestamp t = rs.getTimestamp("creationTime");
+                System.out.println("TimeStamp:" + t.toString() + " => To:" + to + ", Message:" + msg);
+                hmap.put(t,"TimeStamp:" + t.toString() + " => To:" + to + ", Message:" + msg + "\n");
+            }
+        } catch(Exception e) {System.out.println(e.toString());}
+
+        Iterator i = hmap.entrySet().iterator();
+        while (i.hasNext())
+        {
+            Map.Entry m = (Map.Entry)i.next();
+            msgInformation = msgInformation + m.getValue();
+        }
+        return msgInformation;
+    }
+
+    public String getAllMessagesForGroup(String group) {
+        //NOTE: write code to check if user belongs to that group
+        String msgInformation = "";
+        SortedMap<Timestamp,String> hmap = new TreeMap<Timestamp,String>(Collections.reverseOrder());
+        try {
+            // check whether user belongs to specific group or not
+            String sql = "SELECT fromUser, message, creationTime FROM message_details WHERE toUser='" + group + "' AND IsGroupMsg = " + true;
+            Statement pStatement = connection.createStatement();
+            ResultSet rs = pStatement.executeQuery(sql);
+            while(rs.next()) {
+                String from = getUsername(String.valueOf(rs.getInt("fromUser")));
+                String msg = rs.getString("message");
+                Timestamp t = rs.getTimestamp("creationTime");
+                hmap.put(t,"TimeStamp:" + t.toString() + " => From:" + from + ", Message:" + msg + "\n");
+            }
+        } catch(Exception e) {}
+
+        Iterator i = hmap.entrySet().iterator();
+        while (i.hasNext())
+        {
+            Map.Entry m = (Map.Entry)i.next();
+            msgInformation = msgInformation + m.getValue();
+        }
+        return msgInformation;
+    }
+
+    public List<String> retrieveAllUsers(){
+        List<String> userInformation = new ArrayList<>();
+        try {
+            // '*' in case we require userId or more fields in future
+            String sqlRetrieveAllUsers = "SELECT * FROM users";
+            PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveAllUsers);
+            ResultSet userSet = pStatement.executeQuery();
+            while(userSet.next()) {
+                userInformation.add(userSet.getString("username"));
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.toString());
+        }
+        return userInformation;
+
+    }
+
+    public List<String> retrieveGroupMembers(String groupName){
+        List<String> userInformation = new ArrayList<>();
+        try {
+            if(checkGroup(groupName)) {
+                int groupId = getGroupID(groupName);
+                String sqlRetrieveGroup = "SELECT userId FROM groupMembers WHERE groupId=?";
+                PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveGroup);
+                pStatement.setInt(1, groupId);
+                ResultSet userSet = pStatement.executeQuery();
+                while(userSet.next()) {
+                    int tempUserId = userSet.getInt("userId");
+                    String tempUsername = getUsername(Integer.toString(tempUserId));
+                    userInformation.add(tempUsername);
+                }
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.toString());
+        }
+        return userInformation;
+
     }
 }
