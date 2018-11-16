@@ -34,6 +34,7 @@ class PrattleTest {
         Thread.sleep(1000);
         Prattle.directMessage(msg, "username");
         Prattle.broadcastMessage(msg);
+        Prattle.getOnline();
         serverThread.interrupt();
     }
 
