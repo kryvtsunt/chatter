@@ -193,8 +193,47 @@ public class IMConnection {
 		if (!connectionActive()) {
 			throw new IllegalOperationException("Cannot send a message if you are not connected to a server!\n");
 		}
-		Message bctMessage = Message.makeBroadcastMessage(userName, message);
-		socketConnection.print(bctMessage);
+		if (message.contains(">>")) {
+			String[] args = message.split(">>");
+			String destination = args[0];
+			String content = args[1];
+			String[] to = destination.split(",");
+			for (String directTo : to) {
+				Message dctMessage = Message.makeGroupMessage(userName, directTo, content);
+				socketConnection.print(dctMessage);
+			}
+		} else if (message.contains(">")) {
+			String[] args = message.split(">");
+			String destination = args[0];
+			String content = args[1];
+			String[] to = destination.split(",");
+			for (String directTo : to) {
+				Message dctMessage = Message.makeDirectMessage(userName, directTo, content);
+				socketConnection.print(dctMessage);
+			}
+		} else if (message.contains("RETRIEVE ")) {
+			String[] args = message.split("RETRIEVE ");
+			String content = args[1];
+			Message rtrMessage = Message.makeRetrieveMessage(userName, content);
+			socketConnection.print(rtrMessage);
+		} else if (message.contains("JOIN ")) {
+			String[] args = message.split("JOIN ");
+			String content = args[1];
+			Message crtMessage = Message.makeCreateMessage(userName, content);
+			socketConnection.print(crtMessage);
+		} else if (message.contains("DELETE")) {
+			Message dltMessage = Message.makeDeleteMessage(userName, null);
+			socketConnection.print(dltMessage);
+		}else if (message.contains("UPDATE")) {
+			String[] args = message.split("UPDATE ");
+			String content = args[1];
+			Message crtMessage = Message.makeUpdateMessage(userName, content);
+			socketConnection.print(crtMessage);
+		}
+		else {
+			Message bctMessage = Message.makeBroadcastMessage(userName, message);
+			socketConnection.print(bctMessage);
+		}
 	}
 
 	/**

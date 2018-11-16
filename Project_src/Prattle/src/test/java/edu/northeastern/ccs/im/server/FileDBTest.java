@@ -1,20 +1,17 @@
 package edu.northeastern.ccs.im.server;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Tests the simple "data base"(text-file) PrattleDB
+ * Tests the simple "data base"(text-file) FileDB
  */
-class PrattleDBTest {
+class FileDBTest {
 
     @Test
     void testPrattleDB() {
-        PrattleDB db = PrattleDB.instance();
+        FileDB db = FileDB.instance();
         assertTrue(db.create("tim", "1234"));
         assertTrue(db.delete("tim"));
         assertTrue(db.delete("bubochka"));

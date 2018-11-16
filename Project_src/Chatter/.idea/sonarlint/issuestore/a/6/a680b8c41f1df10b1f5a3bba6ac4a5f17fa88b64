@@ -1,11 +1,0 @@
-
-U
-squid:S106ä"9Replace this use of System.out or System.err by a logger.(„Ó±âûÿÿÿÿ
-squid:S1149#"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ğÉŒ›úÿÿÿÿ
-usquid:S2293I"YReplace the type specification in this constructor call with the diamond operator ("<>").(Ï»Ñüÿÿÿÿ
-squid:S1149)"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(œ¯“Ûıÿÿÿÿ
-‚squid:S1149‚"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(«äÇûÿÿÿÿ
-U
-squid:S106ã"9Replace this use of System.out or System.err by a logger.(Ûœ´ıúÿÿÿÿ
-psquid:S2293H"YReplace the type specification in this constructor call with the diamond operator ("<>").(½€¾°
-‚squid:S1149÷"eReplace the synchronized class "Vector" by an unsynchronized one such as "ArrayList" or "LinkedList".(ºÒŠûÿÿÿÿ

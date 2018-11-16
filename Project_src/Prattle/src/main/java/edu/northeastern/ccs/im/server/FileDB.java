@@ -13,19 +13,19 @@ import java.util.Scanner;
  * A simple "Data Base" implemented (CRUD operations on the text file that has information about all users)
  * Uses singleton design pattern.
  */
-public class PrattleDB {
+public class FileDB {
 
     /**
      * A Data Structure that contatins a mapping of usernames to the user passwords.
      */
 
-    private static PrattleDB instance;
+    private static FileDB instance;
 
     private Map<String, String> users = new HashMap<>();
 
     private String name = "db.txt";
 
-    private PrattleDB() {
+    private FileDB() {
     }
 
     /**
@@ -33,9 +33,9 @@ public class PrattleDB {
      *
      * @return instance of the state (create new if it does not exist);
      */
-    public static PrattleDB instance() {
+    public static FileDB instance() {
         if (instance == null) {
-            instance = new PrattleDB();
+            instance = new FileDB();
         }
         return instance;
     }
@@ -43,7 +43,6 @@ public class PrattleDB {
     /**
      * Read DB from the file
      *
-     * @throws FileNotFoundException if file is not found
      */
     private boolean readDB() {
         String str = "";
