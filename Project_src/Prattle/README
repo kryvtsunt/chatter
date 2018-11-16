@@ -25,7 +25,7 @@ CRUD functionality:
 -RETRIEVE GROUPS (displays the name of all existing groups)
 -RETRIEVE GROUP group (displays the users that are part of the group) *only if you are part of the group*
 -RETRIEVE MESSAGES (displays all messages sent by the user ordered by time)
--RETRIEVE GROUP-MESSAGES (displays all messages for a particular group) *only if you are part of the group*
+-RETRIEVE GROUP_MESSAGES group(displays all messages for a particular group) *only if you are part of the group*
 -RETRIEVE USERS (all users in the database)
 -RETRIEVE ONLINE (only online users)
 
