@@ -82,7 +82,6 @@ class ClientRunnableTest {
         } catch (ClosedSelectorException e) {
             assertNull(e.getMessage());
         }
-
         serverSocket.close();
     }
 
