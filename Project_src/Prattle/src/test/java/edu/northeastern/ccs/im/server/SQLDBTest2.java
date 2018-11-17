@@ -1,6 +1,5 @@
 package edu.northeastern.ccs.im.server;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -65,8 +64,6 @@ class SQLDBTest2 {
         db.getGroupID("asdf");
         db.retrieveAllUsers();
         db.retrieve("tim");
-
-        //------------------
         db.getGroupID("random");
         db.getUsername("none");
         db.checkGroup("none");
@@ -85,6 +82,7 @@ class SQLDBTest2 {
         db.storeMessageIndividual("nonw","nonow","aonso");
         db.retrieveGroup("none");
         db.getUserID("none");
+        db.retrieveAllGroups();
         db.storeMessageGroup("nonw","nonw","non");
         db.storeMessageGroup("none","mo","sa");
         db.getAllMessagesForUser("no");

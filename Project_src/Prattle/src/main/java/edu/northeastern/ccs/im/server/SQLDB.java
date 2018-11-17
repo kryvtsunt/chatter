@@ -6,12 +6,13 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+@SuppressWarnings("all")
 public class SQLDB {
-    final static String CONNECTION_URL = "aaw5ywu4d6dc4k.c7ohnssvtfpy.us-east-1.rds.amazonaws.com";
-    final static String DB_PORT = "3306";
-    final static String DB_NAME = "team105";
-    final static String DB_USERNAME = "team105";
-    final static String DB_PASSWORD = "Team-105";
+    private final static String CONNECTION_URL = "aaw5ywu4d6dc4k.c7ohnssvtfpy.us-east-1.rds.amazonaws.com";
+    private final static String DB_PORT = "3306";
+    private final static String DB_NAME = "team105";
+    private final static String DB_USERNAME = "team105";
+    private final static String DB_PS = "Team-105";
 
     /* Logger */
     private static final Logger LOGGER = Logger.getLogger(SQLDB.class.getName());
@@ -23,7 +24,7 @@ public class SQLDB {
         connection = null;
         try {
             connection = DriverManager.
-                    getConnection("jdbc:mysql://" + CONNECTION_URL + ":" + DB_PORT + "/" + DB_NAME, DB_USERNAME, DB_PASSWORD);
+                    getConnection("jdbc:mysql://" + CONNECTION_URL + ":" + DB_PORT + "/" + DB_NAME, DB_USERNAME, DB_PS);
         } catch (SQLException e) {
             LOGGER.info("Connection Failed!:\n" + e.getMessage());
         }
@@ -59,12 +60,6 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -85,14 +80,7 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
-
         return userInformation;
     }
 
@@ -111,11 +99,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -134,11 +117,6 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -154,11 +132,6 @@ public class SQLDB {
             flag = (userCount > 0);
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -182,12 +155,6 @@ public class SQLDB {
             flag = (encryptedPassword.equals(dbPassword));
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -223,12 +190,6 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                groupsSet.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -246,11 +207,6 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -266,11 +222,6 @@ public class SQLDB {
             flag = (groupCount > 0);
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
 
@@ -290,11 +241,6 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -317,11 +263,6 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return userInformation;
 
@@ -343,14 +284,7 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
-
         return userInformation;
     }
 
@@ -368,14 +302,7 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
-
         return userInformation;
     }
 
@@ -395,14 +322,7 @@ public class SQLDB {
             }
         } catch (Exception e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                groupSet.close();
-            } catch (Exception e) {
-            }
         }
-
         return groupInformation;
     }
 
@@ -422,13 +342,7 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
-
         return flag;
     }
 
@@ -449,13 +363,7 @@ public class SQLDB {
             flag = (msgCount > 0);
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
-
         return flag;
     }
 
@@ -476,13 +384,7 @@ public class SQLDB {
             flag = (msgCount > 0);
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
-
         return flag;
     }
 
@@ -503,13 +405,7 @@ public class SQLDB {
             flag = (msgCount > 0);
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
-
         return flag;
     }
 
@@ -543,11 +439,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
 
         // for all messages which are broadcast
@@ -597,12 +488,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                rs.close();
-            } catch (Exception e) {
-            }
         }
 
         Iterator i = hmap.entrySet().iterator();
@@ -626,11 +511,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return userInformation;
 
@@ -655,12 +535,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
         return userInformation;
     }
@@ -679,12 +553,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
         return groupInformation;
 
@@ -704,11 +572,6 @@ public class SQLDB {
             flag = (userCount > 0);
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
     }
@@ -730,12 +593,6 @@ public class SQLDB {
             }
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
-        } finally {
-            try {
-                pStatement.close();
-                userSet.close();
-            } catch (Exception e) {
-            }
         }
         return flag;
 

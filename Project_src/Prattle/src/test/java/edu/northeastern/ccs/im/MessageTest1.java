@@ -12,6 +12,7 @@ import org.powermock.api.mockito.PowerMockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Message.class)
 class MessageTest1 {
@@ -26,81 +27,81 @@ class MessageTest1 {
     @Test
     void makeQuitMessage() {
         Message msgQuit = Message.makeQuitMessage("mockUser");
-        assertEquals("BYE",msgQuit.getType().toString());
+        assertEquals("BYE", msgQuit.getType().toString());
     }
 
     @Test
     void makeBroadcastMessage() {
-        Message makeBCT = Message.makeBroadcastMessage("mockUser","User input");
-        assertEquals("BCT",makeBCT.getType().toString());
+        Message makeBCT = Message.makeBroadcastMessage("mockUser", "User input");
+        assertEquals("BCT", makeBCT.getType().toString());
     }
 
     @Test
     void makeDirectMessage() {
-        Message makeDM = Message.makeDirectMessage("mockUser","mockUser2","received?");
-        assertEquals("DIR",makeDM.getType().toString());
+        Message makeDM = Message.makeDirectMessage("mockUser", "mockUser2", "received?");
+        assertEquals("DIR", makeDM.getType().toString());
     }
 
     @Test
     void makeGroupMessage() {
 
-        Message makeGM = Message.makeGroupMessage("mockUser","mockUserGroup","group received?");
-        assertEquals("GRP",makeGM.getType().toString());
+        Message makeGM = Message.makeGroupMessage("mockUser", "mockUserGroup", "group received?");
+        assertEquals("GRP", makeGM.getType().toString());
 
     }
 
     @Test
     void makeRetrieveMessage() {
-        Message makeRM = Message.makeRetrieveMessage("mockUser","text");
-        assertEquals("RET",makeRM.getType().toString());
+        Message makeRM = Message.makeRetrieveMessage("mockUser", "text");
+        assertEquals("RET", makeRM.getType().toString());
 
     }
 
     @Test
     void makeDeleteMessage() {
-        Message makeDelM = Message.makeDeleteMessage("mockUser","deleted?");
+        Message makeDelM = Message.makeDeleteMessage("mockUser", "deleted?");
         assertEquals("DEL", makeDelM.getType().toString());
     }
 
     @Test
     void makeJoinMessage() {
-        Message makeJM = Message.makeJoinMessage("mockUser","joined?");
+        Message makeJM = Message.makeJoinMessage("mockUser", "joined?");
         assertTrue(makeJM.isJoinMessage());
-        assertEquals("JIN",makeJM.getType().toString());
+        assertEquals("JIN", makeJM.getType().toString());
     }
 
     @Test
     void makeLeaveMessage() {
-        Message msgLV = Message.makeLeaveMessage("mockUser","left?");
-        assertEquals("LVE",msgLV.getType().toString());
+        Message msgLV = Message.makeLeaveMessage("mockUser", "left?");
+        assertEquals("LVE", msgLV.getType().toString());
     }
 
     @Test
     void makeUpdateMessage() {
-        Message msgUp = Message.makeUpdateMessage("mockUser","updte");
-        assertEquals("UPD",msgUp.getType().toString());
+        Message msgUp = Message.makeUpdateMessage("mockUser", "updte");
+        assertEquals("UPD", msgUp.getType().toString());
     }
 
     @Test
     void makeHelloMessage() {
         Message msgHello = Message.makeHelloMessage("mockUser");
-        assertEquals("mockUser",msgHello.getText());
+        assertEquals("mockUser", msgHello.getText());
     }
 
     @Test
     void makeMessage() {
-        Message m1 = Message.makeMessage("HLO","mockUser","mockUser1","hello");
-        Message m2 = Message.makeMessage("ACK","mockUser","mockUser1","hello");
-        Message m3 = Message.makeMessage("NAK","mockUser","mockUser1","hello");
-        Message m4 = Message.makeMessage("BYE","mockUser","mockUser1","hello");
-        Message m5 = Message.makeMessage("BCT","mockUser","mockUser1","hello");
-        Message m6 = Message.makeMessage("DIR","mockUser","mockUser1","hello");
-        Message m7 = Message.makeMessage("GRP","mockUser","mockUser1","hello");
-        Message m8 = Message.makeMessage("RET","mockUser","mockUser1","hello");
-        Message m9 = Message.makeMessage("UPD","mockUser","mockUser1","hello");
-        Message m10 = Message.makeMessage("DEL","mockUser","mockUser1","hello");
-        Message m11 = Message.makeMessage("JIN","mockUser","mockUser1","hello");
-        Message m12 = Message.makeMessage("LVE","mockUser","mockUser1","hello");
+        Message m1 = Message.makeMessage("HLO", "mockUser", "mockUser1", "hello");
+        Message m2 = Message.makeMessage("ACK", "mockUser", "mockUser1", "hello");
+        Message m3 = Message.makeMessage("NAK", "mockUser", "mockUser1", "hello");
+        Message m4 = Message.makeMessage("BYE", "mockUser", "mockUser1", "hello");
+        Message m5 = Message.makeMessage("BCT", "mockUser", "mockUser1", "hello");
+        Message m6 = Message.makeMessage("DIR", "mockUser", "mockUser1", "hello");
+        Message m7 = Message.makeMessage("GRP", "mockUser", "mockUser1", "hello");
+        Message m8 = Message.makeMessage("RET", "mockUser", "mockUser1", "hello");
+        Message m9 = Message.makeMessage("UPD", "mockUser", "mockUser1", "hello");
+        Message m10 = Message.makeMessage("DEL", "mockUser", "mockUser1", "hello");
+        Message m11 = Message.makeMessage("JIN", "mockUser", "mockUser1", "hello");
+        Message m12 = Message.makeMessage("LVE", "mockUser", "mockUser1", "hello");
         assertTrue(m2.isAcknowledge());
         assertTrue(m5.isDisplayMessage());
         assertTrue(m5.isBroadcastMessage());
@@ -116,51 +117,51 @@ class MessageTest1 {
     @Test
     void makeNoAcknowledgeMessage() {
         Message msg = Message.makeNoAcknowledgeMessage();
-        assertEquals("NAK",msg.getType().toString());
+        assertEquals("NAK", msg.getType().toString());
 
     }
 
     @Test
     void makeAcknowledgeMessage() {
         Message msg = Message.makeAcknowledgeMessage("mockUser");
-        assertEquals("ACK",msg.getType().toString());
+        assertEquals("ACK", msg.getType().toString());
 
     }
 
     @Test
     void makeLoginMessage() {
-        assertEquals("HLO 8 mockUser 2 -- 2 --",Message.makeLoginMessage("mockUser").toString());
+        assertEquals("HLO 8 mockUser 2 -- 2 --", Message.makeLoginMessage("mockUser").toString());
     }
 
     @Test
     void getType() {
-        assertEquals("ACK",Message.makeAcknowledgeMessage("mockUser").getType().toString());
+        assertEquals("ACK", Message.makeAcknowledgeMessage("mockUser").getType().toString());
     }
 
     @Test
     void getSender() {
-        assertNull(Message.makeDirectMessage(null,"user","text").getSender());
+        assertNull(Message.makeDirectMessage(null, "user", "text").getSender());
 //        assertNull(Message.makeDirectMessage(null,"user","text").getReceiver());
-        assertNull(Message.makeDirectMessage("user",null,"text").getReceiver());
-        assertNull(Message.makeDirectMessage(null,"user",null).getText());
-        assertNotNull(Message.makeDirectMessage("user","user1","text").getReceiver());
-        assertNotNull(Message.makeDirectMessage("user","user1","text").getText());
-        assertEquals("mockUser",Message.makeDirectMessage("mockUser","user2","test").getSender());
+        assertNull(Message.makeDirectMessage("user", null, "text").getReceiver());
+        assertNull(Message.makeDirectMessage(null, "user", null).getText());
+        assertNotNull(Message.makeDirectMessage("user", "user1", "text").getReceiver());
+        assertNotNull(Message.makeDirectMessage("user", "user1", "text").getText());
+        assertEquals("mockUser", Message.makeDirectMessage("mockUser", "user2", "test").getSender());
 
-        System.out.println(Message.makeDirectMessage("user","user2",null).getReceiver());
-        System.out.println(Message.makeMessage("DIR","user","user2",null).getReceiver());
+        System.out.println(Message.makeDirectMessage("user", "user2", null).getReceiver());
+        System.out.println(Message.makeMessage("DIR", "user", "user2", null).getReceiver());
     }
 
     @Test
     void getReceiver() {
-        System.out.println(Message.makeDirectMessage(null,null,null));
-        assertEquals("mockUser",Message.makeDirectMessage("mockUser","user2","test").getSender());
+        System.out.println(Message.makeDirectMessage(null, null, null));
+        assertEquals("mockUser", Message.makeDirectMessage("mockUser", "user2", "test").getSender());
 
     }
 
     @Test
     void getText() {
-        assertEquals("mockUser",Message.makeDirectMessage("mockUser","user2","test").getSender());
+        assertEquals("mockUser", Message.makeDirectMessage("mockUser", "user2", "test").getSender());
 //        System.out.println(Message.makeDirectMessage("user","user1","text").getText());
 //        System.out.println(Message.makeDirectMessage(null,"user1","text").getText());
 //        System.out.println(Message.makeDirectMessage("user",null,"text").getText());
@@ -185,8 +186,8 @@ class MessageTest1 {
 
     @Test
     void isUpdateMessage() {
-        assertEquals("UPD",Message.makeUpdateMessage("mockUser","update").getType().toString());
-        assertTrue(Message.makeUpdateMessage("mockUser","update").isUpdateMessage());
+        assertEquals("UPD", Message.makeUpdateMessage("mockUser", "update").getType().toString());
+        assertTrue(Message.makeUpdateMessage("mockUser", "update").isUpdateMessage());
     }
 
     @Test
