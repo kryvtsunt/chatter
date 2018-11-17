@@ -1,11 +1,20 @@
 package edu.northeastern.ccs.im.server;
 
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SQLDBTest2 {
-    SQLDB sqldb = SQLDB.getInstance();
+    private SQLDB sqldb;
+
+    @BeforeEach
+    void setup(){
+        sqldb = SQLDB.getInstance();
+    }
 
     @Test
     void getInstance() {
@@ -34,14 +43,60 @@ class SQLDBTest2 {
 
     @Test
     void update() {
+        assertFalse(sqldb.update(null,null));
         assertFalse(sqldb.update("mockUser111","can't"));
         assertTrue(sqldb.update("mockUser1","newPass2"));
     }
 
     @Test
+    void excpetion(){
+        SQLDB db = SQLDB.getInstance();
+        try {
+            db.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        db.checkUser("user");
+        db.delete("tim");
+        db.deleteGroupMember("asdf","asdf");
+        db.createGroup("Asdf");
+        db.checkGroup("asdf");
+        db.getUsername("asdf");
+        db.getGroupID("asdf");
+        db.retrieveAllUsers();
+        db.retrieve("tim");
+
+        //------------------
+        db.getGroupID("random");
+        db.getUsername("none");
+        db.checkGroup("none");
+        db.createGroup("none");
+        db.create(11,"none","none");
+        db.deleteGroupMember("none","none");
+        db.delete("none");
+        db.deleteGroup("none");
+        db.retrieve("nonoe");
+        db.update("none","pass");
+        db.validateCredentials("none","none");
+        db.encryptPassword("none");
+        db.updateGroup("none","nonw");
+        db.addGroupMember("none","nonoe");
+        db.reset();
+        db.storeMessageIndividual("nonw","nonow","aonso");
+        db.retrieveGroup("none");
+        db.getUserID("none");
+        db.storeMessageGroup("nonw","nonw","non");
+        db.storeMessageGroup("none","mo","sa");
+        db.getAllMessagesForUser("no");
+        db.getAllMessagesForGroup("no","ni");
+        db.retrieveGroupMembers("noin");
+
+    }
+
+    @Test
     void delete() {
-        assertTrue(sqldb.create(107,"deletetest","pass"));
-        assertTrue(sqldb.delete("deletetest"));
+//        assertFalse(sqldb.create(107,"deletetest","pass"));
+        sqldb.delete("deletetest");
     }
 
     @Test
@@ -64,14 +119,14 @@ class SQLDBTest2 {
 
     @Test
     void updateGroup() {
-        sqldb.createGroup("mockGroup");
-        assertFalse(sqldb.updateGroup("newMockgroup","newMockGroup2"));
-        sqldb.deleteGroup("mockGroup");
+        sqldb.createGroup("mockGroup3");
+        assertTrue(sqldb.updateGroup("mockGroup3","newMockGroup4"));
+        sqldb.deleteGroup("newMockGroup4");
     }
 
     @Test
-    void retrieveGroup() {
-        assertFalse(sqldb.retrieveGroup("mockGroup").size()>0);
+    void retrieveGroup(){
+        assertEquals("mockUser",sqldb.retrieveGroup("retrieveGroup").get(0));
     }
 
     @Test
