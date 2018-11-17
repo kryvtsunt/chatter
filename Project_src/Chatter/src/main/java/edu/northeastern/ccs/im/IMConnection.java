@@ -1,10 +1,18 @@
 package edu.northeastern.ccs.im;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Vector;
 
+import javax.imageio.ImageIO;
 import javax.swing.SwingWorker;
 
 /**
@@ -193,8 +201,66 @@ public class IMConnection {
 		if (!connectionActive()) {
 			throw new IllegalOperationException("Cannot send a message if you are not connected to a server!\n");
 		}
-		Message bctMessage = Message.makeBroadcastMessage(userName, message);
-		socketConnection.print(bctMessage);
+		if (message.contains(">>")) {
+			String[] args = message.split(">>");
+			String destination = args[0];
+			String content = args[1];
+			String[] to = destination.split(",");
+			for (String directTo : to) {
+				Message dctMessage = Message.makeGroupMessage(userName, directTo, content);
+				socketConnection.print(dctMessage);
+			}
+		} else if (message.contains(">")) {
+			String[] args = message.split(">");
+			String destination = args[0];
+			String content = args[1];
+			if (content.contains("jpg") || content.contains("txt") || content.contains("png")){
+				try {
+					String type = content.split("\\.")[1];
+					File file = new File("resources/send/" + content);
+					FileInputStream fileInputStreamReader = new FileInputStream(file);
+					byte[] bytes = new byte[(int)file.length()];
+					fileInputStreamReader.read(bytes);
+					String encodedfile = new String(Base64.getEncoder().encode(bytes), "UTF-8");
+					content = encodedfile + " " + type;
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+
+			}
+			String[] to = destination.split(",");
+			for (String directTo : to) {
+				Message dctMessage = Message.makeDirectMessage(userName, directTo, content);
+				socketConnection.print(dctMessage);
+			}
+		} else if (message.contains("RETRIEVE ")) {
+			String[] args = message.split("RETRIEVE ");
+			String content = args[1];
+			Message rtrMessage = Message.makeRetrieveMessage(userName, content);
+			socketConnection.print(rtrMessage);
+		} else if (message.contains("JOIN ")) {
+			String[] args = message.split("JOIN ");
+			String content = args[1];
+			Message crtMessage = Message.makeJoinMessage(userName, content);
+			socketConnection.print(crtMessage);
+		} else if (message.contains("LEAVE ")) {
+			String[] args = message.split("LEAVE ");
+			String content = args[1];
+			Message lvMessage = Message.makeLeaveMessage(userName, content);
+			socketConnection.print(lvMessage);
+		} else if (message.contains("DELETE")) {
+			Message dltMessage = Message.makeDeleteMessage(userName, null);
+			socketConnection.print(dltMessage);
+		}else if (message.contains("UPDATE")) {
+			String[] args = message.split("UPDATE ");
+			String content = args[1];
+			Message crtMessage = Message.makeUpdateMessage(userName, content);
+			socketConnection.print(crtMessage);
+		}
+		else {
+			Message bctMessage = Message.makeBroadcastMessage(userName, message);
+			socketConnection.print(bctMessage);
+		}
 	}
 
 	/**
@@ -231,7 +297,6 @@ public class IMConnection {
 		return true;
 	}
 
-	@SuppressWarnings({ "unchecked" })
 	protected void fireSendMessages(List<Message> mess) {
 		Vector<MessageListener> targets;
 		synchronized (this) {
@@ -242,7 +307,6 @@ public class IMConnection {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void fireStatusChange(String userName) {
 		Vector<LinkListener> targets;
 		synchronized (this) {

@@ -21,7 +21,7 @@ class PrattleTest {
         Thread serverThread = new Thread(server);
         serverThread.start();
         Thread.sleep(1500);
-        Message loginmsg = Message.makeSimpleLoginMessage("username");
+        Message loginmsg = Message.makeLoginMessage("username");
         Message passwordmsg = Message.makeBroadcastMessage("username", "password");
         Message msg = Message.makeBroadcastMessage("username", "test");
         SocketChannel socketChannel = SocketChannel.open();
@@ -34,6 +34,7 @@ class PrattleTest {
         Thread.sleep(1000);
         Prattle.directMessage(msg, "username");
         Prattle.broadcastMessage(msg);
+        Prattle.getOnline();
         serverThread.interrupt();
     }
 

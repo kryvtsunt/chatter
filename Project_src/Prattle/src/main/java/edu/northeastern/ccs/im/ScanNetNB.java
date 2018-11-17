@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class ScanNetNB {
 
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
 	private static final int BUFFER_SIZE = 64 * 1024;
 
@@ -86,7 +86,7 @@ public class ScanNetNB {
 	 * @param connection Non-blocking Socket instance from which we will receive
 	 *                   communications.
 	 */
-	ScanNetNB(SocketNB connection) {
+	public ScanNetNB(SocketNB connection) {
 		// Get the socket channel from the SocketNB instance and go.
 		this(connection.getSocket());
 	}
@@ -174,10 +174,14 @@ public class ScanNetNB {
 				final String sender = readArgument(charBuffer);
 				// Skip past the leading space
 				charBuffer.position(charBuffer.position() + 2);
+				final String receiver = readArgument(charBuffer);
+				charBuffer.position(charBuffer.position() + 2);
 				// Read in the second argument containing the message
 				final String message = readArgument(charBuffer);
 				// Add this message into our queue
-				Message newMsg = Message.makeMessage(handle, sender, message);
+
+				// Add this message into our queue
+				Message newMsg = Message.makeMessage(handle, sender, receiver, message);
 				messages.add(newMsg);
 				// And move the position to the start of the next character
 				start = charBuffer.position() + 1;
