@@ -55,6 +55,8 @@ public abstract class Prattle {
     /* Socket on the appropriate port to which this server connects. */
     private static ServerSocketChannel serverSocket;
 
+    static final String SERVER_NAME = "PRATTLE";
+
     /* All of the static initialization occurs in this "method" */
     static {
         // Create the new queue of active threads.
@@ -134,6 +136,10 @@ public abstract class Prattle {
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(THREAD_POOL_SIZE);
         // Listen on this port until ...
         boolean done = false;
+        listen(selector, threadPool, done);
+    }
+
+    private static void listen(Selector selector, ScheduledExecutorService threadPool, boolean done) throws IOException {
         while (!done) {
             // Check if we have a valid incoming request, but limit the time we may wait.
             while (selector.select(DELAY_IN_MS) != 0) {
@@ -141,37 +147,49 @@ public abstract class Prattle {
                 Set<SelectionKey> acceptKeys = selector.selectedKeys();
                 // Now iterate through all of the keys
                 Iterator<SelectionKey> it = acceptKeys.iterator();
-                while (it.hasNext()) {
-                    // Get the next key; it had better be from a new incoming connection
-                    SelectionKey key = it.next();
-                    it.remove();
-                    // Assert certain things I really hope is true
-                    assert key.isAcceptable();
-                    assert key.channel() == serverSocket;
-                    // Create a new thread to handle the client for which we just received a
-                    // request.
-                    try {
-                        // Accept the connection and create a new thread to handle this client.
-                        SocketChannel socket = serverSocket.accept();
-                        // Make sure we have a connection to work with.
-                        if (socket != null) {
-                            ClientRunnable tt = new ClientRunnable(socket);
-                            // Add the thread to the queue of active threads
-                            active.add(tt);
-                            // Have the client executed by our pool of threads.
-                            @SuppressWarnings("rawtypes")
-                            ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(tt, CLIENT_CHECK_DELAY,
-                                    CLIENT_CHECK_DELAY, TimeUnit.MILLISECONDS);
-                            tt.setFuture(clientFuture);
-                        }
-                    } catch (AssertionError ae) {
-                        LOGGER.info("Caught Assertion: " + ae.toString());
-                    } catch (Exception e) {
-                        LOGGER.info("Caught Exception: " + e.toString());
-                    }
-                }
+                itterate(threadPool, it);
             }
         }
+    }
+
+    private static void itterate(ScheduledExecutorService threadPool, Iterator<SelectionKey> it) {
+        while (it.hasNext()) {
+            // Get the next key; it had better be from a new incoming connection
+            SelectionKey key = it.next();
+            it.remove();
+            // Assert certain things I really hope is true
+            assert key.isAcceptable();
+            assert key.channel() == serverSocket;
+            // Create a new thread to handle the client for which we just received a
+            // request.
+            clientThread(threadPool);
+        }
+    }
+
+    private static void clientThread(ScheduledExecutorService threadPool) {
+        try {
+            // Accept the connection and create a new thread to handle this client.
+            SocketChannel socket = serverSocket.accept();
+            // Make sure we have a connection to work with.
+            if (socket != null) {
+                newThread(threadPool, socket);
+            }
+        } catch (AssertionError ae) {
+            LOGGER.info("Caught Assertion: " + ae.toString());
+        } catch (Exception e) {
+            LOGGER.info("Caught Exception: " + e.toString());
+        }
+    }
+
+    private static void newThread(ScheduledExecutorService threadPool, SocketChannel socket) throws IOException {
+        ClientRunnable tt = new ClientRunnable(socket);
+        // Add the thread to the queue of active threads
+        active.add(tt);
+        // Have the client executed by our pool of threads.
+        @SuppressWarnings("rawtypes")
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(tt, CLIENT_CHECK_DELAY,
+                CLIENT_CHECK_DELAY, TimeUnit.MILLISECONDS);
+        tt.setFuture(clientFuture);
     }
 
 

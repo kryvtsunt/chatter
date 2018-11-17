@@ -216,7 +216,6 @@ public class IMConnection {
 			String content = args[1];
 			if (content.contains("jpg") || content.contains("txt") || content.contains("png")){
 				try {
-					System.out.println(content);
 					String type = content.split("\\.")[1];
 					File file = new File("resources/send/" + content);
 					FileInputStream fileInputStreamReader = new FileInputStream(file);

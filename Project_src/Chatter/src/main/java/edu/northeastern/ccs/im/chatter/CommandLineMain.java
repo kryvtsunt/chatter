@@ -73,7 +73,7 @@ public class CommandLineMain {
 			if (mess.hasNext()) {
 				Message message = mess.next();
 				if (!message.getSender().equals(connect.getUserName())) {
-					if (message.getText().contains("jpg") || message.getText().contains("txt")  || message.getText().contains("png")){
+					if (message.getText().contains("jpg") || message.getText().contains("txt") || message.getText().contains("png")){
 						System.out.println("File was received");
 						String file = message.getText().split(" ")[0];
 						String type = message.getText().split(" ")[1];
