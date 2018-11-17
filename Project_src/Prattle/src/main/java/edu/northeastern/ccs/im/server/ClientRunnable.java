@@ -128,8 +128,8 @@ public class ClientRunnable implements Runnable {
     private static final String GROUPS = "GROUPS";
     private static final String USERS = "USERS";
     private static final String ONLINE = "ONLINE";
-    private static final String PASSWORD = "PASSWORD";
-    private static final String EPASSWORD = "EPASSWORD";
+    private static final String PASWD = "PASSWORD";
+    private static final String EPASWD = "EPASSWORD";
 
 
     /**
@@ -482,7 +482,6 @@ public class ClientRunnable implements Runnable {
     private void directMessage(Message msg) {
         SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
         Prattle.directMessage(msg, msg.getReceiver());
-        return;
     }
 
     private void groupMessage(Message msg) {
@@ -556,11 +555,12 @@ public class ClientRunnable implements Runnable {
         db.addGroupMember(group, getName());
     }
 
+    @SuppressWarnings("all")
     private void retrieve(Message msg) {
-        if (msg.getText().equals(EPASSWORD)) {
+        if (msg.getText().equals(EPASWD)) {
             String epassword = SQLDB.getInstance().retrieve(getName());
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
-        } else if (msg.getText().equals(PASSWORD)) {
+        } else if (msg.getText().equals(PASWD)) {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
         } else if (msg.getText().equals(MESSAGES)) {
             String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
@@ -573,8 +573,7 @@ public class ClientRunnable implements Runnable {
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You do not have access to the group!"), this.getName());
             }
-        }
-        else if (msg.getText().equals(USERS)) {
+        } else if (msg.getText().equals(USERS)) {
             String users = SQLDB.getInstance().retrieveAllUsers().toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
         }else if (msg.getText().equals(ONLINE)) {

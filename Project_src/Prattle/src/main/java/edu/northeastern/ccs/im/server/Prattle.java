@@ -134,8 +134,7 @@ public abstract class Prattle {
         // Create our pool of threads on which we will execute.
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(THREAD_POOL_SIZE);
         // Listen on this port until ...
-        boolean done = false;
-        while (!done) {
+        while (true) {
             incomingRequests(selector, threadPool);
         }
     }
