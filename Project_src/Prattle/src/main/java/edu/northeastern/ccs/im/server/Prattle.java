@@ -122,6 +122,7 @@ public abstract class Prattle {
      * @throws IOException Exception thrown if the server cannot connect to the port
      *                     to which it is supposed to listen.
      */
+    @SuppressWarnings("all")
     public static void main(String[] args) throws IOException {
         // Connect to the socket on the appropriate port to which this server connects.
         serverSocket = ServerSocketChannel.open();
@@ -134,12 +135,12 @@ public abstract class Prattle {
         // Create our pool of threads on which we will execute.
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(THREAD_POOL_SIZE);
         // Listen on this port until ...
-        while (true) {
-            incomingRequests(selector, threadPool);
+        while(true) {
+            parseIncomingRequests(selector, threadPool);
         }
     }
 
-    private static void incomingRequests(Selector selector, ScheduledExecutorService threadPool) throws IOException {
+    private static void parseIncomingRequests(Selector selector, ScheduledExecutorService threadPool) throws IOException {
         // Check if we have a valid incoming request, but limit the time we may wait.
         while (selector.select(DELAY_IN_MS) != 0) {
             // Get the list of keys that have arrived since our last check
