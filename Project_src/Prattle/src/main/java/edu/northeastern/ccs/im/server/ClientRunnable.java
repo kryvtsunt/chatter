@@ -109,6 +109,8 @@ public class ClientRunnable implements Runnable {
 
     private boolean validated;
 
+    private boolean terminate;
+
     /**
      * The future that is used to schedule the client for execution in the thread
      * pool.
@@ -126,6 +128,8 @@ public class ClientRunnable implements Runnable {
     private static final String GROUPS = "GROUPS";
     private static final String USERS = "USERS";
     private static final String ONLINE = "ONLINE";
+    private static final String PASSWORD = "PASSWORD";
+    private static final String EPASSWORD = "EPASSWORD";
 
 
     /**
@@ -157,6 +161,7 @@ public class ClientRunnable implements Runnable {
         terminateInactivity = new GregorianCalendar();
         terminateInactivity
                 .setTimeInMillis(terminateInactivity.getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
+        terminate = false;
     }
 
     /**
@@ -349,175 +354,14 @@ public class ClientRunnable implements Runnable {
      * @see Thread#run()
      */
     public void run() {
-        boolean terminate = false;
-
-        // The client must be initialized before we can do anything else
+        // The client must be initialized and validated before we can do anything else
         if (!initialized) {
             checkForInitialization();
-
-        }
-        // The client must be validated before we can do anything else
-        else if (!validated) {
+        } else if (!validated) {
             checkForValidation();
         } else {
             try {
-                // Client has already been initialized, so we should first check
-                // if there are any input
-                // messages.
-                if (input.hasNextMessage()) {
-                    // Get the next message
-                    Message msg = input.nextMessage();
-                    // Update the time until we terminate the client for
-                    // inactivity.
-                    terminateInactivity.setTimeInMillis(
-                            new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
-                    // If the message is a direct message, send it out
-                    if (msg.isDirectMessage()) {
-                        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
-                        Prattle.directMessage(msg, msg.getReceiver());
-                        return;
-                    }else if (msg.isGroupMessage()) {
-                        SQLDB db = SQLDB.getInstance();
-                        String group = msg.getReceiver();
-                        if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
-                            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
-                            List<String> users = db.retrieveGroupMembers(group);
-                            for (String user : users) {
-                                Prattle.directMessage(msg, user);
-                            }
-                        }
-                        return;
-                    }
-                    // If the message is a RETRIEVE
-                    else if (msg.isRetrieveMessage()) {
-                        if (msg.getText().equals("EPASSWORD")) {
-                            String epassword = SQLDB.getInstance().retrieve(getName());
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
-                        } else if (msg.getText().equals("PASSWORD")) {
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
-                        } else if (msg.getText().equals(MESSAGES)) {
-                            String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
-                        } else if (msg.getText().contains(GROUP_MESSAGES)) {
-                            String group = msg.getText().split(GROUP_MESSAGES)[1];
-                            if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())){
-                                String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split(GROUP_MESSAGES)[1]);
-                                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), this.getName());
-                            } else {
-                                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You do not have access to the group!"), this.getName());
-                            }
-                        }
-                        else if (msg.getText().equals(USERS)) {
-                            String users = SQLDB.getInstance().retrieveAllUsers().toString();
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
-                        }else if (msg.getText().equals(ONLINE)) {
-                            String users = Prattle.getOnline().toString();
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
-                        } else if (msg.getText().equals(GROUPS)) {
-                            String groups = SQLDB.getInstance().retrieveAllGroups().toString();
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
-                        } else if (msg.getText().contains(GROUP)) {
-                            String group = msg.getText().split(GROUP )[1];
-                            if (SQLDB.getInstance().checkGroup(group)) {
-                                String members = SQLDB.getInstance().retrieveGroupMembers(group).toString();
-                                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), members), getName());
-                            } else {
-                            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
-                        }
-                        }
-                        return;
-
-                    }
-                    // If the message is a RETRIEVE user
-                    else if (msg.isJoinMessage()) {
-                        String group = msg.getText();
-                        SQLDB db = SQLDB.getInstance();
-                        if (!db.checkGroup(group)) {
-                            db.createGroup(group);
-                        }
-                        db.addGroupMember(group, getName());
-                    }  else if (msg.isLeavenMessage()) {
-                        String group = msg.getText();
-                        SQLDB db = SQLDB.getInstance();
-                        if (db.checkGroup(group)) {
-                            db.deleteGroupMember(group, getName());
-                            if (db.retrieveGroupMembers(group).isEmpty()){
-                                db.deleteGroup(group);
-                            }
-                        }
-
-                    }
-                    // If the message is a DELETE user
-                    else if (msg.isDeleteMessage()) {
-                        SQLDB.getInstance().delete(getName());
-                        this.terminateClient();
-                        return;
-                    }
-                    // If the message is a UPDATE user
-                    else if (msg.isUpdateMessage()) {
-                        password = msg.getText();
-                        SQLDB.getInstance().update(getName(), msg.getText());
-                        return;
-                    } else if (msg.isDisplayMessage()) {
-                        // Check if the message is legal formatted
-                        if (messageChecks(msg)) {
-                            // Check for our "special messages"
-                            if ((msg.isBroadcastMessage()) && (!broadcastMessageIsSpecial(msg))) {
-                                // Check for our "special messages"
-                                if ((msg.getText() != null)
-                                        && (msg.getText().compareToIgnoreCase(ServerConstants.BOMB_TEXT) == 0)) {
-                                    initialized = false;
-                                    Prattle.broadcastMessage(Message.makeQuitMessage(name));
-                                } else {
-                                    SQLDB.getInstance().storeMessageBroadcast(getName(), msg.getText());
-                                    Prattle.broadcastMessage(msg);
-                                }
-                            }
-                        } else {
-                            Message sendMsg;
-                            sendMsg = Message.makeBroadcastMessage(ServerConstants.BOUNCER_ID,
-                                    "Last message was rejected because it specified an incorrect user name.");
-                            enqueueMessage(sendMsg);
-                        }
-                    } else if (msg.terminate()) {
-                        // Stop sending the poor client message.
-                        terminate = true;
-                        // Reply with a quit message.
-                        enqueueMessage(Message.makeQuitMessage(name));
-                    }
-                    // Otherwise, ignore it (for now).
-                }
-                if (!immediateResponse.isEmpty()) {
-                    while (!immediateResponse.isEmpty()) {
-                        sendMessage(immediateResponse.remove());
-                    }
-                }
-
-                // Check to make sure we have a client to send to.
-                boolean processSpecial = !specialResponse.isEmpty()
-                        && ((!initialized) || (!waitingList.isEmpty()) || sendResponses.before(new Date()));
-                boolean keepAlive = !processSpecial;
-                // Send the responses to any special messages we were asked.
-                if (processSpecial) {
-                    // Send all of the messages and check that we get valid
-                    // responses.
-                    while (!specialResponse.isEmpty()) {
-                        keepAlive |= sendMessage(specialResponse.remove());
-                    }
-                }
-                if (!waitingList.isEmpty()) {
-                    if (!processSpecial) {
-                        keepAlive = false;
-                    }
-                    // Send out all of the message that have been added to the
-                    // queue.
-                    do {
-                        Message msg = waitingList.remove();
-                        boolean sentGood = sendMessage(msg);
-                        keepAlive |= sentGood;
-                    } while (!waitingList.isEmpty());
-                }
-                terminate |= !keepAlive;
+                respond();
             } finally {
                 // When it is appropriate, terminate the current client.
                 if (terminate) {
@@ -525,13 +369,228 @@ public class ClientRunnable implements Runnable {
                 }
             }
         }
-        // Finally, check if this client have been inactive for too long and,
-        // when they have, terminate
+        // Finally, check if this client have been inactive for too long and, when they have, terminate
         // the client.
+        terminateInactive();
+    }
+
+    private void respond() {
+        // Client has already been initialized, so we should first check
+        // if there are any input
+        // messages.
+        respondIncoming();
+        respondImmediate();
+
+        // Check to make sure we have a client to send to.
+        boolean processSpecial = !specialResponse.isEmpty()
+                && ((!initialized) || (!waitingList.isEmpty()) || sendResponses.before(new Date()));
+        boolean keepAlive = !processSpecial;
+        // Send the responses to any special messages we were asked.
+        keepAlive = respondSpecial(processSpecial, keepAlive);
+        keepAlive = respondWaiting(processSpecial, keepAlive);
+        terminate |= !keepAlive;
+    }
+
+    private void terminateInactive() {
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
             String str = "Timing out or forcing off a user " + name;
             LOGGER.log(Level.INFO, str);
             terminateClient();
+        }
+    }
+
+    private boolean respondWaiting(boolean processSpecial, boolean keepAlive) {
+        if (!waitingList.isEmpty()) {
+            if (!processSpecial) {
+                keepAlive = false;
+            }
+            // Send out all of the message that have been added to the
+            // queue.
+            do {
+                Message msg = waitingList.remove();
+                boolean sentGood = sendMessage(msg);
+                keepAlive |= sentGood;
+            } while (!waitingList.isEmpty());
+        }
+        return keepAlive;
+    }
+
+    private boolean respondSpecial(boolean processSpecial, boolean keepAlive) {
+        if (processSpecial) {
+            // Send all of the messages and check that we get valid
+            // responses.
+            while (!specialResponse.isEmpty()) {
+                keepAlive |= sendMessage(specialResponse.remove());
+            }
+        }
+        return keepAlive;
+    }
+
+    private void respondImmediate() {
+        if (!immediateResponse.isEmpty()) {
+            while (!immediateResponse.isEmpty()) {
+                sendMessage(immediateResponse.remove());
+            }
+        }
+    }
+
+    private void respondIncoming() {
+        if (input.hasNextMessage()) {
+            // Get the next message
+            Message msg = input.nextMessage();
+            // Update the time until we terminate the client for
+            // inactivity.
+            terminateInactivity.setTimeInMillis(
+                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
+            executeRequest(msg);
+        }
+    }
+
+    private void executeRequest(Message msg) {
+        // If the message is a direct message, send it out
+        if (msg.isDirectMessage()) {
+            directMessage(msg);
+        }else if (msg.isGroupMessage()) {
+            groupMessage(msg);
+        }
+        // If the message is a RETRIEVE
+        else if (msg.isRetrieveMessage()) {
+            retrieve(msg);
+        }
+        // If the message is a RETRIEVE user
+        else if (msg.isJoinMessage()) {
+            join(msg);
+        }  else if (msg.isLeaveMessage()) {
+            leave(msg);
+        }
+        // If the message is a DELETE user
+        else if (msg.isDeleteMessage()) {
+            delete();
+        }
+        // If the message is a UPDATE user
+        else if (msg.isUpdateMessage()) {
+            update(msg);
+        }
+        else if (msg.isDisplayMessage()) {
+            display(msg);
+        } else if (msg.terminate()) {
+            terminate();
+        }
+        // Otherwise, ignore it (for now).
+    }
+
+    private void directMessage(Message msg) {
+        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+        Prattle.directMessage(msg, msg.getReceiver());
+        return;
+    }
+
+    private void groupMessage(Message msg) {
+        SQLDB db = SQLDB.getInstance();
+        String group = msg.getReceiver();
+        if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
+            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
+            List<String> users = db.retrieveGroupMembers(group);
+            for (String user : users) {
+                Prattle.directMessage(msg, user);
+            }
+        }
+    }
+
+    private void terminate() {
+        // Reply with a quit message.
+        enqueueMessage(Message.makeQuitMessage(name));
+        terminate = true;
+    }
+
+    private void display(Message msg) {
+        // Check if the message is legal formatted
+        if (messageChecks(msg)) {
+            // Check for our "special messages"
+            if ((msg.isBroadcastMessage()) && (!broadcastMessageIsSpecial(msg))) {
+                // Check for our "special messages"
+                if ((msg.getText() != null)
+                        && (msg.getText().compareToIgnoreCase(ServerConstants.BOMB_TEXT) == 0)) {
+                    initialized = false;
+                    Prattle.broadcastMessage(Message.makeQuitMessage(name));
+                } else {
+                    SQLDB.getInstance().storeMessageBroadcast(getName(), msg.getText());
+                    Prattle.broadcastMessage(msg);
+                }
+            }
+        } else {
+            Message sendMsg;
+            sendMsg = Message.makeBroadcastMessage(ServerConstants.BOUNCER_ID,
+                    "Last message was rejected because it specified an incorrect user name.");
+            enqueueMessage(sendMsg);
+        }
+    }
+
+    private void update(Message msg) {
+        password = msg.getText();
+        SQLDB.getInstance().update(getName(), msg.getText());
+    }
+
+    private void delete() {
+        SQLDB.getInstance().delete(getName());
+        this.terminateClient();
+    }
+
+    private void leave(Message msg) {
+        String group = msg.getText();
+        SQLDB db = SQLDB.getInstance();
+        if (db.checkGroup(group)) {
+            db.deleteGroupMember(group, getName());
+            if (db.retrieveGroupMembers(group).isEmpty()){
+                db.deleteGroup(group);
+            }
+        }
+    }
+
+    private void join(Message msg) {
+        String group = msg.getText();
+        SQLDB db = SQLDB.getInstance();
+        if (!db.checkGroup(group)) {
+            db.createGroup(group);
+        }
+        db.addGroupMember(group, getName());
+    }
+
+    private void retrieve(Message msg) {
+        if (msg.getText().equals(EPASSWORD)) {
+            String epassword = SQLDB.getInstance().retrieve(getName());
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
+        } else if (msg.getText().equals(PASSWORD)) {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
+        } else if (msg.getText().equals(MESSAGES)) {
+            String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
+        } else if (msg.getText().contains(GROUP_MESSAGES) && msg.getText().split(GROUP_MESSAGES).length == 2) {
+            String group = msg.getText().split(GROUP_MESSAGES)[1];
+            if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())){
+                String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split(GROUP_MESSAGES)[1]);
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), this.getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You do not have access to the group!"), this.getName());
+            }
+        }
+        else if (msg.getText().equals(USERS)) {
+            String users = SQLDB.getInstance().retrieveAllUsers().toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
+        }else if (msg.getText().equals(ONLINE)) {
+            String users = Prattle.getOnline().toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
+        } else if (msg.getText().equals(GROUPS)) {
+            String groups = SQLDB.getInstance().retrieveAllGroups().toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
+        } else if (msg.getText().contains(GROUP) && msg.getText().split(GROUP).length == 2) {
+            String group = msg.getText().split(GROUP )[1];
+            if (SQLDB.getInstance().checkGroup(group)) {
+                String members = SQLDB.getInstance().retrieveGroupMembers(group).toString();
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), members), getName());
+            } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
+        }
         }
     }
 

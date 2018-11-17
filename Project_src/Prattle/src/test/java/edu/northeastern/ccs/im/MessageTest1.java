@@ -109,7 +109,7 @@ class MessageTest1 {
         assertTrue(m7.isGroupMessage());
         assertTrue(m8.isRetrieveMessage());
         assertTrue(m10.isDeleteMessage());
-        assertTrue(m12.isLeavenMessage());
+        assertTrue(m12.isLeaveMessage());
         assertTrue(m11.isJoinMessage());
 
     }

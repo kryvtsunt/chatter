@@ -437,7 +437,7 @@ public class Message {
      *
      * @return True if the message is a broadcast message; false otherwise.
      */
-    public boolean isLeavenMessage() {
+    public boolean isLeaveMessage() {
         return (msgType == MessageType.LEAVE);
     }
 

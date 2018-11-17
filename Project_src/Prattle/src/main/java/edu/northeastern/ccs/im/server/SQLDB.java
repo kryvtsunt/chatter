@@ -1,7 +1,6 @@
 package edu.northeastern.ccs.im.server;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;

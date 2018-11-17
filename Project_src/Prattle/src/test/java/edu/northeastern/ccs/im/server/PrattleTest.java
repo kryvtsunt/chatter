@@ -15,6 +15,7 @@ class PrattleTest {
 
     // Runs the main function in parallel thread to test server communication
     @Test
+    @SuppressWarnings("all")
     void testMain() throws IOException, SecurityException,
             IllegalArgumentException,InterruptedException {
         ServerRunnable server = new PrattleTest().new ServerRunnable();
