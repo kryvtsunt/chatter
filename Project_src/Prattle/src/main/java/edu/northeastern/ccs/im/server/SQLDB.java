@@ -6,6 +6,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+
+@SuppressWarnings("all")
 public class SQLDB {
     final static String CONNECTION_URL = "aaw5ywu4d6dc4k.c7ohnssvtfpy.us-east-1.rds.amazonaws.com";
     final static String DB_PORT = "3306";
