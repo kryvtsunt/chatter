@@ -13,6 +13,8 @@ When you successfully log in, you can:
 -send direct messages by typing user>your_message (where user is the name of the user you want to talk to)
 -send same messages to many users by typing user1,user2,user3>your_message
 -send group messages by typing group>>your_message
+-send files by typing user>file (::text.txt, picture.png, etc. - files from the resources/send folder)
+*when message is received it is saved in the resources/receive folder in the destination user machine
 
 CRUD functionality:
 -UPDATE new_password (updates the password of the current user)
