@@ -677,6 +677,7 @@ public class ClientRunnable implements Runnable {
      *            -RETRIEVE USERS (all users in the database)
      *            -RETRIEVE ONLINE (only online users)
      */
+    @SuppressWarnings("all")
     private void retrieve(Message msg) {
         if (msg.getText().equals(EPASWD)) {
             String epassword = SQLDB.getInstance().retrieve(getName());
