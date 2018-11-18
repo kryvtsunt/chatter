@@ -2,17 +2,18 @@ pipeline {
  environment {
    jobBaseName = "${env.JOB_NAME}".split('/').first()
  }
- agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v $HOME/.m2:/root/.m2'
-        }
-    }
+ agent any
  options {
-      timeout(time: 10, unit: 'MINUTES')
-  }
+      timeout(time: 10, unit: 'MINUTES') 
+  }  
  stages {
    stage('Build') {
+   agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v m2_repos:/root/.m2'
+                }
+            }
      steps {
        echo "Building Chatter"
        sh 'mvn -f Project_src/Chatter/pom.xml install'
@@ -22,6 +23,12 @@ pipeline {
    }
 
    stage('SonarQube') {
+   agent {
+                docker {
+                    image 'maven:3-alpine'
+                    args '-v m2_repos:/root/.m2'
+                }
+            }
     steps {
       withSonarQubeEnv('SonarQube') {
         sh 'mvn -f Project_src/Prattle/pom.xml clean install'
@@ -29,7 +36,7 @@ pipeline {
       }
 
       sh 'sleep 30'
-      timeout(time: 30, unit: 'SECONDS') {
+      timeout(time: 10, unit: 'SECONDS') {
        retry(5) {
         script {
           def qg = waitForQualityGate()
@@ -40,10 +47,26 @@ pipeline {
       }
     }
   }
-} //SONAR
+} //SONAR 
+stage('Master Branch Tasks') {
+        when {
+            branch "master"
+        }
+        steps {
+        	echo "Building Prattle"
+             sh 'mvn -f Project_src/Prattle/pom.xml package'          
 
+             script {
+              def json = readJSON file:'config.json'
+              sh 'cd ${WORKSPACE}'
+              sh "chmod 400 ${json.server[0].PEM}"
+              sh "scp -oStrictHostKeyChecking=no -i ${json.server[0].PEM} Project_src/Prattle/target/${json.server[0].JARNAME} ${json.server[0].user}@${json.server[0].DNS}:${json.server[0].directory}"
+              sh "ssh -oStrictHostKeyChecking=no -i ${json.server[0].PEM} ${json.server[0].user}@${json.server[0].DNS}  pkill java &"
+              sh "ssh -oStrictHostKeyChecking=no -i ${json.server[0].PEM} ${json.server[0].user}@${json.server[0].DNS}  nohup java -jar ${json.server[0].directory}/${json.server[0].JARNAME} >nohup.out 2>&1 &"
+                 }
+              }
+              }
 } // STAGES
-
 
  post {
      always {
