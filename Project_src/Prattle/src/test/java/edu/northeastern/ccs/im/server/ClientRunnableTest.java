@@ -69,7 +69,7 @@ class ClientRunnableTest {
         assertFalse(client.isInitialized());
         assertEquals(0, client.getUserId());
         assertTrue(client.getWaitingList().isEmpty());
-        for (int i = 0; i < msgs.size(); i++) {
+        for (int i = 0; i < msgs.size()-1; i++) {
             client.run();
         }
         assertTrue(client.isValidated());
