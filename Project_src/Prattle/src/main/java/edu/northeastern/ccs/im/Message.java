@@ -223,7 +223,7 @@ public class Message {
     }
 
     /**
-     * Create a new message about deletion directed to a certain user.
+     * Create a new message to delete current user.
      *
      * @param myName Name of the sender of this very important missive.
      * @param text   Text of the message that will be sent to that particular user
@@ -234,10 +234,10 @@ public class Message {
     }
 
     /**
-     * Create a new join message directed to a certain user.
+     * Create a message to join a group.
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to that particular user
+     * @param text   Group to join
      * @return Instance of Message that transmits text to user who joined a group.
      */
     public static Message makeJoinMessage(String myName, String text) {
@@ -245,10 +245,10 @@ public class Message {
     }
 
     /**
-     * Create a new leaving message directed to a certain user.
+     * Create a message to leave a group.
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to user who left the group
+     * @param text   Group to leave
      * @return Instance of Message that transmits text to user who left
      */
     public static Message makeLeaveMessage(String myName, String text) {
@@ -257,10 +257,10 @@ public class Message {
 
 
     /**
-     * Create a new message directed to a certain user.
+     * Create a message to update the password
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to the particular user
+     * @param text   New password
      * @return Instance of Message that transmits text to user who updated their details.
      */
     public static Message makeUpdateMessage(String myName, String text) {
