@@ -14,12 +14,24 @@ public class SQLDB {
     final static String DB_USERNAME = "team105";
     final static String DB_PASWD = "Team-105";
 
-    /* Logger */
+    /**
+     * Logger
+     */
     private static final Logger LOGGER = Logger.getLogger(SQLDB.class.getName());
 
+    /**
+     * Database connection
+     */
     private Connection connection;
+
+    /**
+     * Instance of the Database
+     */
     private static SQLDB instance;
 
+    /**
+     * Constructor which establishes the connection between DB and JDBC
+     */
     private SQLDB() {
         connection = null;
         try {
@@ -30,7 +42,9 @@ public class SQLDB {
         }
     }
 
-
+    /**
+     * @return instance of the Database
+     */
     public static SQLDB getInstance() {
         if (instance == null) {
             instance = new SQLDB();
@@ -38,14 +52,26 @@ public class SQLDB {
         return instance;
     }
 
+    /**
+     * resets the Database connection
+     */
     public void reset() {
         instance = null;
     }
 
+    /**
+     * Close the DB connection
+     * @throws SQLException
+     */
     public void close() throws SQLException {
         connection.close();
     }
 
+    /**
+     * To validate a user, the user's credentials are compared against the users table in MySQL
+     * @param username string entered by the user which is used for validating
+     * @return true if the user exists in the Database
+     */
     public boolean checkUser(String username) {
         boolean flag = false;
         try {
@@ -65,6 +91,11 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * Retreive the user's data from the Database
+     * @param username keyword against which the sql operations are carried on
+     * @return the user's details stored in the Database
+     */
     public String retrieve(String username) {
         String userInformation = null;
         try {
@@ -86,6 +117,13 @@ public class SQLDB {
         return userInformation;
     }
 
+    /**
+     * creates a user if they don't exist in the database
+     * @param userId integer which acts a primary key in the Database
+     * @param username name the user wants to have
+     * @param password string entered by the user for their password
+     * @return true if the details entered are in a legal format and when they stored in the Database
+     */
     public boolean create(int userId, String username, String password) {
         boolean flag = false;
         try {
@@ -105,6 +143,12 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * if the user wants to update their informatin escpecially their password
+     * @param username user who is trying to update their password
+     * @param password new password the user wants to update to
+     * @return true if the sql operation of updating is successful
+     */
     public boolean update(String username, String password) {
         boolean flag = false;
         try {
@@ -123,6 +167,11 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * deletes a user from the Database
+     * @param username name that is supposed to be deleted
+     * @return true if the sql operation of deletion is successful
+     */
     public boolean delete(String username) {
         boolean flag = false;
         try {
@@ -138,6 +187,12 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * The first step of establishing a connection
+     * @param username users input of their username
+     * @param password users input of their password
+     * @return true if the credentials match the Database and the sql operation of matching succeeds
+     */
     public boolean validateCredentials(String username, String password) {
         boolean flag = false;
         try {
@@ -161,6 +216,12 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * users password when created, is stored in MD5 format
+     * (hehe, we are not stupid to store as a plain string)
+     * @param password string that needs encryption
+     * @return the encrypted password
+     */
     public String encryptPassword(String password) {
         StringBuilder hexConversion = new StringBuilder();
         try {
@@ -178,6 +239,11 @@ public class SQLDB {
         return hexConversion.toString();
     }
 
+    /**
+     * A group must be in the database for a user to join, this method validates it
+     * @param groupName the group name user wants to join or to retrive messages from
+     * @return true if there exists a group in the Database and the SQL operation is successful
+     */
     public boolean checkGroup(String groupName) {
         boolean flag = false;
         try {
@@ -196,6 +262,11 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * If a group doesn't exists it can be create or if a user wants, they can crete one
+     * @param groupName name of the group
+     * @return true if the sql operation of creating a group with a valid name is successful
+     */
     public boolean createGroup(String groupName) {
         boolean flag = false;
         try {
@@ -213,6 +284,11 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * you don't want a group? no problem just delete it
+     * @param groupName name which needs to be deleted
+     * @return true if the groupname exixts and the sql operation of deleting is successful
+     */
     public boolean deleteGroup(String groupName) {
         boolean flag = false;
         try {
@@ -229,6 +305,12 @@ public class SQLDB {
 
     }
 
+    /**
+     * well, you might want to change the groupname at some point
+     * @param groupName the existing group
+     * @param newGroupName new name for the group
+     * @return true if group name exists, new name is valid and the sql operation is successful
+     */
     public boolean updateGroup(String groupName, String newGroupName) {
         boolean flag = false;
         try {
@@ -247,6 +329,11 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * retrives the group information
+     * @param groupName group that is expected to be retrieved
+     * @return list of information of the group which can be user details
+     */
     public List<String> retrieveGroup(String groupName) {
         List<String> userInformation = new ArrayList<>();
 
@@ -272,6 +359,11 @@ public class SQLDB {
 
     }
 
+    /**
+     * gets the userID for a given user
+     * @param username name used to retrive the ID from Database
+     * @return the member ID (which is an integer)
+     */
     public int getUserID(String username) {
         int userInformation = -1;
         try {
@@ -293,6 +385,11 @@ public class SQLDB {
         return userInformation;
     }
 
+    /**
+     * gets the user name
+     * @param userId unique interger for retrieval
+     * @return the name of the user according to the ID
+     */
     public String getUsername(String userId) {
         String userInformation = "";
         try {
@@ -313,6 +410,11 @@ public class SQLDB {
         return userInformation;
     }
 
+    /**
+     * Each group is given a unique ID which can be retrieved
+     * @param groupName name against which the sql operation is performed
+     * @return the unique number of the group
+     */
     public int getGroupID(String groupName) {
         int groupInformation = -1;
         try {
@@ -333,6 +435,12 @@ public class SQLDB {
         return groupInformation;
     }
 
+    /**
+     * when the situation of adding a member arises
+     * @param groupName group to which an user is added
+     * @param username the user who is expected to be added
+     * @return true of the group and user exists and sql operation is successful
+     */
     public boolean addGroupMember(String groupName, String username) {
         boolean flag = false;
         try {
@@ -354,6 +462,13 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * stroes the messages for each user
+     * @param from user who sent the message
+     * @param to user who received the message
+     * @param text message sene from one user to other
+     * @return true from user exists and sql operation is successful
+     */
     public boolean storeMessageIndividual(String from, String to, String text) {
         int userID = getUserID(from);
 //        PreparedStatement pStatement = null;
@@ -377,6 +492,13 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * stores the messages for a group
+     * @param from user who sent the message
+     * @param group group to which the message is sent
+     * @param text the messages sent by the user/users
+     * @return true if users/groups exists and sql operation is successful
+     */
     public boolean storeMessageGroup(String from, String group, String text) {
         int userID = getUserID(from);
         boolean flag = false;
@@ -399,6 +521,12 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * stores the broadcast messages
+     * @param from user who sent the message
+     * @param text message sent by the user
+     * @return true if the user exists and sql operation is successful
+     */
     public boolean storeMessageBroadcast(String from, String text) {
         int userID = getUserID(from);
         boolean flag = false;
@@ -421,6 +549,11 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * retrieves all the messages of a given user
+     * @param user name of the user
+     * @return list of all the broadcast, group, individual messsages sent/received by the user
+     */
     public String getAllMessagesForUser(String user) {
         int userID = getUserID(user);
         String msgInformation = "";
@@ -477,6 +610,12 @@ public class SQLDB {
         return msgInformation;
     }
 
+    /**
+     * gets the messages of a group in which the user is present
+     * @param userName name of the user
+     * @param group name of thr group
+     * @return list of all messages in the group in which the user is present
+     */
     public String getAllMessagesForGroup(String userName, String group) {
         if (!isGroupMember(group, userName)) {
             return "User not a member of group";
@@ -512,13 +651,18 @@ public class SQLDB {
         return msgInformation;
     }
 
+
+    /**
+     *
+     * @return list of all users in the DB
+     */
     public List<String> retrieveAllUsers() {
         List<String> userInformation = new ArrayList<>();
         try {
             // '*' in case we require userId or more fields in future
             String sqlRetrieveAllUsers = "SELECT * FROM users";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveAllUsers)) {
-                try(ResultSet userSet = pStatement.executeQuery()) {
+                try (ResultSet userSet = pStatement.executeQuery()) {
                     while (userSet.next()) {
                         userInformation.add(userSet.getString("username"));
                     }
@@ -531,6 +675,11 @@ public class SQLDB {
 
     }
 
+    /**
+     * to see all the members in a group
+     * @param groupName name of the group that is expected to be retrieved
+     * @return list of users in the group
+     */
     public List<String> retrieveGroupMembers(String groupName) {
         List<String> userInformation = new ArrayList<>();
         try {
@@ -554,6 +703,10 @@ public class SQLDB {
         return userInformation;
     }
 
+    /**
+     *
+     * @return all the groups in the DB
+     */
     public List<String> retrieveAllGroups() {
         List<String> groupInformation = new ArrayList<>();
 
@@ -574,6 +727,12 @@ public class SQLDB {
 
     }
 
+    /**
+     * deletes a user from the group
+     * @param groupName name in which deletion occurs
+     * @param username name of the user who is supposed to be deleted
+     * @return true if user exists and sql operation is successful
+     */
     public boolean deleteGroupMember(String groupName, String username) {
         boolean flag = false;
 
@@ -593,6 +752,12 @@ public class SQLDB {
         return flag;
     }
 
+    /**
+     * check if a user is a member of a group
+     * @param groupName name of the group in which the check occurs
+     * @param userName name of the user who is supposed to be checked
+     * @return true if the user exists in the group
+     */
     public boolean isGroupMember(String groupName, String userName) {
         boolean flag = false;
 

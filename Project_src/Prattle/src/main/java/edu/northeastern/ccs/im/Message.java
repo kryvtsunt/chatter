@@ -44,17 +44,36 @@ public class Message {
          */
         DIRECT("DIR"),
 
+        /**
+         * Message for groups
+         */
         GROUP("GRP"),
 
+        /**
+         * Message for retreival operations
+         */
         RETRIEVE("RET"),
 
+        /**
+         * Message for updating a user or a group
+         */
         UPDATE("UPD"),
 
+        /**
+         * Message to delete a user or a group
+         */
         DELETE("DEL"),
 
+        /**
+         * Message from a user to join a group
+         */
         JOIN("JIN"),
 
+        /**
+         * Message from the user to leave a group
+         */
         LEAVE("LVE");
+
         /**
          * Store the short name of this message type.
          */
@@ -180,11 +199,11 @@ public class Message {
     }
 
     /**
-     * Create a new message directed to a certain user.
+     * Create a new group message
      *
      * @param myName   Name of the sender of this very important missive.
      * @param directTo Name of the destination user
-     * @param text     Text of the message that will be sent to all users
+     * @param text     Text of the message that will be sent to all users in a group
      * @return Instance of Message that transmits text to all logged in users.
      */
     public static Message makeGroupMessage(String myName, String directTo, String text) {
@@ -193,44 +212,44 @@ public class Message {
 
 
     /**
-     * Create a new message directed to a certain user.
+     * Message while performing retrieval operations
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to all users
-     * @return Instance of Message that transmits text to all logged in users.
+     * @param text   Text of the message that will be sent to that particular user
+     * @return Instance of Message that transmits to the user who requested a retrieval operation
      */
     public static Message makeRetrieveMessage(String myName, String text) {
         return new Message(MessageType.RETRIEVE, myName, null, text);
     }
 
     /**
-     * Create a new message directed to a certain user.
+     * Create a new message about deletion directed to a certain user.
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to all users
-     * @return Instance of Message that transmits text to all logged in users.
+     * @param text   Text of the message that will be sent to that particular user
+     * @return Instance of Message that transmits text to user who requested a deletion.
      */
     public static Message makeDeleteMessage(String myName, String text) {
         return new Message(MessageType.DELETE, myName, null, text);
     }
 
     /**
-     * Create a new message directed to a certain user.
+     * Create a new join message directed to a certain user.
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to all users
-     * @return Instance of Message that transmits text to all logged in users.
+     * @param text   Text of the message that will be sent to that particular user
+     * @return Instance of Message that transmits text to user who joined a group.
      */
     public static Message makeJoinMessage(String myName, String text) {
         return new Message(MessageType.JOIN, myName, null, text);
     }
 
     /**
-     * Create a new message directed to a certain user.
+     * Create a new leaving message directed to a certain user.
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to all users
-     * @return Instance of Message that transmits text to all logged in users.
+     * @param text   Text of the message that will be sent to user who left the group
+     * @return Instance of Message that transmits text to user who left
      */
     public static Message makeLeaveMessage(String myName, String text) {
         return new Message(MessageType.LEAVE, myName, null, text);
@@ -241,8 +260,8 @@ public class Message {
      * Create a new message directed to a certain user.
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   Text of the message that will be sent to all users
-     * @return Instance of Message that transmits text to all logged in users.
+     * @param text   Text of the message that will be sent to the particular user
+     * @return Instance of Message that transmits text to user who updated their details.
      */
     public static Message makeUpdateMessage(String myName, String text) {
         return new Message(MessageType.UPDATE, myName, null, text);

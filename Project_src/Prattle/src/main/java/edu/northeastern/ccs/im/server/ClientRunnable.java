@@ -107,8 +107,14 @@ public class ClientRunnable implements Runnable {
      */
     private boolean initialized;
 
+    /**
+     * Whether this client is validated, confirms is the username and password match
+     */
     private boolean validated;
 
+    /**
+     * To terminate a clients session. Scenarios include: inactivity and logoff
+     */
     private boolean terminate;
 
     /**
@@ -122,13 +128,45 @@ public class ClientRunnable implements Runnable {
      */
     private Queue<Message> waitingList;
 
+    /**
+     * Keyword in the user input for CRUD operations. Used to view the messages
+     * in a group in which the user is present
+     */
     private static final String GROUP_MESSAGES = "GROUP_MESSAGES ";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used by the user to join a group
+     */
     private static final String GROUP = "GROUP ";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used to view the users messages
+     */
     private static final String MESSAGES = "MESSAGES";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used to see all the existing groups
+     */
     private static final String GROUPS = "GROUPS";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used to see all the users in the database
+     */
     private static final String USERS = "USERS";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used to see only the online users
+     */
     private static final String ONLINE = "ONLINE";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the current user's password
+     */
     private static final String PASWD = "PASSWORD";
+
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the current user's encrypted password
+     */
     private static final String EPASWD = "EPASSWORD";
 
 
@@ -218,7 +256,7 @@ public class ClientRunnable implements Runnable {
             Message msg = input.nextMessage();
             password = msg.getText();
             SQLDB db = SQLDB.getInstance();
-            if (!db.checkUser(getName())){
+            if (!db.checkUser(getName())) {
                 SQLDB.getInstance().create(getUserId(), getName(), password);
                 validated = true;
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
@@ -227,7 +265,7 @@ public class ClientRunnable implements Runnable {
 
             if (db.validateCredentials(getName(), password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcoopme back " + getName() + "! You are successfully logged in."), getName());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in."), getName());
             } else {
                 validated = false;
             }
@@ -374,6 +412,9 @@ public class ClientRunnable implements Runnable {
         terminateInactive();
     }
 
+    /**
+     * Method that is responsible for an active communication between the server and a validated user.
+     */
     private void respond() {
         // Client has already been initialized, so we should first check
         // if there are any input
@@ -391,6 +432,9 @@ public class ClientRunnable implements Runnable {
         terminate |= !keepAlive;
     }
 
+    /**
+     * If a user is logged in for a long time without activity, their connection will be terminated by this method
+     */
     private void terminateInactive() {
         if (!terminate && terminateInactivity.before(new GregorianCalendar())) {
             String str = "Timing out or forcing off a user " + name;
@@ -399,6 +443,13 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * To keep the thread active between user and server to send/receive messages
+     *
+     * @param processSpecial boolean to process queued messages
+     * @param keepAlive      boolean which determines if the thread needs to be active or not
+     * @return true if the queued message is valid and needs a response
+     */
     private boolean respondWaiting(boolean processSpecial, boolean keepAlive) {
         if (!waitingList.isEmpty()) {
             if (!processSpecial) {
@@ -415,6 +466,13 @@ public class ClientRunnable implements Runnable {
         return keepAlive;
     }
 
+    /**
+     * To keep the thread active between user and server to send/receive special messages
+     *
+     * @param processSpecial boolean to check if the message is considered special
+     * @param keepAlive      boolean to keep the thread active
+     * @return true if the message is special and needs a response
+     */
     private boolean respondSpecial(boolean processSpecial, boolean keepAlive) {
         if (processSpecial) {
             // Send all of the messages and check that we get valid
@@ -426,6 +484,9 @@ public class ClientRunnable implements Runnable {
         return keepAlive;
     }
 
+    /**
+     * For an immediate response from the server to the user
+     */
     private void respondImmediate() {
         if (!immediateResponse.isEmpty()) {
             while (!immediateResponse.isEmpty()) {
@@ -434,6 +495,9 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * Gets the next message from the user's console
+     */
     private void respondIncoming() {
         if (input.hasNextMessage()) {
             // Get the next message
@@ -446,11 +510,17 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * Depending on the user input the handles are considered and passed on to the server,
+     * for implementing the CRUD operations.
+     *
+     * @param msg Message which we are interested in and that needs to be executed by the server
+     */
     private void executeRequest(Message msg) {
         // If the message is a direct message, send it out
         if (msg.isDirectMessage()) {
             directMessage(msg);
-        }else if (msg.isGroupMessage()) {
+        } else if (msg.isGroupMessage()) {
             groupMessage(msg);
         }
         // If the message is a RETRIEVE
@@ -460,7 +530,7 @@ public class ClientRunnable implements Runnable {
         // If the message is a RETRIEVE user
         else if (msg.isJoinMessage()) {
             join(msg);
-        }  else if (msg.isLeaveMessage()) {
+        } else if (msg.isLeaveMessage()) {
             leave(msg);
         }
         // If the message is a DELETE user
@@ -470,8 +540,7 @@ public class ClientRunnable implements Runnable {
         // If the message is a UPDATE user
         else if (msg.isUpdateMessage()) {
             update(msg);
-        }
-        else if (msg.isDisplayMessage()) {
+        } else if (msg.isDisplayMessage()) {
             display(msg);
         } else if (msg.terminate()) {
             terminate();
@@ -479,11 +548,21 @@ public class ClientRunnable implements Runnable {
         // Otherwise, ignore it (for now).
     }
 
+    /**
+     * For communication between two users
+     *
+     * @param msg message sent from one user to other
+     */
     private void directMessage(Message msg) {
         SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
         Prattle.directMessage(msg, msg.getReceiver());
     }
 
+    /**
+     * for communication between a user and group
+     *
+     * @param msg message sent from the user to a group/groups
+     */
     private void groupMessage(Message msg) {
         SQLDB db = SQLDB.getInstance();
         String group = msg.getReceiver();
@@ -496,12 +575,20 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * terminate a client if they logout
+     */
     private void terminate() {
         // Reply with a quit message.
         enqueueMessage(Message.makeQuitMessage(name));
         terminate = true;
     }
 
+    /**
+     * Validate if the message is legal, check for special messages and show the message sent/received by the user/server
+     *
+     * @param msg Messages that needs to be displayed
+     */
     private void display(Message msg) {
         // Check if the message is legal formatted
         if (messageChecks(msg)) {
@@ -525,27 +612,45 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * Update the user/group profile
+     *
+     * @param msg Message containing the keyword UPDATE
+     */
     private void update(Message msg) {
         password = msg.getText();
         SQLDB.getInstance().update(getName(), msg.getText());
     }
 
+    /**
+     * Delete a user/group profile
+     */
     private void delete() {
         SQLDB.getInstance().delete(getName());
         this.terminateClient();
     }
 
+    /**
+     * Deletes the member from the group
+     *
+     * @param msg Message with keyword LEAVE
+     */
     private void leave(Message msg) {
         String group = msg.getText();
         SQLDB db = SQLDB.getInstance();
         if (db.checkGroup(group)) {
             db.deleteGroupMember(group, getName());
-            if (db.retrieveGroupMembers(group).isEmpty()){
+            if (db.retrieveGroupMembers(group).isEmpty()) {
                 db.deleteGroup(group);
             }
         }
     }
 
+    /**
+     * Lets a user join a group if it exists
+     *
+     * @param msg Message with keyword JOIN
+     */
     private void join(Message msg) {
         String group = msg.getText();
         SQLDB db = SQLDB.getInstance();
@@ -555,7 +660,23 @@ public class ClientRunnable implements Runnable {
         db.addGroupMember(group, getName());
     }
 
-    @SuppressWarnings("all")
+    /**
+     * Method which handles all the requests from the user, it performs all the individual and group CRUD operations
+     *
+     * @param msg Message with keyword handle
+     *            -UPDATE <new_password></new_password> (updates the password of the current user)
+     *            -DELETE (deletes currently logged in user)
+     *            -JOIN group (adds current user to the group. creates group if there is no one)
+     *            -LEAVE group (removes current user from the group. deletes group if it is empty)
+     *            -RETRIEVE PASSWORD(tells current user's password)
+     *            -RETRIEVE EPASSWORD(tells current user's encrypted password)
+     *            -RETRIEVE GROUPS (displays the name of all existing groups)
+     *            -RETRIEVE GROUP <group>.</group> (displays the users that are part of the group) *only if you are part of the group*
+     *            -RETRIEVE MESSAGES (displays all messages sent by the user ordered by time)
+     *            -RETRIEVE GROUP_MESSAGES group(displays all messages for a particular group) *only if you are part of the group*
+     *            -RETRIEVE USERS (all users in the database)
+     *            -RETRIEVE ONLINE (only online users)
+     */
     private void retrieve(Message msg) {
         if (msg.getText().equals(EPASWD)) {
             String epassword = SQLDB.getInstance().retrieve(getName());
@@ -567,7 +688,7 @@ public class ClientRunnable implements Runnable {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
         } else if (msg.getText().contains(GROUP_MESSAGES) && msg.getText().split(GROUP_MESSAGES).length == 2) {
             String group = msg.getText().split(GROUP_MESSAGES)[1];
-            if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())){
+            if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())) {
                 String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split(GROUP_MESSAGES)[1]);
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), this.getName());
             } else {
@@ -576,20 +697,20 @@ public class ClientRunnable implements Runnable {
         } else if (msg.getText().equals(USERS)) {
             String users = SQLDB.getInstance().retrieveAllUsers().toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
-        }else if (msg.getText().equals(ONLINE)) {
+        } else if (msg.getText().equals(ONLINE)) {
             String users = Prattle.getOnline().toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
         } else if (msg.getText().equals(GROUPS)) {
             String groups = SQLDB.getInstance().retrieveAllGroups().toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
         } else if (msg.getText().contains(GROUP) && msg.getText().split(GROUP).length == 2) {
-            String group = msg.getText().split(GROUP )[1];
+            String group = msg.getText().split(GROUP)[1];
             if (SQLDB.getInstance().checkGroup(group)) {
                 String members = SQLDB.getInstance().retrieveGroupMembers(group).toString();
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), members), getName());
             } else {
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
-        }
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
+            }
         }
     }
 
@@ -624,6 +745,11 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * Method created solely for testing purpose
+     *
+     * @return all the messages enqueued to the server
+     */
     public Queue<Message> getWaitingList() {
         return new ConcurrentLinkedQueue<>(waitingList);
     }
