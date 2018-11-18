@@ -221,8 +221,8 @@ public class IMConnection {
 					FileInputStream fileInputStreamReader = new FileInputStream(file);
 					byte[] bytes = new byte[(int)file.length()];
 					fileInputStreamReader.read(bytes);
-					String encodedfile = new String(Base64.getEncoder().encode(bytes), "UTF-8");
-					content = encodedfile + " " + type;
+					String encodedfile = new String(Base64.getEncoder().encode(bytes));
+					content = encodedfile + "." + type;
 				} catch (Exception e){
 					e.printStackTrace();
 				}

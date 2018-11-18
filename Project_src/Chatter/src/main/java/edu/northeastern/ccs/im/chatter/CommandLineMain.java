@@ -73,10 +73,13 @@ public class CommandLineMain {
 			if (mess.hasNext()) {
 				Message message = mess.next();
 				if (!message.getSender().equals(connect.getUserName())) {
-					if (message.getText().contains("jpg") || message.getText().contains("txt") || message.getText().contains("png")){
+				    String str = message.getText();
+                    String last3 = str == null || str.length() < 3 ?
+                            str : str.substring(str.length() - 3);
+					if (last3.equals("jpg") || last3.equals("txt") || last3.equals("png")){
 						System.out.println("File was received");
-						String file = message.getText().split(" ")[0];
-						String type = message.getText().split(" ")[1];
+						String file = str.split("\\.")[0];
+						String type = str.split("\\.")[1];
 						byte[] data = Base64.getDecoder().decode(file);
 						try (OutputStream stream = new FileOutputStream("resources/receive/file."+type)) {
 							stream.write(data);

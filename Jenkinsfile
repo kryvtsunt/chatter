@@ -4,8 +4,8 @@ pipeline {
  }
  agent any
  options {
-      timeout(time: 10, unit: 'MINUTES') 
-  }  
+      timeout(time: 10, unit: 'MINUTES')
+  }
  stages {
    stage('Build') {
    agent {
@@ -47,14 +47,14 @@ pipeline {
       }
     }
   }
-} //SONAR 
+} //SONAR
 stage('Master Branch Tasks') {
         when {
             branch "master"
         }
         steps {
         	echo "Building Prattle"
-             sh 'mvn -f Project_src/Prattle/pom.xml package'          
+             sh 'mvn -f Project_src/Prattle/pom.xml package'
 
              script {
               def json = readJSON file:'config.json'
