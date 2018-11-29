@@ -2,6 +2,8 @@ package edu.northeastern.ccs.im.server;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
@@ -266,7 +268,23 @@ public class ClientRunnable implements Runnable {
 
             if (db.validateCredentials(getName(), password)) {
                 validated = true;
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in."), getName());
+                String lastSeen = "";
+                try {
+                    lastSeen = db.retrieveLastSeen(this.getName()).toString();
+                } catch (Exception e){
+                    db.updateLastSeen(this.getName());
+                }
+                List<String> msgs = db.getAllQueuedMessagesForUser(this.getName(), db.retrieveLastSeen(this.getName()));
+                System.out.println(msgs.toString());
+                int role = db.getUserRole(this.getName());
+                if (role == 0){
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
+                } else if (role == 1){
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. " + lastSeen), getName());
+                } else if (role == 2){
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups" + lastSeen), getName());
+
+                }
             } else {
                 validated = false;
             }
@@ -784,6 +802,7 @@ public class ClientRunnable implements Runnable {
     public void terminateClient() {
         try {
             // Once the communication is done, close this connection.
+            SQLDB.getInstance().updateLastSeen(this.name);
             input.close();
             socket.close();
         } catch (IOException e) {

@@ -72,7 +72,22 @@ public class Message {
         /**
          * Message from the user to leave a group
          */
-        LEAVE("LVE");
+        LEAVE("LVE"),
+        /**
+         * Wiretap request
+         */
+        WTR("WTR"),
+        /**
+         * Wiretap
+         */
+        WTP("WTP"),
+        /**
+         * Set the role
+         */
+        ROLE("RLE");
+
+
+
 
         /**
          * Store the short name of this message type.
@@ -198,6 +213,19 @@ public class Message {
         return new Message(MessageType.DIRECT, myName, directTo, text);
     }
 
+    public static Message makeSetRoleMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.ROLE, myName, directTo, text);
+    }
+
+    public static Message makeWTPRequestMessage(String myName, String directTo) {
+        return new Message(MessageType.WTR, myName, directTo, null);
+    }
+
+    public static Message makeWTPMessage(String myName, String directTo) {
+        return new Message(MessageType.WTP, myName, directTo, null);
+    }
+
+
     /**
      * Create a new group message
      *
@@ -257,10 +285,10 @@ public class Message {
 
 
     /**
-     * Create a message to update the password
+     * Create a message to update
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   New password
+     * @param text   Update message
      * @return Instance of Message that transmits text to user who updated their details.
      */
     public static Message makeUpdateMessage(String myName, String text) {
@@ -314,6 +342,12 @@ public class Message {
             result = makeJoinMessage(srcName, text);
         } else if (handle.compareTo(MessageType.LEAVE.toString()) == 0) {
             result = makeLeaveMessage(srcName, text);
+        } else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
+            result = makeSetRoleMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WTR.toString()) == 0) {
+            result = makeWTPRequestMessage(srcName, dstName);
+        }else if (handle.compareTo(MessageType.WTP.toString()) == 0) {
+            result = makeWTPMessage(srcName, dstName);
         }
         return result;
     }
@@ -478,6 +512,20 @@ public class Message {
     public boolean isDisplayMessage() {
         return (msgType == MessageType.BROADCAST);
     }
+
+
+    public boolean isWTRMessage() {
+        return (msgType == MessageType.WTR);
+    }
+
+    public boolean isWTPMessage() {
+        return (msgType == MessageType.WTP);
+    }
+
+    public boolean isRoleMessage() {
+        return (msgType == MessageType.ROLE);
+    }
+
 
     /**
      * Determine if this message is sent by a new client to log-in to the server.
