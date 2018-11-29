@@ -184,6 +184,7 @@ public class ClientRunnable implements Runnable {
         socket.configureBlocking(false);
         // Create the class we will use to receive input
         input = new ScanNetNB(socket);
+        socket.getRemoteAddress();
         // Create the class we will use to send output
         output = new PrintNetNB(socket);
         // Mark that we are not initialized
