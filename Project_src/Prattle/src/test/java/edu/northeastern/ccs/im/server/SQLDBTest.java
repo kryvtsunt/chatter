@@ -4,12 +4,31 @@ import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import edu.northeastern.ccs.im.Message;
+import edu.northeastern.ccs.im.PrintNetNB;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.channels.ClosedSelectorException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SQLDBTest {
     private SQLDB sqldb;
+    private static final int port = 4548;
 
     @BeforeEach
     void setup(){
@@ -64,12 +83,10 @@ class SQLDBTest {
         db.deleteGroupMember("asdf","asdf");
         db.createGroup("Asdf");
         db.checkGroup("asdf");
-        db.getUsername("asdf");
         db.getGroupID("asdf");
         db.retrieveAllUsers();
         db.retrieve("tim");
         db.getGroupID("random");
-        db.getUsername("none");
         db.checkGroup("none");
         db.createGroup("none");
         db.create(11,"none","none");
@@ -138,7 +155,7 @@ class SQLDBTest {
 
     @Test
     void getUsername() {
-        assertEquals("mockUser",sqldb.getUsername("105"));
+        assertEquals("mockUser",sqldb.getUsername(105));
     }
 
     @Test
@@ -206,4 +223,42 @@ class SQLDBTest {
         assertTrue(sqldb.deleteGroupMember("newMockGroup2","mockUser"));
 
     }
+
+    @Test
+    void setOrRemoveWireTap() {
+
+        sqldb.create(220, "adminUserTest", "pass");
+        sqldb.updateUserRole("adminUserTest", 0);
+
+        sqldb.create(221, "agencyUserTest", "pass");
+        sqldb.updateUserRole("agencyUserTest", 2);
+
+        sqldb.create(222, "normalUserTest1", "pass");
+
+        assertEquals(false, sqldb.isUserOrGroupWiretapped("normalUserTest1", 0));
+        assertEquals(false, sqldb.getWiretappedUsers("agencyUserTest", 0).size() > 0);
+
+        assertEquals(true, sqldb.requestWiretap("normalUserTest1", "normalUserTest2", 0, 5) == -1);
+        int requestRowID = sqldb.requestWiretap("agencyUserTest", "normalUserTest1", 0, 7);
+
+
+
+        assertEquals(false, sqldb.getWiretapRequests("agencyUserTest", "agencyUserTest").size() > 0);
+        assertEquals(true,sqldb.getWiretapRequests("adminUserTest", "agencyUserTest").size() > 0);
+
+        assertEquals(false, sqldb.setWireTap("agencyUserTest", requestRowID));
+        assertEquals(true,sqldb.setWireTap("adminUserTest", "agencyUserTest"));
+        assertEquals(true, sqldb.setWireTap("adminUserTest", requestRowID));
+
+        assertEquals(true, sqldb.getAgencyList("normalUserTest1", 0, 1).size()> 0);
+        assertEquals(true, sqldb.isUserOrGroupWiretapped("normalUserTest1", 0));
+        assertEquals(true, sqldb.getWiretappedUsers("agencyUserTest", 0).size() > 0);
+
+        sqldb.deleteWiretapRequest(requestRowID);
+
+        assertEquals(true,sqldb.delete("adminUserTest"));
+        assertEquals(true,sqldb.delete("agencyUserTest"));
+        assertEquals(true,sqldb.delete("normalUserTest1"));
+    }
+
 }
