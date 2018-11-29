@@ -44,17 +44,51 @@ public class Message {
 		 */
 		DIRECT("DIR"),
 
+		/**
+		 * Message for groups
+		 */
 		GROUP("GRP"),
 
+		/**
+		 * Message for retreival operations
+		 */
 		RETRIEVE("RET"),
 
+		/**
+		 * Message for updating a user or a group
+		 */
 		UPDATE("UPD"),
 
+		/**
+		 * Message to delete a user or a group
+		 */
 		DELETE("DEL"),
 
+		/**
+		 * Message from a user to join a group
+		 */
 		JOIN("JIN"),
 
-		LEAVE("LVE");
+		/**
+		 * Message from the user to leave a group
+		 */
+		LEAVE("LVE"),
+		/**
+		 * Wiretap request
+		 */
+		WTR("WTR"),
+		/**
+		 * Wiretap
+		 */
+		WTP("WTP"),
+		/**
+		 * Set the role
+		 */
+		ROLE("RLE");
+
+
+
+
 		/**
 		 * Store the short name of this message type.
 		 */
@@ -179,12 +213,25 @@ public class Message {
 		return new Message(MessageType.DIRECT, myName, directTo, text);
 	}
 
+	public static Message makeSetRoleMessage(String myName, String directTo, String text) {
+		return new Message(MessageType.ROLE, myName, directTo, text);
+	}
+
+	public static Message makeWTPRequestMessage(String myName, String directTo) {
+		return new Message(MessageType.WTR, myName, directTo, null);
+	}
+
+	public static Message makeWTPMessage(String myName, String directTo) {
+		return new Message(MessageType.WTP, myName, directTo, null);
+	}
+
+
 	/**
-	 * Create a new message directed to a certain user.
+	 * Create a new group message
 	 *
 	 * @param myName   Name of the sender of this very important missive.
 	 * @param directTo Name of the destination user
-	 * @param text     Text of the message that will be sent to all users
+	 * @param text     Text of the message that will be sent to all users in a group
 	 * @return Instance of Message that transmits text to all logged in users.
 	 */
 	public static Message makeGroupMessage(String myName, String directTo, String text) {
@@ -193,44 +240,44 @@ public class Message {
 
 
 	/**
-	 * Create a new message directed to a certain user.
+	 * Message while performing retrieval operations
 	 *
-	 * @param myName   Name of the sender of this very important missive.
-	 * @param text     Text of the message that will be sent to all users
-	 * @return Instance of Message that transmits text to all logged in users.
+	 * @param myName Name of the sender of this very important missive.
+	 * @param text   Text of the message that will be sent to that particular user
+	 * @return Instance of Message that transmits to the user who requested a retrieval operation
 	 */
 	public static Message makeRetrieveMessage(String myName, String text) {
 		return new Message(MessageType.RETRIEVE, myName, null, text);
 	}
 
 	/**
-	 * Create a new message directed to a certain user.
+	 * Create a new message to delete current user.
 	 *
-	 * @param myName   Name of the sender of this very important missive.
-	 * @param text     Text of the message that will be sent to all users
-	 * @return Instance of Message that transmits text to all logged in users.
+	 * @param myName Name of the sender of this very important missive.
+	 * @param text   Text of the message that will be sent to that particular user
+	 * @return Instance of Message that transmits text to user who requested a deletion.
 	 */
 	public static Message makeDeleteMessage(String myName, String text) {
 		return new Message(MessageType.DELETE, myName, null, text);
 	}
 
 	/**
-	 * Create a new message directed to a certain user.
+	 * Create a message to join a group.
 	 *
-	 * @param myName   Name of the sender of this very important missive.
-	 * @param text     Text of the message that will be sent to all users
-	 * @return Instance of Message that transmits text to all logged in users.
+	 * @param myName Name of the sender of this very important missive.
+	 * @param text   Group to join
+	 * @return Instance of Message that transmits text to user who joined a group.
 	 */
 	public static Message makeJoinMessage(String myName, String text) {
 		return new Message(MessageType.JOIN, myName, null, text);
 	}
 
 	/**
-	 * Create a new message directed to a certain user.
+	 * Create a message to leave a group.
 	 *
-	 * @param myName   Name of the sender of this very important missive.
-	 * @param text     Text of the message that will be sent to all users
-	 * @return Instance of Message that transmits text to all logged in users.
+	 * @param myName Name of the sender of this very important missive.
+	 * @param text   Group to leave
+	 * @return Instance of Message that transmits text to user who left
 	 */
 	public static Message makeLeaveMessage(String myName, String text) {
 		return new Message(MessageType.LEAVE, myName, null, text);
@@ -238,11 +285,11 @@ public class Message {
 
 
 	/**
-	 * Create a new message directed to a certain user.
+	 * Create a message to update
 	 *
-	 * @param myName   Name of the sender of this very important missive.
-	 * @param text     Text of the message that will be sent to all users
-	 * @return Instance of Message that transmits text to all logged in users.
+	 * @param myName Name of the sender of this very important missive.
+	 * @param text   Update message
+	 * @return Instance of Message that transmits text to user who updated their details.
 	 */
 	public static Message makeUpdateMessage(String myName, String text) {
 		return new Message(MessageType.UPDATE, myName, null, text);
@@ -283,7 +330,7 @@ public class Message {
 			result = makeNoAcknowledgeMessage();
 		} else if (handle.compareTo(MessageType.DIRECT.toString()) == 0) {
 			result = makeDirectMessage(srcName, dstName, text);
-		}  else if (handle.compareTo(MessageType.GROUP.toString()) == 0) {
+		} else if (handle.compareTo(MessageType.GROUP.toString()) == 0) {
 			result = makeGroupMessage(srcName, dstName, text);
 		} else if (handle.compareTo(MessageType.RETRIEVE.toString()) == 0) {
 			result = makeRetrieveMessage(srcName, text);
@@ -291,10 +338,16 @@ public class Message {
 			result = makeDeleteMessage(srcName, text);
 		} else if (handle.compareTo(MessageType.UPDATE.toString()) == 0) {
 			result = makeUpdateMessage(srcName, text);
-		}  else if (handle.compareTo(MessageType.JOIN.toString()) == 0) {
+		} else if (handle.compareTo(MessageType.JOIN.toString()) == 0) {
 			result = makeJoinMessage(srcName, text);
-		}  else if (handle.compareTo(MessageType.LEAVE.toString()) == 0) {
+		} else if (handle.compareTo(MessageType.LEAVE.toString()) == 0) {
 			result = makeLeaveMessage(srcName, text);
+		} else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
+			result = makeSetRoleMessage(srcName, dstName, text);
+		}else if (handle.compareTo(MessageType.WTR.toString()) == 0) {
+			result = makeWTPRequestMessage(srcName, dstName);
+		}else if (handle.compareTo(MessageType.WTP.toString()) == 0) {
+			result = makeWTPMessage(srcName, dstName);
 		}
 		return result;
 	}
@@ -394,7 +447,6 @@ public class Message {
 	}
 
 
-
 	/**
 	 * Determine if this message is directing text to specific users.
 	 *
@@ -438,7 +490,7 @@ public class Message {
 	 *
 	 * @return True if the message is a broadcast message; false otherwise.
 	 */
-	public boolean isLeavenMessage() {
+	public boolean isLeaveMessage() {
 		return (msgType == MessageType.LEAVE);
 	}
 
@@ -460,6 +512,20 @@ public class Message {
 	public boolean isDisplayMessage() {
 		return (msgType == MessageType.BROADCAST);
 	}
+
+
+	public boolean isWTRMessage() {
+		return (msgType == MessageType.WTR);
+	}
+
+	public boolean isWTPMessage() {
+		return (msgType == MessageType.WTP);
+	}
+
+	public boolean isRoleMessage() {
+		return (msgType == MessageType.ROLE);
+	}
+
 
 	/**
 	 * Determine if this message is sent by a new client to log-in to the server.
