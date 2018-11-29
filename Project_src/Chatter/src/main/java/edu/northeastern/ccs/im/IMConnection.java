@@ -257,6 +257,10 @@ public class IMConnection {
 			Message crtMessage = Message.makeUpdateMessage(userName, content);
 			socketConnection.print(crtMessage);
 		}
+		else if (message.contains("RECALL")) {
+			Message crtMessage = Message.makeRecallMessage(userName);
+			socketConnection.print(crtMessage);
+		}
 		else {
 			Message bctMessage = Message.makeBroadcastMessage(userName, message);
 			socketConnection.print(bctMessage);

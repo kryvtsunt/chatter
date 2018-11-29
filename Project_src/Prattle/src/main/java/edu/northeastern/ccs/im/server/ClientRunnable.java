@@ -602,9 +602,7 @@ public class ClientRunnable implements Runnable {
      */
     private void recallMessage() {
         int msgID = SQLDB.getInstance().getLastMessageID(getName());
-        if(SQLDB.getInstance().updateMessage(getName(),msgID)) {
-            return;
-        }
+        SQLDB.getInstance().updateMessage(getName(),msgID);
     }
 
 //    /**
