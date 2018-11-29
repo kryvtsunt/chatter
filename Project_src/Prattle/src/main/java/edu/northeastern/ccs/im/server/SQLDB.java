@@ -14,6 +14,10 @@ public class SQLDB {
     final static String DB_USERNAME = "team105";
     final static String DB_PASWD = "Team-105";
 
+    final static int USER_ROLE_NORMAL_ID = 1;
+    final static int USER_ROLE_AGENCY_ID = 2;
+    final static int USER_ROLE_ADMIN_ID = 0;
+
     /**
      * Logger
      */
@@ -118,6 +122,35 @@ public class SQLDB {
     }
 
     /**
+     * SPRINT 3(PREM)
+     * Retreive the user's lastseen from the Database
+     * @param username keyword against which the sql operations are carried on
+     * @return the user's lastseen stored in the Database
+     */
+    public Timestamp retrieveLastSeen(String username) {
+        Timestamp lastSeen = null;
+        try {
+            if (checkUser(username)) {
+                String sqlCreateUser = "SELECT lastSeen FROM users WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setString(1, username);
+                    try (ResultSet userSet = pStatement.executeQuery()) {
+                        while (userSet.next()) {
+                            lastSeen = userSet.getTimestamp("lastSeen");
+                            //adding time difference between java and mysql time
+                            lastSeen.setTime(lastSeen.getTime() + ((5 * 60 * 60) * 1000));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+
+        return lastSeen;
+    }
+
+    /**
      * creates a user if they don't exist in the database
      * @param userId integer which acts a primary key in the Database
      * @param username name the user wants to have
@@ -159,6 +192,31 @@ public class SQLDB {
                     pStatement.setString(2, username);
                     int userCount = pStatement.executeUpdate();
                     flag = (userCount > 0);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
+     * SPRINT 3(PREM)
+     * if the user wants to update their username
+     * @param oldUsername user who is trying to update their last seen
+     * @return true if the sql operation of updating is successful
+     */
+    public boolean updateLastSeen(String oldUsername) {
+        boolean flag = false;
+        try {
+            if (checkUser(oldUsername)) {
+                String sqlCreateUser = "UPDATE users SET lastSeen=? WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+                    pStatement.setString(2, oldUsername);
+                    int userCount = pStatement.executeUpdate();
+                    flag = (userCount > 0);
+                    System.out.println("updation flag:" + flag);
                 }
             }
         } catch (Exception e) {
@@ -345,7 +403,7 @@ public class SQLDB {
                     pStatement.setInt(1, groupId);
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
-                            String tempUserId = userSet.getString("userId");
+                            int tempUserId = userSet.getInt("userId");
                             String tempUsername = getUsername(tempUserId);
                             userInformation.add(tempUsername);
                         }
@@ -385,17 +443,18 @@ public class SQLDB {
         return userInformation;
     }
 
+
     /**
      * gets the user name
      * @param userId unique interger for retrieval
      * @return the name of the user according to the ID
      */
-    public String getUsername(String userId) {
+    public String getUsername(int userId) {
         String userInformation = "";
         try {
             String sqlRetrieveGroup = "SELECT username FROM users WHERE userId=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveGroup)) {
-                pStatement.setString(1, userId);
+                pStatement.setInt(1, userId);
                 try (ResultSet userSet = pStatement.executeQuery()) {
                     while (userSet.next()) {
                         userInformation = userSet.getString("username");
@@ -550,6 +609,53 @@ public class SQLDB {
     }
 
     /**
+     * SPRINT 3(PREM)
+     * retrieve message id of last message send by user
+     * @param user name of user
+     * @return message id of last message sent by user
+     */
+    public int getLastMessageID(String user) {
+        int msgID = -1;
+        try {
+            String sql = "SELECT messageID FROM message_details WHERE fromUser = '" + getUserID(user) + "' ORDER BY messageID DESC LIMIT 1";
+            try (Statement pStatement = connection.createStatement()) {
+                try (ResultSet rs = pStatement.executeQuery(sql)) {
+                    while (rs.next()) {
+                        msgID = rs.getInt("messageID");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return msgID;
+    }
+
+    /**
+     * SPRINT 3(PREM)
+     * set recall flag to true for last message send by respective user
+     * @param userName the user name
+     * @param messageID id of message whose recall flag needs to be set
+     * @return true if updation is successful otherwise false
+     */
+    public boolean updateMessage(String userName, int messageID) {
+        boolean flag = false;
+        try {
+            String sqlCreateUser = "UPDATE message_details SET isRecall=? WHERE messageID=? AND fromUser=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                pStatement.setBoolean(1, true);
+                pStatement.setInt(2, messageID);
+                pStatement.setInt(3, getUserID(userName));
+                int msgCount = pStatement.executeUpdate();
+                flag = (msgCount > 0);
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
      * retrieves all the messages of a given user
      * @param user name of the user
      * @return list of all the broadcast, group, individual messsages sent/received by the user
@@ -611,6 +717,58 @@ public class SQLDB {
     }
 
     /**
+     * SPRINT 3(PREM)
+     * retrieves all the queued messages of a given user
+     * @param user name of the user
+     * @param lastSeen last seen of respective user
+     * @return list of all the queued messsages received by the user
+     */
+    public List<String> getAllQueuedMessagesForUser(String user,Timestamp lastSeen) {
+        List<String> msgInformation = new ArrayList<>();
+        SortedMap<Timestamp, String> queuedMsgs = new TreeMap<Timestamp, String>();
+        try {
+            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > '" + lastSeen + "'";
+            try (Statement pStatement = connection.createStatement()) {
+                try (ResultSet rs = pStatement.executeQuery(sql)) {
+                    while (rs.next()) {
+                        String fromUser = getUsername(rs.getInt("fromUser"));
+                        String to = rs.getString("toUser");
+                        boolean groupMsg = rs.getBoolean("IsGroupMsg");
+                        String msg = rs.getString("message");
+                        Timestamp t = rs.getTimestamp("creationTime");
+                        boolean broadcastMsg = rs.getBoolean("IsBroadcast");
+                        boolean recallMsg = rs.getBoolean("isRecall");
+                        // if not a recall message then store it
+                        if(!recallMsg) {
+                            if(groupMsg) {
+                                //if user is memeber of that group then store msg
+                                if(SQLDB.getInstance().isGroupMember(to, user)) {
+                                    queuedMsgs.put(t,"fromUser:" + fromUser + ",Message:" + msg);
+                                }
+                            } else if(broadcastMsg) {
+                                //if broadcast msg then store msg
+                                queuedMsgs.put(t,"fromUser:" + fromUser + ",Message:" + msg);
+                            } else if(to.equals(user)) {
+                                //if direct message belongs to respective user then store msg
+                                queuedMsgs.put(t,"fromUser:" + fromUser + ",Message:" + msg);
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+
+        Iterator i = queuedMsgs.entrySet().iterator();
+        while (i.hasNext()) {
+            Map.Entry m = (Map.Entry) i.next();
+            msgInformation.add((String)m.getValue());
+        }
+        return msgInformation;
+    }
+
+    /**
      * gets the messages of a group in which the user is present
      * @param userName name of the user
      * @param group name of thr group
@@ -632,7 +790,7 @@ public class SQLDB {
                 pStatement.setBoolean(2, true);
                 try (ResultSet rs = pStatement.executeQuery()) {
                     while (rs.next()) {
-                        String from = getUsername(String.valueOf(rs.getInt("fromUser")));
+                        String from = getUsername(rs.getInt("fromUser"));
                         String msg = rs.getString("message");
                         Timestamp t = rs.getTimestamp("creationTime");
                         hmap.put(t, "TimeStamp:" + t.toString() + " => From:" + from + ", Message:" + msg + "\n");
@@ -691,7 +849,7 @@ public class SQLDB {
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
                             int tempUserId = userSet.getInt("userId");
-                            String tempUsername = getUsername(Integer.toString(tempUserId));
+                            String tempUsername = getUsername(tempUserId);
                             userInformation.add(tempUsername);
                         }
                     }
@@ -780,4 +938,319 @@ public class SQLDB {
         return flag;
 
     }
+
+    /**
+     * check if a user is an agency or not
+     * @param userName name of the user who is supposed to be checked
+     * @return user's role type
+     */
+    public int getUserRole(String userName) {
+        int roleId = -1;
+        try {
+            int userId = getUserID(userName);
+            String sqlCheckUser = "SELECT roleId FROM users WHERE userId=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser)) {
+                pStatement.setInt(1, userId);
+                try (ResultSet userSet = pStatement.executeQuery()) {
+                    while (userSet.next()) {
+                        roleId = userSet.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return roleId;
+    }
+
+    /**
+     * check if a user is an agency or not
+     * @param userName name of the user who is supposed to be checked
+     * @return true if the user is agency/has agency privilege
+     */
+    public boolean isUserOrGroupWiretapped(String userOrGroupName, int isGroup) {
+        boolean flag = false;
+        try {
+            String sqlCheckUser = "SELECT COUNT(*) FROM wiretapUsers WHERE userWiretapped=?";
+            int wiretapCandidateId = (isGroup == 1)? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
+            if(isGroup == 1) {
+                sqlCheckUser = "SELECT COUNT(*) FROM wiretapGroups WHERE userWiretapped=?";
+            }
+
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser)) {
+                pStatement.setInt(1, wiretapCandidateId);
+                try (ResultSet userSet = pStatement.executeQuery()) {
+                    while (userSet.next()) {
+                        flag = (userSet.getInt(1) > 0);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    public int requestWiretap(String requestingUser, String userOrGroupName, int isGroup, int requestDurationDays) {
+        int insertedRowID = -1;
+
+        try {
+            if(getUserRole(requestingUser) != USER_ROLE_AGENCY_ID) return insertedRowID;
+            int requestingUserId = getUserID(requestingUser);
+            int wireTapCandidate = (isGroup == 1) ? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
+            if (wireTapCandidate == -1) return insertedRowID;
+            String sqlStatement = "INSERT INTO wiretapRequests(userRequestingId, userVictimId, requestDurationDays, isGroup) VALUES(?,?,?,?)";
+
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement, Statement.RETURN_GENERATED_KEYS)) {
+                pStatement.setInt(1, requestingUserId);
+                pStatement.setInt(2, wireTapCandidate);
+                pStatement.setInt(3, requestDurationDays);
+                pStatement.setInt(4, isGroup);
+                int wiretapCount = pStatement.executeUpdate();
+                ResultSet keySet = pStatement.getGeneratedKeys();
+                if(keySet.next())
+                {
+                    insertedRowID = keySet.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return insertedRowID;
+    }
+
+    public Map<Integer, String> getWiretapRequests(String requestingUser, String agencyUser) {
+        Map<Integer, String> wiretapRequests = new HashMap<>();
+        String wiretapRequestString = "";
+        if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return wiretapRequests;
+        try {
+            int agencyUserId = getUserID(agencyUser);
+            String sqlRetrieveAllUsers = "SELECT * FROM wiretapRequests WHERE userRequestingId LIKE ? AND isApproved=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveAllUsers)) {
+                if(agencyUserId == -1) {
+                    pStatement.setString(1, "%");
+                }
+                else {
+                    pStatement.setInt(1, agencyUserId);
+                }
+                pStatement.setInt(2, 0);
+                try (ResultSet requestSet = pStatement.executeQuery()) {
+                    while (requestSet.next()) {
+                        wiretapRequestString = "Agency " + agencyUser + " has made a request to wiretap ";
+                        if(requestSet.getInt("isGroup") == 1) {
+                            wiretapRequestString += "group: ";
+                            wiretapRequestString += getGroupName(requestSet.getInt("userVictimId"));
+                        }
+                        else {
+                            wiretapRequestString += "user: ";
+                            wiretapRequestString += getUsername(requestSet.getInt("userVictimId"));
+                        }
+                        wiretapRequestString += " for " + requestSet.getInt("requestDurationDays") + " days.";
+
+                        wiretapRequests.put(requestSet.getInt("requestId"), wiretapRequestString);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return wiretapRequests;
+    }
+
+
+    public boolean setWireTap(String requestingUser, String agencyUsername) {
+        boolean flag = false;
+        try {
+            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
+            String sqlStatement = "SELECT * FROM wiretapRequests WHERE userRequestingId=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
+                pStatement.setInt(1, getUserID(agencyUsername));
+                try (ResultSet requestSet = pStatement.executeQuery()) {
+                    while (requestSet.next()) {
+                        if(requestSet.getInt("isGroup") == 1) {
+                            sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
+                        }
+                        else {
+                            sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
+                        }
+
+                        try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
+                            subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
+                            subPStatement.setInt(2, requestSet.getInt("userVictimId"));
+                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
+                            int wiretapCount = subPStatement.executeUpdate();
+                            flag = (wiretapCount > 0);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
+     * set wiretap on a user or a group
+     * @param requestingUser name of the user requesting wiretap
+     * @param userOrGroupName name or group name on whom the wire tap is supposed to be set
+     * @param isGroup 1 if wire tap request is for group, 0 otherwise
+     * @param isSetWiretap 1 if user is requesting to set wire tap, 0 otherwise
+     * @return true if the wire tap was successfully set
+     */
+    public boolean setWireTap(String requestingUser, int requestId) {
+        boolean flag = false;
+        try {
+            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
+            String sqlStatement = "SELECT * FROM wiretapRequests WHERE requestId=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
+                pStatement.setInt(1, requestId);
+                try (ResultSet requestSet = pStatement.executeQuery()) {
+                    while (requestSet.next()) {
+                        if(requestSet.getInt("isGroup") == 1) {
+                            sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
+                        }
+                        else {
+                            sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
+                        }
+
+                        try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
+                            subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
+                            subPStatement.setInt(2, requestSet.getInt("userVictimId"));
+                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
+                            int wiretapCount = subPStatement.executeUpdate();
+                            flag = (wiretapCount > 0);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
+     * get wiretapped users
+     * @param requestingUser name of the user requesting wiretapped users/groups
+     * @param isGroup true if wire tap request is for group, false otherwise
+     * @return a list of users/groups wiretapped by the requestingUser
+     */
+    public List<String> getWiretappedUsers(String agencyUsername, int isGroup) {
+        List<String> tappedUsersOrGroups = new ArrayList<>();
+        String sqlCheckUser = "";
+        int requestingUserId = -1;
+        try {
+            requestingUserId = getUserID(agencyUsername);
+            sqlCheckUser = "SELECT userWiretapped FROM wiretapUsers WHERE userWireTapping=?";
+            if(isGroup == 1) {
+                sqlCheckUser = "SELECT userWiretapped FROM wiretapGroups WHERE userWireTapping=?";
+            }
+
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser)) {
+                pStatement.setInt(1, requestingUserId);
+                try (ResultSet userSet = pStatement.executeQuery()) {
+                    while (userSet.next()) {
+                        tappedUsersOrGroups.add(userSet.getString("userWiretapped"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return tappedUsersOrGroups;
+    }
+
+
+    /**
+     * set wiretap on a user or a group
+     * @param requestingUser name of the user requesting wiretapped users/groups
+     * @param isGroup true if wire tap request is for group, false otherwise
+     * @return a list of users/groups wiretapped by the requestingUser
+     */
+    public List<String> getAgencyList(String userOrGroupName, int isGroup, int isIncludeExpired) {
+        List<String> agencyList = new ArrayList<>();
+        String sqlCheckUser = "";
+
+        try {
+            int wireTapCandidate = (isGroup == 1) ? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
+            sqlCheckUser = "SELECT w.userWiretapping"
+                    + " FROM wiretapUsers w WHERE userWireTapped=? AND isGroup=?";
+            if(isIncludeExpired == 0) {
+                sqlCheckUser += " AND CURDATE() < DATE_ADD(w.creationTime, INTERVAL w.expireAfterDays DAY)";
+            }
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser)) {
+                pStatement.setInt(1, wireTapCandidate);
+                pStatement.setInt(2, isGroup);
+                try (ResultSet userSet = pStatement.executeQuery()) {
+                    while (userSet.next()) {
+                        agencyList.add(userSet.getString("userWiretapping"));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return agencyList;
+    }
+
+    public boolean updateUserRole(String username, int roleId) {
+        boolean flag = false;
+        try {
+            if (checkUser(username)) {
+                String sqlCreateUser = "UPDATE users SET roleId=? WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setInt(1, roleId);
+                    pStatement.setString(2, username);
+                    int userCount = pStatement.executeUpdate();
+                    flag = (userCount > 0);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    public boolean deleteWiretapRequest(int requestID) {
+        boolean flag = false;
+        try {
+            String sqlDeleteRequest = "DELETE FROM wiretapRequests WHERE requestId=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlDeleteRequest)) {
+                pStatement.setInt(1, requestID);
+                int userCount = pStatement.executeUpdate();
+                flag = (userCount > 0);
+
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
+     * gets the group name
+     * @param groupId unique interger for retrieval
+     * @return the name of the group according to the ID
+     */
+    public String getGroupName(int groupId) {
+        String userInformation = "";
+        try {
+            String sqlRetrieveGroup = "SELECT groupName FROM groups WHERE groupId=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveGroup)) {
+                pStatement.setInt(1, groupId);
+                try (ResultSet userSet = pStatement.executeQuery()) {
+                    while (userSet.next()) {
+                        userInformation = userSet.getString("username");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+
+        return userInformation;
+    }
+
 }
