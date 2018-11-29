@@ -212,8 +212,8 @@ public class Message {
      *
      * @return Instance of Message that specifies the process is of recalling a message.
      */
-    public static Message makeRecallMessage(String myName) {
-        return new Message(MessageType.RECALL, myName, null, null);
+    public static Message makeRecallMessage(String myName, String text) {
+        return new Message(MessageType.RECALL, myName, null, text);
     }
 
     /**
@@ -364,7 +364,7 @@ public class Message {
         }else if (handle.compareTo(MessageType.WTA.toString()) == 0) {
             result = makeWTAMessage(srcName, dstName, text);
         } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
-            result = makeRecallMessage(srcName);
+            result = makeRecallMessage(srcName, text);
         }
         return result;
     }

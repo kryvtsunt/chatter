@@ -282,8 +282,10 @@ public class IMConnection {
             String content = args[1];
             Message crtMessage = Message.makeUpdateMessage(userName, content);
             socketConnection.print(crtMessage);
-        } else if (message.contains("RECALL")) {
-            Message crtMessage = Message.makeRecallMessage(userName);
+        } else if (message.contains("RECALL ")) {
+            String[] args = message.split("RECALL ");
+            String content = args[1];
+            Message crtMessage = Message.makeRecallMessage(userName, content);
             socketConnection.print(crtMessage);
         } else if (message.contains(" APPROVE ")) {
             String[] args = message.split(" APPROVE ");

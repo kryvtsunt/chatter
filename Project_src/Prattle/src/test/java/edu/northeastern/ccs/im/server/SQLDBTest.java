@@ -106,7 +106,7 @@ class SQLDBTest {
         db.getUserID("none");
         db.storeMessageGroup("nonw","nonw","non");
         db.storeMessageGroup("none","mo","sa");
-        db.getAllMessagesForUser("no");
+        db.getAllMessagesForUser("no", "fromUser");
         db.getAllMessagesForGroup("no","ni");
         db.retrieveGroupMembers("noin");
 
@@ -191,7 +191,7 @@ class SQLDBTest {
 
     @Test
     void getAllMessagesForUser() {
-        assertNotNull(sqldb.getAllMessagesForUser("mockUser"));
+        assertNotNull(sqldb.getAllMessagesForUser("mockUser", "fromUser"));
     }
 
     @Test

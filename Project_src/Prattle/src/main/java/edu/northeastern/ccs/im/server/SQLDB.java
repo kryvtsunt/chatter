@@ -2,6 +2,7 @@ package edu.northeastern.ccs.im.server;
 
 import java.security.MessageDigest;
 import java.sql.*;
+import java.sql.Date;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -65,6 +66,7 @@ public class SQLDB {
 
     /**
      * Close the DB connection
+     *
      * @throws SQLException
      */
     public void close() throws SQLException {
@@ -73,6 +75,7 @@ public class SQLDB {
 
     /**
      * To validate a user, the user's credentials are compared against the users table in MySQL
+     *
      * @param username string entered by the user which is used for validating
      * @return true if the user exists in the Database
      */
@@ -97,6 +100,7 @@ public class SQLDB {
 
     /**
      * Retreive the user's data from the Database
+     *
      * @param username keyword against which the sql operations are carried on
      * @return the user's details stored in the Database
      */
@@ -124,6 +128,7 @@ public class SQLDB {
     /**
      * SPRINT 3(PREM)
      * Retreive the user's lastseen from the Database
+     *
      * @param username keyword against which the sql operations are carried on
      * @return the user's lastseen stored in the Database
      */
@@ -152,7 +157,8 @@ public class SQLDB {
 
     /**
      * creates a user if they don't exist in the database
-     * @param userId integer which acts a primary key in the Database
+     *
+     * @param userId   integer which acts a primary key in the Database
      * @param username name the user wants to have
      * @param password string entered by the user for their password
      * @return true if the details entered are in a legal format and when they stored in the Database
@@ -178,6 +184,7 @@ public class SQLDB {
 
     /**
      * if the user wants to update their informatin escpecially their password
+     *
      * @param username user who is trying to update their password
      * @param password new password the user wants to update to
      * @return true if the sql operation of updating is successful
@@ -203,6 +210,7 @@ public class SQLDB {
     /**
      * SPRINT 3(PREM)
      * if the user wants to update their username
+     *
      * @param oldUsername user who is trying to update their last seen
      * @return true if the sql operation of updating is successful
      */
@@ -227,6 +235,7 @@ public class SQLDB {
 
     /**
      * deletes a user from the Database
+     *
      * @param username name that is supposed to be deleted
      * @return true if the sql operation of deletion is successful
      */
@@ -247,6 +256,7 @@ public class SQLDB {
 
     /**
      * The first step of establishing a connection
+     *
      * @param username users input of their username
      * @param password users input of their password
      * @return true if the credentials match the Database and the sql operation of matching succeeds
@@ -277,6 +287,7 @@ public class SQLDB {
     /**
      * users password when created, is stored in MD5 format
      * (hehe, we are not stupid to store as a plain string)
+     *
      * @param password string that needs encryption
      * @return the encrypted password
      */
@@ -299,6 +310,7 @@ public class SQLDB {
 
     /**
      * A group must be in the database for a user to join, this method validates it
+     *
      * @param groupName the group name user wants to join or to retrive messages from
      * @return true if there exists a group in the Database and the SQL operation is successful
      */
@@ -322,6 +334,7 @@ public class SQLDB {
 
     /**
      * If a group doesn't exists it can be create or if a user wants, they can crete one
+     *
      * @param groupName name of the group
      * @return true if the sql operation of creating a group with a valid name is successful
      */
@@ -344,6 +357,7 @@ public class SQLDB {
 
     /**
      * you don't want a group? no problem just delete it
+     *
      * @param groupName name which needs to be deleted
      * @return true if the groupname exixts and the sql operation of deleting is successful
      */
@@ -365,7 +379,8 @@ public class SQLDB {
 
     /**
      * well, you might want to change the groupname at some point
-     * @param groupName the existing group
+     *
+     * @param groupName    the existing group
      * @param newGroupName new name for the group
      * @return true if group name exists, new name is valid and the sql operation is successful
      */
@@ -389,6 +404,7 @@ public class SQLDB {
 
     /**
      * retrives the group information
+     *
      * @param groupName group that is expected to be retrieved
      * @return list of information of the group which can be user details
      */
@@ -419,6 +435,7 @@ public class SQLDB {
 
     /**
      * gets the userID for a given user
+     *
      * @param username name used to retrive the ID from Database
      * @return the member ID (which is an integer)
      */
@@ -446,6 +463,7 @@ public class SQLDB {
 
     /**
      * gets the user name
+     *
      * @param userId unique interger for retrieval
      * @return the name of the user according to the ID
      */
@@ -471,6 +489,7 @@ public class SQLDB {
 
     /**
      * Each group is given a unique ID which can be retrieved
+     *
      * @param groupName name against which the sql operation is performed
      * @return the unique number of the group
      */
@@ -496,8 +515,9 @@ public class SQLDB {
 
     /**
      * when the situation of adding a member arises
+     *
      * @param groupName group to which an user is added
-     * @param username the user who is expected to be added
+     * @param username  the user who is expected to be added
      * @return true of the group and user exists and sql operation is successful
      */
     public boolean addGroupMember(String groupName, String username) {
@@ -523,8 +543,9 @@ public class SQLDB {
 
     /**
      * stroes the messages for each user
+     *
      * @param from user who sent the message
-     * @param to user who received the message
+     * @param to   user who received the message
      * @param text message sene from one user to other
      * @return true from user exists and sql operation is successful
      */
@@ -553,9 +574,10 @@ public class SQLDB {
 
     /**
      * stores the messages for a group
-     * @param from user who sent the message
+     *
+     * @param from  user who sent the message
      * @param group group to which the message is sent
-     * @param text the messages sent by the user/users
+     * @param text  the messages sent by the user/users
      * @return true if users/groups exists and sql operation is successful
      */
     public boolean storeMessageGroup(String from, String group, String text) {
@@ -582,6 +604,7 @@ public class SQLDB {
 
     /**
      * stores the broadcast messages
+     *
      * @param from user who sent the message
      * @param text message sent by the user
      * @return true if the user exists and sql operation is successful
@@ -611,6 +634,7 @@ public class SQLDB {
     /**
      * SPRINT 3(PREM)
      * retrieve message id of last message send by user
+     *
      * @param user name of user
      * @return message id of last message sent by user
      */
@@ -634,11 +658,12 @@ public class SQLDB {
     /**
      * SPRINT 3(PREM)
      * set recall flag to true for last message send by respective user
-     * @param userName the user name
+     *
+     * @param userName  the user name
      * @param messageID id of message whose recall flag needs to be set
      * @return true if updation is successful otherwise false
      */
-    public boolean updateMessage(String userName, int messageID) {
+    public boolean setRecallFlagMessage(String userName, int messageID) {
         boolean flag = false;
         try {
             String sqlCreateUser = "UPDATE message_details SET isRecall=? WHERE messageID=? AND fromUser=?";
@@ -657,34 +682,44 @@ public class SQLDB {
 
     /**
      * retrieves all the messages of a given user
+     *
      * @param user name of the user
      * @return list of all the broadcast, group, individual messsages sent/received by the user
      */
-    public String getAllMessagesForUser(String user) {
-        int userID = getUserID(user);
+    public String getAllMessagesForUser(String user, String type) {
+        String username = "";
+        if (type.equals("fromUser")) {
+            username = Integer.toString(getUserID(user));
+        } else {
+            username = user;
+        }
         String msgInformation = "";
         SortedMap<Timestamp, String> userHashMap = new TreeMap<Timestamp, String>();
         SortedMap<Timestamp, String> groupHashMap = new TreeMap<Timestamp, String>();
         SortedMap<Timestamp, String> broadcastHashMap = new TreeMap<Timestamp, String>();
         try {
-            String sql = "SELECT toUser, IsGroupMsg, message, creationTime, IsBroadcast FROM message_details WHERE fromUser = '" + userID + "'";
+            String sql = "SELECT messageID, fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast FROM message_details WHERE " + type + " = '" + username + "'" + "AND isRecall = 0";
             try (Statement pStatement = connection.createStatement()) {
                 try (ResultSet rs = pStatement.executeQuery(sql)) {
                     while (rs.next()) {
                         String to = rs.getString("toUser");
+                        String from = rs.getString("fromUser");
                         boolean groupMsg = rs.getBoolean("IsGroupMsg");
                         String msg = rs.getString("message");
                         Timestamp t = rs.getTimestamp("creationTime");
                         boolean broadcastMsg = rs.getBoolean("IsBroadcast");
+                        int id = rs.getInt("messageID");
+                        String fromName = this.getUsername(Integer.parseInt(from));
+                        String toName = to;
                         if (groupMsg) {
-                            groupHashMap.put(t, "TimeStamp:" + t.toString() + " => Group:" + to + ", Message:" + msg + "\n");
-                            System.out.println("TimeStamp:" + t.toString() + " => Group:" + to + ", Message:" + msg + "\n");
+                            groupHashMap.put(t, id + " TimeStamp:" + t.toString() + " => fromUser:" + fromName + ", toGroup:" + toName + ", Message:" + msg + "\n");
+                            System.out.println("TimeStamp:" + t.toString() + " => Group:" + toName + ", Message:" + msg + "\n");
                         } else if (broadcastMsg) {
-                            broadcastHashMap.put(t, "TimeStamp:" + t.toString() + " => Broadcast to all users, Message:" + msg + "\n");
+                            broadcastHashMap.put(t, id+" TimeStamp:" + t.toString() + " => fromUser:" + fromName + ", Broadcast to all users, Message:" + msg + "\n");
                             System.out.println("TimeStamp:" + t.toString() + " => Broadcast to all users, Message:" + msg + "\n");
                         } else {
-                            userHashMap.put(t, "TimeStamp:" + t.toString() + " => User:" + to + ", Message:" + msg + "\n");
-                            System.out.println("TimeStamp:" + t.toString() + " => User:" + to + ", Message:" + msg + "\n");
+                            userHashMap.put(t, id+" TimeStamp:" + t.toString() + " => fromUser:" + fromName + ", toUser:" + toName + ", Message:" + msg + "\n");
+                            System.out.println("TimeStamp:" + t.toString() + " => toUser:" + toName + ", Message:" + msg + "\n");
                         }
                     }
                 }
@@ -692,22 +727,23 @@ public class SQLDB {
         } catch (SQLException e) {
             LOGGER.info("Caught SQL Exception:" + e.toString());
         }
-        msgInformation = msgInformation + "------------------BROADCAST MESSAGES------------------" + "\n";
-        Iterator i = broadcastHashMap.entrySet().iterator();
-        while (i.hasNext()) {
-            Map.Entry m = (Map.Entry) i.next();
-            msgInformation = msgInformation + m.getValue();
+        Iterator i;
+        if (type.equals("fromUser")) {
+            msgInformation = msgInformation + "\n------------------BROADCAST MESSAGES------------------" + "\n";
+            i = broadcastHashMap.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry m = (Map.Entry) i.next();
+                msgInformation = msgInformation + m.getValue();
+            }
+            msgInformation = msgInformation + "------------------GROUP MESSAGES------------------" + "\n";
+            i = groupHashMap.entrySet().iterator();
+            while (i.hasNext()) {
+                Map.Entry m = (Map.Entry) i.next();
+                msgInformation = msgInformation + m.getValue();
+            }
         }
-
-        msgInformation = msgInformation + "------------------GROUP MESSAGES------------------" + "\n";
-        i = groupHashMap.entrySet().iterator();
-        while (i.hasNext()) {
-            Map.Entry m = (Map.Entry) i.next();
-            msgInformation = msgInformation + m.getValue();
-        }
-
         // for all messages which are broadcast
-        msgInformation = msgInformation + "------------------USER MESSAGES------------------" + "\n";
+        msgInformation = msgInformation + "------------------DIRECT MESSAGES------------------" + "\n";
         i = userHashMap.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry m = (Map.Entry) i.next();
@@ -717,13 +753,13 @@ public class SQLDB {
     }
 
     /**
-     * SPRINT 3(PREM)
      * retrieves all the queued messages of a given user
-     * @param user name of the user
+     *
+     * @param user     name of the user
      * @param lastSeen last seen of respective user
      * @return list of all the queued messsages received by the user
      */
-    public List<String> getAllQueuedMessagesForUser(String user,Timestamp lastSeen) {
+    public List<String> getAllQueuedMessagesForUser(String user, Timestamp lastSeen) {
         List<String> msgInformation = new ArrayList<>();
         SortedMap<Timestamp, String> queuedMsgs = new TreeMap<Timestamp, String>();
         try {
@@ -739,18 +775,18 @@ public class SQLDB {
                         boolean broadcastMsg = rs.getBoolean("IsBroadcast");
                         boolean recallMsg = rs.getBoolean("isRecall");
                         // if not a recall message then store it
-                        if(!recallMsg) {
-                            if(groupMsg) {
+                        if (!recallMsg) {
+                            if (groupMsg) {
                                 //if user is memeber of that group then store msg
-                                if(SQLDB.getInstance().isGroupMember(to, user)) {
-                                    queuedMsgs.put(t,"fromUser:" + fromUser + ",Message:" + msg);
+                                if (SQLDB.getInstance().isGroupMember(to, user)) {
+                                    queuedMsgs.put(t, "fromUser:" + fromUser + ",Message:" + msg);
                                 }
-                            } else if(broadcastMsg) {
+                            } else if (broadcastMsg) {
                                 //if broadcast msg then store msg
-                                queuedMsgs.put(t,"fromUser:" + fromUser + ",Message:" + msg);
-                            } else if(to.equals(user)) {
+                                queuedMsgs.put(t, "fromUser:" + fromUser + ",Message:" + msg);
+                            } else if (to.equals(user)) {
                                 //if direct message belongs to respective user then store msg
-                                queuedMsgs.put(t,"fromUser:" + fromUser + ",Message:" + msg);
+                                queuedMsgs.put(t, "fromUser:" + fromUser + ",Message:" + msg);
                             }
                         }
                     }
@@ -763,15 +799,16 @@ public class SQLDB {
         Iterator i = queuedMsgs.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry m = (Map.Entry) i.next();
-            msgInformation.add((String)m.getValue());
+            msgInformation.add((String) m.getValue());
         }
         return msgInformation;
     }
 
     /**
      * gets the messages of a group in which the user is present
+     *
      * @param userName name of the user
-     * @param group name of thr group
+     * @param group    name of thr group
      * @return list of all messages in the group in which the user is present
      */
     public String getAllMessagesForGroup(String userName, String group) {
@@ -784,7 +821,7 @@ public class SQLDB {
         try {
             // check whether user belongs to specific group or not
 //            String sql = "SELECT fromUser, message, creationTime FROM message_details WHERE toUser='".concat(group).concat("' AND IsGroupMsg = ");
-            String sql = "SELECT fromUser, message, creationTime FROM message_details WHERE toUser=? AND IsGroupMsg =?";
+            String sql = "SELECT messageID, isRecall, fromUser, message, creationTime FROM message_details WHERE toUser=? AND IsGroupMsg =?";
             try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
                 pStatement.setString(1, group);
                 pStatement.setBoolean(2, true);
@@ -793,7 +830,11 @@ public class SQLDB {
                         String from = getUsername(rs.getInt("fromUser"));
                         String msg = rs.getString("message");
                         Timestamp t = rs.getTimestamp("creationTime");
-                        hmap.put(t, "TimeStamp:" + t.toString() + " => From:" + from + ", Message:" + msg + "\n");
+                        boolean recallMsg = rs.getBoolean("isRecall");
+                        int id = rs.getInt("messageID");
+                        if (!recallMsg) {
+                            hmap.put(t, id + "TimeStamp:" + t.toString() + " => From:" + from + ", Message:" + msg + "\n");
+                        }
                     }
                 }
             }
@@ -809,9 +850,112 @@ public class SQLDB {
         return msgInformation;
     }
 
+    /**
+     * SPRINT 3(PREM)
+     * get all messages send by specific user
+     *
+     * @param fromUser name of user
+     * @return list of messages which are send by respective user
+     */
+    public List<String> getAllMessagesSendBySender(String fromUser) {
+        List<String> getAllMessages = new ArrayList<>();
+        try {
+            String sql = "SELECT message FROM message_details WHERE fromUser=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
+                pStatement.setInt(1, getUserID(fromUser));
+                try (ResultSet rs = pStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String msg = rs.getString("message");
+                        getAllMessages.add(msg);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return getAllMessages;
+    }
 
     /**
+     * SPRINT 3(PREM)
+     * get all messageid of messages send by specific user
      *
+     * @param fromUser name of user
+     * @return list of message id which were send by respective user
+     */
+    public List<Integer> getAllMessageID(String fromUser) {
+        List<Integer> getAllMessageID = new ArrayList<>();
+        try {
+            String sql = "SELECT messageID FROM message_details WHERE fromUser=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
+                pStatement.setInt(1, getUserID(fromUser));
+                try (ResultSet rs = pStatement.executeQuery()) {
+                    while (rs.next()) {
+                        int msgID = rs.getInt("messageID");
+                        getAllMessageID.add(msgID);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return getAllMessageID;
+    }
+
+    /**
+     * SPRINT 3(PREM)
+     * get all messages delivered to specific user
+     *
+     * @param toUser name of user or group
+     * @return list of messages which are delivered to respective user
+     */
+    public List<String> getAllMessagesReceivedByReceiver(String toUser) {
+        List<String> getAllMessages = new ArrayList<>();
+        try {
+            String sql = "SELECT message FROM message_details WHERE toUser=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
+                pStatement.setString(1, toUser);
+                try (ResultSet rs = pStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String msg = rs.getString("message");
+                        getAllMessages.add(msg);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return getAllMessages;
+    }
+
+    /**
+     * SPRINT 3(PREM)
+     * get all messages delivered at specific date
+     *
+     * @param d date
+     * @return list of messages which are delivered at specific date
+     */
+    public List<String> getAllMessagesDeliveredAtSpecificDate(Date d) {
+        List<String> getAllMessages = new ArrayList<>();
+        try {
+            String sql = "SELECT message FROM message_details WHERE DATE(creationTime)=?";
+            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
+                pStatement.setDate(1, d);
+                try (ResultSet rs = pStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String msg = rs.getString("message");
+                        getAllMessages.add(msg);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return getAllMessages;
+    }
+
+
+    /**
      * @return list of all users in the DB
      */
     public List<String> retrieveAllUsers() {
@@ -835,6 +979,7 @@ public class SQLDB {
 
     /**
      * to see all the members in a group
+     *
      * @param groupName name of the group that is expected to be retrieved
      * @return list of users in the group
      */
@@ -862,7 +1007,6 @@ public class SQLDB {
     }
 
     /**
-     *
      * @return all the groups in the DB
      */
     public List<String> retrieveAllGroups() {
@@ -887,8 +1031,9 @@ public class SQLDB {
 
     /**
      * deletes a user from the group
+     *
      * @param groupName name in which deletion occurs
-     * @param username name of the user who is supposed to be deleted
+     * @param username  name of the user who is supposed to be deleted
      * @return true if user exists and sql operation is successful
      */
     public boolean deleteGroupMember(String groupName, String username) {
@@ -912,8 +1057,9 @@ public class SQLDB {
 
     /**
      * check if a user is a member of a group
+     *
      * @param groupName name of the group in which the check occurs
-     * @param userName name of the user who is supposed to be checked
+     * @param userName  name of the user who is supposed to be checked
      * @return true if the user exists in the group
      */
     public boolean isGroupMember(String groupName, String userName) {
@@ -941,6 +1087,7 @@ public class SQLDB {
 
     /**
      * check if a user is an agency or not
+     *
      * @param userName name of the user who is supposed to be checked
      * @return user's role type
      */
@@ -965,6 +1112,7 @@ public class SQLDB {
 
     /**
      * check if a user is an agency or not
+     *
      * @param userName name of the user who is supposed to be checked
      * @return true if the user is agency/has agency privilege
      */
@@ -972,8 +1120,8 @@ public class SQLDB {
         boolean flag = false;
         try {
             String sqlCheckUser = "SELECT COUNT(*) FROM wiretapUsers WHERE userWiretapped=?";
-            int wiretapCandidateId = (isGroup == 1)? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
-            if(isGroup == 1) {
+            int wiretapCandidateId = (isGroup == 1) ? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
+            if (isGroup == 1) {
                 sqlCheckUser = "SELECT COUNT(*) FROM wiretapGroups WHERE userWiretapped=?";
             }
 
@@ -995,7 +1143,7 @@ public class SQLDB {
         int insertedRowID = -1;
 
         try {
-            if(getUserRole(requestingUser) != USER_ROLE_AGENCY_ID) return insertedRowID;
+            if (getUserRole(requestingUser) != USER_ROLE_AGENCY_ID) return insertedRowID;
             int requestingUserId = getUserID(requestingUser);
             int wireTapCandidate = (isGroup == 1) ? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
             if (wireTapCandidate == -1) return insertedRowID;
@@ -1008,8 +1156,7 @@ public class SQLDB {
                 pStatement.setInt(4, isGroup);
                 int wiretapCount = pStatement.executeUpdate();
                 ResultSet keySet = pStatement.getGeneratedKeys();
-                if(keySet.next())
-                {
+                if (keySet.next()) {
                     insertedRowID = keySet.getInt(1);
                 }
             }
@@ -1022,26 +1169,24 @@ public class SQLDB {
     public Map<Integer, String> getWiretapRequests(String requestingUser, String agencyUser) {
         Map<Integer, String> wiretapRequests = new HashMap<>();
         String wiretapRequestString = "";
-        if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return wiretapRequests;
+        if (getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return wiretapRequests;
         try {
             int agencyUserId = getUserID(agencyUser);
             String sqlRetrieveAllUsers = "SELECT * FROM wiretapRequests WHERE userRequestingId LIKE ? AND isApproved=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveAllUsers)) {
-                if(agencyUserId == -1) {
+                if (agencyUserId == -1) {
                     pStatement.setString(1, "%");
-                }
-                else {
+                } else {
                     pStatement.setInt(1, agencyUserId);
                 }
                 pStatement.setInt(2, 0);
                 try (ResultSet requestSet = pStatement.executeQuery()) {
                     while (requestSet.next()) {
-                        wiretapRequestString = "Agency " + agencyUser + " has made a request to wiretap ";
-                        if(requestSet.getInt("isGroup") == 1) {
+                        wiretapRequestString = "Agency " + this.getUsername(requestSet.getInt("userRequestingId")) + " has made a request to wiretap ";
+                        if (requestSet.getInt("isGroup") == 1) {
                             wiretapRequestString += "group: ";
                             wiretapRequestString += getGroupName(requestSet.getInt("userVictimId"));
-                        }
-                        else {
+                        } else {
                             wiretapRequestString += "user: ";
                             wiretapRequestString += getUsername(requestSet.getInt("userVictimId"));
                         }
@@ -1061,23 +1206,22 @@ public class SQLDB {
     public boolean setWireTap(String requestingUser, String agencyUsername) {
         boolean flag = false;
         try {
-            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
+            if (getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
             String sqlStatement = "SELECT * FROM wiretapRequests WHERE userRequestingId=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
                 pStatement.setInt(1, getUserID(agencyUsername));
                 try (ResultSet requestSet = pStatement.executeQuery()) {
                     while (requestSet.next()) {
-                        if(requestSet.getInt("isGroup") == 1) {
+                        if (requestSet.getInt("isGroup") == 1) {
                             sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
-                        }
-                        else {
+                        } else {
                             sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
                         }
 
                         try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
                             subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
                             subPStatement.setInt(2, requestSet.getInt("userVictimId"));
-                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
+                            subPStatement.setInt(3, requestSet.getInt("requestDurationDays"));
                             int wiretapCount = subPStatement.executeUpdate();
                             flag = (wiretapCount > 0);
                         }
@@ -1092,32 +1236,32 @@ public class SQLDB {
 
     /**
      * set wiretap on a user or a group
-     * @param requestingUser name of the user requesting wiretap
+     *
+     * @param requestingUser  name of the user requesting wiretap
      * @param userOrGroupName name or group name on whom the wire tap is supposed to be set
-     * @param isGroup 1 if wire tap request is for group, 0 otherwise
-     * @param isSetWiretap 1 if user is requesting to set wire tap, 0 otherwise
+     * @param isGroup         1 if wire tap request is for group, 0 otherwise
+     * @param isSetWiretap    1 if user is requesting to set wire tap, 0 otherwise
      * @return true if the wire tap was successfully set
      */
     public boolean setWireTap(String requestingUser, int requestId) {
         boolean flag = false;
         try {
-            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
+            if (getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
             String sqlStatement = "SELECT * FROM wiretapRequests WHERE requestId=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
                 pStatement.setInt(1, requestId);
                 try (ResultSet requestSet = pStatement.executeQuery()) {
                     while (requestSet.next()) {
-                        if(requestSet.getInt("isGroup") == 1) {
+                        if (requestSet.getInt("isGroup") == 1) {
                             sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
-                        }
-                        else {
+                        } else {
                             sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
                         }
 
                         try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
                             subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
                             subPStatement.setInt(2, requestSet.getInt("userVictimId"));
-                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
+                            subPStatement.setInt(3, requestSet.getInt("requestDurationDays"));
                             int wiretapCount = subPStatement.executeUpdate();
                             flag = (wiretapCount > 0);
                         }
@@ -1132,8 +1276,9 @@ public class SQLDB {
 
     /**
      * get wiretapped users
+     *
      * @param requestingUser name of the user requesting wiretapped users/groups
-     * @param isGroup true if wire tap request is for group, false otherwise
+     * @param isGroup        true if wire tap request is for group, false otherwise
      * @return a list of users/groups wiretapped by the requestingUser
      */
     public List<String> getWiretappedUsers(String agencyUsername, int isGroup) {
@@ -1143,7 +1288,7 @@ public class SQLDB {
         try {
             requestingUserId = getUserID(agencyUsername);
             sqlCheckUser = "SELECT userWiretapped FROM wiretapUsers WHERE userWireTapping=?";
-            if(isGroup == 1) {
+            if (isGroup == 1) {
                 sqlCheckUser = "SELECT userWiretapped FROM wiretapGroups WHERE userWireTapping=?";
             }
 
@@ -1164,8 +1309,9 @@ public class SQLDB {
 
     /**
      * set wiretap on a user or a group
+     *
      * @param requestingUser name of the user requesting wiretapped users/groups
-     * @param isGroup true if wire tap request is for group, false otherwise
+     * @param isGroup        true if wire tap request is for group, false otherwise
      * @return a list of users/groups wiretapped by the requestingUser
      */
     public List<String> getAgencyList(String userOrGroupName, int isGroup, int isIncludeExpired) {
@@ -1176,7 +1322,7 @@ public class SQLDB {
             int wireTapCandidate = (isGroup == 1) ? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
             sqlCheckUser = "SELECT w.userWiretapping"
                     + " FROM wiretapUsers w WHERE userWireTapped=? AND isGroup=?";
-            if(isIncludeExpired == 0) {
+            if (isIncludeExpired == 0) {
                 sqlCheckUser += " AND CURDATE() < DATE_ADD(w.creationTime, INTERVAL w.expireAfterDays DAY)";
             }
             try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser)) {
@@ -1230,6 +1376,7 @@ public class SQLDB {
 
     /**
      * gets the group name
+     *
      * @param groupId unique interger for retrieval
      * @return the name of the group according to the ID
      */

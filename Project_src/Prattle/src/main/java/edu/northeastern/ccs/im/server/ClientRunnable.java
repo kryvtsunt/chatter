@@ -144,7 +144,9 @@ public class ClientRunnable implements Runnable {
     /**
      * Keyword in the user input for CRUD operations. Used to view the users messages
      */
-    private static final String MESSAGES = "MESSAGES";
+    private static final String SEND_MESSAGES = "SEND_MESSAGES";
+
+    private static final String RECEIVE_MESSAGES = "RECEIVE_MESSAGES";
 
     /**
      * Keyword in the user input for CRUD operations. Used to see all the existing groups
@@ -592,7 +594,7 @@ public class ClientRunnable implements Runnable {
         }
         //if message is a recall message
         else if (msg.isRecall()) {
-            recallMessage();
+            recallMessage(msg);
         } else if (msg.isWTRMessage()) {
             wiretapRequestMessage(msg);
         } else if (msg.isWTAMessage()) {
@@ -604,9 +606,8 @@ public class ClientRunnable implements Runnable {
     /**
      * method used to update recall status for last message send by user
      */
-    private void recallMessage() {
-        int msgID = SQLDB.getInstance().getLastMessageID(getName());
-        SQLDB.getInstance().updateMessage(getName(), msgID);
+    private void recallMessage(Message msg) {
+        SQLDB.getInstance().setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()));
     }
 
     private void wiretapRequestMessage(Message msg) {
@@ -809,8 +810,11 @@ public class ClientRunnable implements Runnable {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
         } else if (msg.getText().equals(PASWD)) {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
-        } else if (msg.getText().equals(MESSAGES)) {
-            String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
+        } else if (msg.getText().equals(SEND_MESSAGES)) {
+            String logs = SQLDB.getInstance().getAllMessagesForUser(getName(), "fromUser");
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
+        } else if (msg.getText().equals(RECEIVE_MESSAGES)) {
+            String logs = SQLDB.getInstance().getAllMessagesForUser(getName(), "toUser");
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
         } else if (msg.getText().contains(GROUP_MESSAGES) && msg.getText().split(GROUP_MESSAGES).length == 2) {
             String group = msg.getText().split(GROUP_MESSAGES)[1];
@@ -837,11 +841,8 @@ public class ClientRunnable implements Runnable {
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
             }
-        } else if (msg.getText().equals(GROUPS)) {
-            String groups = SQLDB.getInstance().retrieveAllGroups().toString();
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
-        } else if (msg.getText().contains(REQUESTS)) {
-            String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "agencyOne").toString();
+        }  else if (msg.getText().contains(REQUESTS)) {
+            String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "").toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
         }
     }
