@@ -84,7 +84,11 @@ public class Message {
         /**
          * Set the role
          */
-        ROLE("RLE");
+        ROLE("RLE"),
+        /**
+         * Message from user to recall last message
+         */
+        RECALL("RCL");
 
 
 
@@ -168,6 +172,8 @@ public class Message {
         this(handle, null, null, null);
     }
 
+
+
     /**
      * Create a new message that contains a command sent the server that requires a
      * single argument. This message contains the given handle and the single
@@ -199,6 +205,15 @@ public class Message {
      */
     public static Message makeBroadcastMessage(String myName, String text) {
         return new Message(MessageType.BROADCAST, myName, null, text);
+    }
+
+    /**
+     * Create a new message to continue the recall process.
+     *
+     * @return Instance of Message that specifies the process is of recalling a message.
+     */
+    public static Message makeRecallMessage(String myName) {
+        return new Message(MessageType.RECALL, myName, null, null);
     }
 
     /**
@@ -348,6 +363,8 @@ public class Message {
             result = makeWTPRequestMessage(srcName, dstName);
         }else if (handle.compareTo(MessageType.WTP.toString()) == 0) {
             result = makeWTPMessage(srcName, dstName);
+        } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
+            result = makeRecallMessage(srcName);
         }
         return result;
     }
@@ -511,6 +528,15 @@ public class Message {
      */
     public boolean isDisplayMessage() {
         return (msgType == MessageType.BROADCAST);
+    }
+
+    /**
+     * Determine if this message is a recall request by client.
+     *
+     * @return True if the message is a recall message; false otherwise
+     */
+    public boolean isRecall() {
+        return (msgType == MessageType.RECALL);
     }
 
 

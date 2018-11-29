@@ -275,21 +275,46 @@ public class ClientRunnable implements Runnable {
                     db.updateLastSeen(this.getName());
                 }
                 List<String> msgs = db.getAllQueuedMessagesForUser(this.getName(), db.retrieveLastSeen(this.getName()));
-                System.out.println(msgs.toString());
                 int role = db.getUserRole(this.getName());
                 if (role == 0){
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
                 } else if (role == 1){
-                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. " + lastSeen), getName());
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. "), getName());
                 } else if (role == 2){
-                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups" + lastSeen), getName());
-
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
                 }
+                sendAllQueuedMessages();
+
             } else {
                 validated = false;
             }
         }
     }
+
+    /**
+     * SPRINT 3(PREM)
+     * send all queued messages from all senders to respective user
+     */
+    private void sendAllQueuedMessages() {
+        Timestamp lastSeen = null;
+        try {
+            lastSeen = SQLDB.getInstance().retrieveLastSeen(this.getName());
+        } catch (Exception e){
+//            SQLDB.getInstance().updateLastSeen(this.getName());
+            return;
+        }
+        if(lastSeen != null) {
+            System.out.println("lastSeen of user is " + lastSeen.toString());
+            List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
+            for(String msg : queuedMessages) {
+                String fromUser = msg.split(",")[0].split(":")[1];
+                String message = msg.split(",")[1].split(":")[1];
+                Prattle.directMessage(Message.makeDirectMessage(fromUser,getName(),message),getName());
+            }
+        }
+    }
+
+
 
     /**
      * Process one of the special responses
@@ -564,7 +589,22 @@ public class ClientRunnable implements Runnable {
         } else if (msg.terminate()) {
             terminate();
         }
+        //if message is a recall message
+        else if (msg.isRecall()) {
+            recallMessage();
+        }
         // Otherwise, ignore it (for now).
+    }
+
+    /**
+     * SPRINT 3(PREM)
+     * method used to update recall status for last message send by user
+     */
+    private void recallMessage() {
+        int msgID = SQLDB.getInstance().getLastMessageID(getName());
+        if(SQLDB.getInstance().updateMessage(getName(),msgID)) {
+            return;
+        }
     }
 
 //    /**
@@ -595,7 +635,7 @@ public class ClientRunnable implements Runnable {
             SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
             Prattle.directMessage(msg, agency);
         }
-
+        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
         // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
 
@@ -628,6 +668,8 @@ public class ClientRunnable implements Runnable {
         String group = msg.getReceiver();
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
             List<String> users = db.retrieveGroupMembers(group);
+            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
+
             // check if the group is being wire tapped
             if(SQLDB.getInstance().isUserOrGroupWiretapped(group,1)) {
                 users.addAll(SQLDB.getInstance().getAgencyList(group, 1,0));
@@ -638,7 +680,6 @@ public class ClientRunnable implements Runnable {
                 users.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(),0,0));
             }
             for (String user : users) {
-                SQLDB.getInstance().storeMessageGroup(msg.getSender(), user, msg.getText());
                 Prattle.directMessage(msg, user);
             }
         }
@@ -802,7 +843,7 @@ public class ClientRunnable implements Runnable {
     public void terminateClient() {
         try {
             // Once the communication is done, close this connection.
-            SQLDB.getInstance().updateLastSeen(this.name);
+            SQLDB.getInstance().updateLastSeen(this.getName());
             input.close();
             socket.close();
         } catch (IOException e) {
