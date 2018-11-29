@@ -78,9 +78,9 @@ public class Message {
          */
         WTR("WTR"),
         /**
-         * Wiretap
+         * Wiretap approve
          */
-        WTP("WTP"),
+        WTA("WTA"),
         /**
          * Set the role
          */
@@ -232,12 +232,12 @@ public class Message {
         return new Message(MessageType.ROLE, myName, directTo, text);
     }
 
-    public static Message makeWTPRequestMessage(String myName, String directTo) {
-        return new Message(MessageType.WTR, myName, directTo, null);
+    public static Message makeWTRMessage(String myName, String directTo,String text) {
+        return new Message(MessageType.WTR, myName, directTo, text);
     }
 
-    public static Message makeWTPMessage(String myName, String directTo) {
-        return new Message(MessageType.WTP, myName, directTo, null);
+    public static Message makeWTAMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.WTA, myName, directTo, text);
     }
 
 
@@ -360,9 +360,9 @@ public class Message {
         } else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
             result = makeSetRoleMessage(srcName, dstName, text);
         }else if (handle.compareTo(MessageType.WTR.toString()) == 0) {
-            result = makeWTPRequestMessage(srcName, dstName);
-        }else if (handle.compareTo(MessageType.WTP.toString()) == 0) {
-            result = makeWTPMessage(srcName, dstName);
+            result = makeWTRMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WTA.toString()) == 0) {
+            result = makeWTAMessage(srcName, dstName, text);
         } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
             result = makeRecallMessage(srcName);
         }
@@ -544,8 +544,8 @@ public class Message {
         return (msgType == MessageType.WTR);
     }
 
-    public boolean isWTPMessage() {
-        return (msgType == MessageType.WTP);
+    public boolean isWTAMessage() {
+        return (msgType == MessageType.WTA);
     }
 
     public boolean isRoleMessage() {
