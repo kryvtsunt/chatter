@@ -549,15 +549,56 @@ public class ClientRunnable implements Runnable {
         // Otherwise, ignore it (for now).
     }
 
+//    /**
+//     * For communication between two users
+//     *
+//     * @param msg message sent from one user to other
+//     */
+//    private void directMessage(Message msg) {
+//        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+//        Prattle.directMessage(msg, msg.getReceiver());
+//    }
+
     /**
      * For communication between two users
      *
      * @param msg message sent from one user to other
      */
     private void directMessage(Message msg) {
-        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+        // Get list of agencies wiretapping sender and receiver
+        List<String> agencyList = new ArrayList<>();
+        if(SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(),0)) {
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 1,0));
+        }
+        if(SQLDB.getInstance().isUserOrGroupWiretapped(msg.getReceiver(),0)) {
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 1,0));
+        }
+        for(String agency : agencyList) {
+            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+            Prattle.directMessage(msg, agency);
+        }
+
+        // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
+
     }
+
+//    /**
+//     * for communication between a user and group
+//     *
+//     * @param msg message sent from the user to a group/groups
+//     */
+//    private void groupMessage(Message msg) {
+//        SQLDB db = SQLDB.getInstance();
+//        String group = msg.getReceiver();
+//        if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
+//            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
+//            List<String> users = db.retrieveGroupMembers(group);
+//            for (String user : users) {
+//                Prattle.directMessage(msg, user);
+//            }
+//        }
+//    }
 
     /**
      * for communication between a user and group
@@ -568,9 +609,18 @@ public class ClientRunnable implements Runnable {
         SQLDB db = SQLDB.getInstance();
         String group = msg.getReceiver();
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
-            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
             List<String> users = db.retrieveGroupMembers(group);
+            // check if the group is being wire tapped
+            if(SQLDB.getInstance().isUserOrGroupWiretapped(group,1)) {
+                users.addAll(SQLDB.getInstance().getAgencyList(group, 1,0));
+            }
+
+            // check if the sender is being wire tapped
+            if(SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(),0)) {
+                users.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(),0,0));
+            }
             for (String user : users) {
+                SQLDB.getInstance().storeMessageGroup(msg.getSender(), user, msg.getText());
                 Prattle.directMessage(msg, user);
             }
         }
