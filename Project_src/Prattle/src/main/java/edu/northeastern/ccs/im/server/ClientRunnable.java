@@ -615,10 +615,10 @@ public class ClientRunnable implements Runnable {
     }
 
     private void wiretapApproveMessage(Message msg) {
-        if (msg.getText().equals("")) {
+        if (msg.getText().equals("*")) {
             SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver());
         } else {
-            SQLDB.getInstance().setWireTap(msg.getSender(), msg.getText());
+            SQLDB.getInstance().setWireTap(msg.getSender(), Integer.parseInt(msg.getText()));
         }
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
     }
@@ -841,9 +841,13 @@ public class ClientRunnable implements Runnable {
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
             }
-        }  else if (msg.getText().contains(REQUESTS)) {
+        } else if (msg.getText().contains(REQUESTS)) {
             String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "").toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
+        } else if (msg.getText().contains("MESSAGE") && msg.getText().split("MESSAGE").length == 2) {
+            String content = msg.getText().split("MESSAGE")[1];
+            String msgs = SQLDB.getInstance().getAllMessageBasedOnContent(content).toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
         }
     }
 

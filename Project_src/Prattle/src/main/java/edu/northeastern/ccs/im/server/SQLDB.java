@@ -763,7 +763,7 @@ public class SQLDB {
         List<String> msgInformation = new ArrayList<>();
         SortedMap<Timestamp, String> queuedMsgs = new TreeMap<Timestamp, String>();
         try {
-            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > '" + lastSeen + "'";
+            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > '" + lastSeen + "'" + "AND IsBrodcast <> 1";
             try (Statement pStatement = connection.createStatement()) {
                 try (ResultSet rs = pStatement.executeQuery(sql)) {
                     while (rs.next()) {
@@ -900,6 +900,31 @@ public class SQLDB {
             LOGGER.info("Caught SQL Exception:" + e.toString());
         }
         return getAllMessageID;
+    }
+
+    /**
+     * SPRINT 3(PREM)
+     * get all messages which have content as substring
+     * @param content string to be searched for
+     * @return list of messages which have content as a substring
+     */
+    public List<String> getAllMessageBasedOnContent(String content) {
+        List<String> getAllMessages = new ArrayList<>();
+        try {
+            String sql = "SELECT message FROM message_details WHERE LOCATE(?,message)>0";
+            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
+                pStatement.setString(1, content);
+                try (ResultSet rs = pStatement.executeQuery()) {
+                    while (rs.next()) {
+                        String msg = rs.getString("message");
+                        getAllMessages.add(msg);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return getAllMessages;
     }
 
     /**
