@@ -616,6 +616,7 @@ public class ClientRunnable implements Runnable {
         }  else if (msg.isSetRoleMessage()) {
             setRole(msg);
         }
+
 //        else if (msg.is){
 //            LOGGER.getRootLogger().setLevel(Level.OFF);
 //        }
