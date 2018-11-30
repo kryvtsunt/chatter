@@ -565,7 +565,7 @@ public class Message {
         return (msgType == MessageType.REJECT);
     }
 
-    public boolean isChangeRoleMessage() {
+    public boolean isSetRoleMessage() {
         return (msgType == MessageType.ROLE);
     }
 

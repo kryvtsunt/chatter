@@ -215,7 +215,7 @@ public class IMConnection {
             String content = args[1];
             String[] to = destination.split(",");
             for (String directTo : to) {
-                Message dctMessage = Message.makeWTRMessage(userName, directTo, content);
+                Message dctMessage = Message.makeWiretapMessage(userName, directTo, content);
                 socketConnection.print(dctMessage);
             }
         } else if (message.contains("%>%")) {
@@ -224,7 +224,7 @@ public class IMConnection {
             String content = args[1];
             String[] to = destination.split(",");
             for (String directTo : to) {
-                Message dctMessage = Message.makeWTRMessage(userName, directTo, content);
+                Message dctMessage = Message.makeWiretapMessage(userName, directTo, content);
                 socketConnection.print(dctMessage);
             }
         } else if (message.contains(">>")) {
@@ -291,12 +291,25 @@ public class IMConnection {
             String[] args = message.split(" APPROVE ");
             String dest = args[0];
             String content = args[1];
-            Message crtMessage = Message.makeWTAMessage(userName, dest, content);
+            Message crtMessage = Message.makeWiretapApproveMessage(userName, dest, content);
+            socketConnection.print(crtMessage);
+        } else if (message.contains(" REJECT ")) {
+            String[] args = message.split(" REJECT ");
+            String dest = args[0];
+            String content = args[1];
+            Message crtMessage = Message.makeWiretapRejectMessage(userName, dest, content);
+            socketConnection.print(crtMessage);
+        } else if (message.contains(" ROLE ")) {
+            String[] args = message.split(" ROLE ");
+            String dest = args[0];
+            String content = args[1];
+            Message crtMessage = Message.makeSetRoleMessage(userName, dest, content);
             socketConnection.print(crtMessage);
         } else {
             Message bctMessage = Message.makeBroadcastMessage(userName, message);
             socketConnection.print(bctMessage);
         }
+
     }
 
     /**
