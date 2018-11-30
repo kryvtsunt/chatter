@@ -842,7 +842,7 @@ public class ClientRunnable implements Runnable {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
             }
         } else if (msg.getText().contains(REQUESTS)) {
-            String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "").toString();
+            String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "", 0).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
         } else if (msg.getText().contains("MESSAGE") && msg.getText().split("MESSAGE").length == 2) {
             String content = msg.getText().split("MESSAGE")[1];

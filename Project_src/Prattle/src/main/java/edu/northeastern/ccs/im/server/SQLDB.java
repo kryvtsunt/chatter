@@ -1191,27 +1191,29 @@ public class SQLDB {
         return insertedRowID;
     }
 
-    public Map<Integer, String> getWiretapRequests(String requestingUser, String agencyUser) {
+    public Map<Integer, String> getWiretapRequests(String requestingUser, String agencyUser, int isApproved) {
         Map<Integer, String> wiretapRequests = new HashMap<>();
         String wiretapRequestString = "";
-        if (getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return wiretapRequests;
+        if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return wiretapRequests;
         try {
             int agencyUserId = getUserID(agencyUser);
             String sqlRetrieveAllUsers = "SELECT * FROM wiretapRequests WHERE userRequestingId LIKE ? AND isApproved=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveAllUsers)) {
-                if (agencyUserId == -1) {
+                if(agencyUserId == -1) {
                     pStatement.setString(1, "%");
-                } else {
+                }
+                else {
                     pStatement.setInt(1, agencyUserId);
                 }
-                pStatement.setInt(2, 0);
+                pStatement.setInt(2, isApproved);
                 try (ResultSet requestSet = pStatement.executeQuery()) {
                     while (requestSet.next()) {
-                        wiretapRequestString = "Agency " + this.getUsername(requestSet.getInt("userRequestingId")) + " has made a request to wiretap ";
-                        if (requestSet.getInt("isGroup") == 1) {
+                        wiretapRequestString = "Agency " + getUsername(requestSet.getInt("userRequestingId")) + " has made a request to wiretap ";
+                        if(requestSet.getInt("isGroup") == 1) {
                             wiretapRequestString += "group: ";
                             wiretapRequestString += getGroupName(requestSet.getInt("userVictimId"));
-                        } else {
+                        }
+                        else {
                             wiretapRequestString += "user: ";
                             wiretapRequestString += getUsername(requestSet.getInt("userVictimId"));
                         }
@@ -1231,24 +1233,35 @@ public class SQLDB {
     public boolean setWireTap(String requestingUser, String agencyUsername) {
         boolean flag = false;
         try {
-            if (getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
-            String sqlStatement = "SELECT * FROM wiretapRequests WHERE userRequestingId=?";
+            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
+            String sqlStatement = "SELECT * FROM wiretapRequests WHERE userRequestingId=? AND isApproved=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
                 pStatement.setInt(1, getUserID(agencyUsername));
+                pStatement.setInt(2, 0);
                 try (ResultSet requestSet = pStatement.executeQuery()) {
                     while (requestSet.next()) {
-                        if (requestSet.getInt("isGroup") == 1) {
+                        if(requestSet.getInt("isGroup") == 1) {
                             sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
-                        } else {
+                        }
+                        else {
                             sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
                         }
 
                         try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
                             subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
                             subPStatement.setInt(2, requestSet.getInt("userVictimId"));
-                            subPStatement.setInt(3, requestSet.getInt("requestDurationDays"));
+                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
                             int wiretapCount = subPStatement.executeUpdate();
                             flag = (wiretapCount > 0);
+                            if(flag) {
+                                String sqlUpdateRequest = "UPDATE wiretapRequests SET isApproved=? WHERE userRequestingId=? AND isApproved=?";
+                                try (PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateRequest)) {
+                                    updateStatement.setInt(1, 1);
+                                    updateStatement.setInt(2, getUserID(agencyUsername));
+                                    updateStatement.setInt(3,0);
+                                    updateStatement.executeUpdate();
+                                }
+                            }
                         }
                     }
                 }
@@ -1261,35 +1274,46 @@ public class SQLDB {
 
     /**
      * set wiretap on a user or a group
-     *
-     * @param requestingUser  name of the user requesting wiretap
+     * @param requestingUser name of the user requesting wiretap
      * @param userOrGroupName name or group name on whom the wire tap is supposed to be set
-     * @param isGroup         1 if wire tap request is for group, 0 otherwise
-     * @param isSetWiretap    1 if user is requesting to set wire tap, 0 otherwise
+     * @param isGroup 1 if wire tap request is for group, 0 otherwise
+     * @param isSetWiretap 1 if user is requesting to set wire tap, 0 otherwise
      * @return true if the wire tap was successfully set
      */
     public boolean setWireTap(String requestingUser, int requestId) {
         boolean flag = false;
         try {
-            if (getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
-            String sqlStatement = "SELECT * FROM wiretapRequests WHERE requestId=?";
+            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
+            String sqlStatement = "SELECT * FROM wiretapRequests WHERE requestId=? AND isApproved=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
                 pStatement.setInt(1, requestId);
+                pStatement.setInt(2, 0);
                 try (ResultSet requestSet = pStatement.executeQuery()) {
                     while (requestSet.next()) {
-                        if (requestSet.getInt("isGroup") == 1) {
+                        if(requestSet.getInt("isGroup") == 1) {
                             sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
-                        } else {
+                        }
+                        else {
                             sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
                         }
 
                         try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
                             subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
                             subPStatement.setInt(2, requestSet.getInt("userVictimId"));
-                            subPStatement.setInt(3, requestSet.getInt("requestDurationDays"));
+                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
                             int wiretapCount = subPStatement.executeUpdate();
                             flag = (wiretapCount > 0);
+                            if(flag) {
+                                String updateRequestQ = "UPDATE wiretapRequests SET isApproved=? WHERE requestId=? AND isApproved=?";
+                                try (PreparedStatement updateStatement = connection.prepareStatement(updateRequestQ)) {
+                                    updateStatement.setInt(1, 1);
+                                    updateStatement.setInt(2, requestId);
+                                    updateStatement.setInt(3, 0);
+                                    updateStatement.executeUpdate();
+                                }
+                            }
                         }
+
                     }
                 }
             }
@@ -1298,6 +1322,10 @@ public class SQLDB {
         }
         return flag;
     }
+
+
+
+
 
     /**
      * get wiretapped users
