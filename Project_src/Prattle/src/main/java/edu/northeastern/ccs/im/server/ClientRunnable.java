@@ -642,12 +642,13 @@ public class ClientRunnable implements Runnable {
         // Get list of agencies wiretapping sender and receiver
         List<String> agencyList = new ArrayList<>();
         if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 1, 0));
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
         }
         if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getReceiver(), 0)) {
-            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 1, 0));
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 0, 0));
         }
         for (String agency : agencyList) {
+            System.out.println(agency);
             SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
             Prattle.directMessage(msg, agency);
         }
@@ -847,6 +848,9 @@ public class ClientRunnable implements Runnable {
         } else if (msg.getText().contains("MESSAGE") && msg.getText().split("MESSAGE").length == 2) {
             String content = msg.getText().split("MESSAGE")[1];
             String msgs = SQLDB.getInstance().getAllMessageBasedOnContent(content).toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
+        }  else if (msg.getText().contains("WIRETAPS")) {
+            String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
         }
     }

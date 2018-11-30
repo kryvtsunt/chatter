@@ -243,8 +243,8 @@ class SQLDBTest {
 
 
 
-        assertEquals(false, sqldb.getWiretapRequests("agencyUserTest", "agencyUserTest").size() > 0);
-        assertEquals(true,sqldb.getWiretapRequests("adminUserTest", "agencyUserTest").size() > 0);
+        assertEquals(false, sqldb.getWiretapRequests("agencyUserTest", "agencyUserTest", 0 ).size() > 0);
+        assertEquals(true,sqldb.getWiretapRequests("adminUserTest", "agencyUserTest", 0 ).size() > 0);
 
         assertEquals(false, sqldb.setWireTap("agencyUserTest", requestRowID));
         assertEquals(true,sqldb.setWireTap("adminUserTest", "agencyUserTest"));

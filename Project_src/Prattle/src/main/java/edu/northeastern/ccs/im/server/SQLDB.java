@@ -763,7 +763,7 @@ public class SQLDB {
         List<String> msgInformation = new ArrayList<>();
         SortedMap<Timestamp, String> queuedMsgs = new TreeMap<Timestamp, String>();
         try {
-            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > '" + lastSeen + "'" + "AND IsBrodcast <> 1";
+            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > '" + lastSeen + "'" + "AND IsBroadcast = 0";
             try (Statement pStatement = connection.createStatement()) {
                 try (ResultSet rs = pStatement.executeQuery(sql)) {
                     while (rs.next()) {
@@ -1349,7 +1349,7 @@ public class SQLDB {
                 pStatement.setInt(1, requestingUserId);
                 try (ResultSet userSet = pStatement.executeQuery()) {
                     while (userSet.next()) {
-                        tappedUsersOrGroups.add(userSet.getString("userWiretapped"));
+                        tappedUsersOrGroups.add(this.getUsername(userSet.getInt("userWiretapped")));
                     }
                 }
             }
