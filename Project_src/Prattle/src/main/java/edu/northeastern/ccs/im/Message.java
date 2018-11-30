@@ -76,11 +76,13 @@ public class Message {
         /**
          * Wiretap request
          */
-        WTR("WTR"),
+        WTP("WTP"),
         /**
          * Wiretap approve
          */
-        WTA("WTA"),
+        APPROVE("APR"),
+
+        REJECT("RJT"),
         /**
          * Set the role
          */
@@ -232,12 +234,16 @@ public class Message {
         return new Message(MessageType.ROLE, myName, directTo, text);
     }
 
-    public static Message makeWTRMessage(String myName, String directTo,String text) {
-        return new Message(MessageType.WTR, myName, directTo, text);
+    public static Message makeWiretapMessage(String myName, String directTo,String text) {
+        return new Message(MessageType.WTP, myName, directTo, text);
     }
 
-    public static Message makeWTAMessage(String myName, String directTo, String text) {
-        return new Message(MessageType.WTA, myName, directTo, text);
+    public static Message makeWiretapApproveMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.APPROVE, myName, directTo, text);
+    }
+
+    public static Message makeWiretapRejectMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.REJECT, myName, directTo, text);
     }
 
 
@@ -359,10 +365,12 @@ public class Message {
             result = makeLeaveMessage(srcName, text);
         } else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
             result = makeSetRoleMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.WTR.toString()) == 0) {
-            result = makeWTRMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.WTA.toString()) == 0) {
-            result = makeWTAMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WTP.toString()) == 0) {
+            result = makeWiretapMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.APPROVE.toString()) == 0) {
+            result = makeWiretapApproveMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.REJECT.toString()) == 0) {
+            result = makeWiretapRejectMessage(srcName, dstName, text);
         } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
             result = makeRecallMessage(srcName, text);
         }
@@ -546,15 +554,18 @@ public class Message {
     }
 
 
-    public boolean isWTRMessage() {
-        return (msgType == MessageType.WTR);
+    public boolean isWiretapMessage() {
+        return (msgType == MessageType.WTP);
     }
 
-    public boolean isWTAMessage() {
-        return (msgType == MessageType.WTA);
+    public boolean isApproveMessage() {
+        return (msgType == MessageType.APPROVE);
+    }
+    public boolean isRejectMessage() {
+        return (msgType == MessageType.REJECT);
     }
 
-    public boolean isRoleMessage() {
+    public boolean isChangeRoleMessage() {
         return (msgType == MessageType.ROLE);
     }
 

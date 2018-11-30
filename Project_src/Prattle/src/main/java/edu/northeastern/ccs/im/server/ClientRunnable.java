@@ -175,6 +175,9 @@ public class ClientRunnable implements Runnable {
 
     private static final String REQUESTS = "REQUESTS";
 
+    private static final String MESSAGE = "MESSAGE ";
+    private static final String WIRETAPS = "WIRETAPS";
+
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -596,10 +599,14 @@ public class ClientRunnable implements Runnable {
         //if message is a recall message
         else if (msg.isRecall()) {
             recallMessage(msg);
-        } else if (msg.isWTRMessage()) {
-            wiretapRequestMessage(msg);
-        } else if (msg.isWTAMessage()) {
-            wiretapApproveMessage(msg);
+        } else if (msg.isWiretapMessage()) {
+            wiretapRequest(msg);
+        } else if (msg.isApproveMessage()) {
+            wiretapApprove(msg);
+        } else if (msg.isRejectMessage()) {
+            wiretapReject(msg);
+        }  else if (msg.isChangeRoleMessage()) {
+            changeRole(msg);
         }
         // Otherwise, ignore it (for now).
     }
@@ -611,11 +618,15 @@ public class ClientRunnable implements Runnable {
         SQLDB.getInstance().setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()));
     }
 
-    private void wiretapRequestMessage(Message msg) {
+    private void wiretapRequest(Message msg) {
         SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
     }
 
-    private void wiretapApproveMessage(Message msg) {
+    private void changeRole(Message msg) {
+        SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
+    }
+
+    private void wiretapApprove(Message msg) {
         if (msg.getText().equals("*")) {
             SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver());
         } else {
@@ -624,15 +635,15 @@ public class ClientRunnable implements Runnable {
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
     }
 
-//    /**
-//     * For communication between two users
-//     *
-//     * @param msg message sent from one user to other
-//     */
-//    private void directMessage(Message msg) {
-//        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
-//        Prattle.directMessage(msg, msg.getReceiver());
-//    }
+    private void wiretapReject(Message msg) {
+        if (msg.getText().equals("*")) {
+            SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver());
+        } else {
+            SQLDB.getInstance().setWireTap(msg.getSender(), Integer.parseInt(msg.getText()));
+        }
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
+    }
+
 
     /**
      * For communication between two users
@@ -658,23 +669,6 @@ public class ClientRunnable implements Runnable {
         Prattle.directMessage(msg, msg.getReceiver());
 
     }
-
-//    /**
-//     * for communication between a user and group
-//     *
-//     * @param msg message sent from the user to a group/groups
-//     */
-//    private void groupMessage(Message msg) {
-//        SQLDB db = SQLDB.getInstance();
-//        String group = msg.getReceiver();
-//        if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
-//            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
-//            List<String> users = db.retrieveGroupMembers(group);
-//            for (String user : users) {
-//                Prattle.directMessage(msg, user);
-//            }
-//        }
-//    }
 
     /**
      * for communication between a user and group
@@ -846,13 +840,15 @@ public class ClientRunnable implements Runnable {
         } else if (msg.getText().contains(REQUESTS)) {
             String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "", 0).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
-        } else if (msg.getText().contains("MESSAGE") && msg.getText().split("MESSAGE").length == 2) {
-            String content = msg.getText().split("MESSAGE")[1];
+        } else if (msg.getText().contains(MESSAGE) && msg.getText().split(MESSAGE).length == 2) {
+            String content = msg.getText().split(MESSAGE)[1];
             String msgs = SQLDB.getInstance().getAllMessageBasedOnContent(content).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
-        }  else if (msg.getText().contains("WIRETAPS")) {
+        }  else if (msg.getText().contains(WIRETAPS)) {
             String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Wrong Request"), getName());
         }
     }
 
