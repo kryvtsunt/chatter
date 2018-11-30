@@ -305,7 +305,15 @@ public class IMConnection {
             String content = args[1];
             Message crtMessage = Message.makeSetRoleMessage(userName, dest, content);
             socketConnection.print(crtMessage);
-        } else {
+        }
+        else if (message.equals("LOGGER")) {
+            Message lgMessage = Message.makeLoggerMessage(userName);
+            socketConnection.print(lgMessage);
+        }
+        else if (message.equals("PARENT_CONTROL")) {
+            Message pcMessage = Message.makePControlMessage(userName);
+            socketConnection.print(pcMessage);
+        }else {
             Message bctMessage = Message.makeBroadcastMessage(userName, message);
             socketConnection.print(bctMessage);
         }

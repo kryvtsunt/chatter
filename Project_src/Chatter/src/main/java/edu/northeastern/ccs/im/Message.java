@@ -90,7 +90,11 @@ public class Message {
         /**
          * Message from user to recall last message
          */
-        RECALL("RCL");
+        RECALL("RCL"),
+
+        PCONTROL("PCL"),
+
+        LOGGER("LOG");
 
 
 
@@ -207,6 +211,14 @@ public class Message {
      */
     public static Message makeBroadcastMessage(String myName, String text) {
         return new Message(MessageType.BROADCAST, myName, null, text);
+    }
+
+    public static Message makeLoggerMessage(String myName) {
+        return new Message(MessageType.LOGGER, myName, null, null);
+    }
+
+    public static Message makePControlMessage(String myName) {
+        return new Message(MessageType.PCONTROL, myName, null, null);
     }
 
     /**
@@ -373,6 +385,10 @@ public class Message {
             result = makeWiretapRejectMessage(srcName, dstName, text);
         } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
             result = makeRecallMessage(srcName, text);
+        } else if (handle.compareTo(MessageType.LOGGER.toString()) == 0) {
+            result = makeLoggerMessage(srcName);
+        } else if (handle.compareTo(MessageType.PCONTROL.toString()) == 0) {
+            result = makePControlMessage(srcName);
         }
         return result;
     }
@@ -527,6 +543,14 @@ public class Message {
      */
     public boolean isDeleteMessage() {
         return (msgType == MessageType.DELETE);
+    }
+
+    public boolean isLoggerMessage() {
+        return (msgType == MessageType.LOGGER);
+    }
+
+    public boolean isPControlMessage() {
+        return (msgType == MessageType.PCONTROL);
     }
 
     /**

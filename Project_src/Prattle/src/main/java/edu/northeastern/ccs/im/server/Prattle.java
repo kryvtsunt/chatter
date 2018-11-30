@@ -57,6 +57,8 @@ public abstract class Prattle {
 
     static final String SERVER_NAME = "PRATTLE";
 
+    static boolean PARENT_CONTROL = false;
+
     /* All of the static initialization occurs in this "method" */
     static {
         // Create the new queue of active threads.

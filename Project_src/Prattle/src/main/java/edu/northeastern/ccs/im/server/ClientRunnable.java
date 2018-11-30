@@ -10,8 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
@@ -558,7 +558,9 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // Get the next message
             Message msg = input.nextMessage();
-            msg.controlText();
+            if (Prattle.PARENT_CONTROL) {
+                msg.controlText();
+            }
             // Update the time until we terminate the client for
             // inactivity.
             terminateInactivity.setTimeInMillis(
@@ -616,12 +618,16 @@ public class ClientRunnable implements Runnable {
         }  else if (msg.isSetRoleMessage()) {
             setRole(msg);
         }
-
-//        else if (msg.is){
-//            LOGGER.getRootLogger().setLevel(Level.OFF);
-//        }
+        else if (msg.isLoggerMessage()){
+            logger(msg);
+        }
+        else if (msg.isPControlMessage()){
+            pcontrol(msg);
+        }
         // Otherwise, ignore it (for now).
     }
+
+
 
     /**
      * method used to update recall status for last message send by user
@@ -659,6 +665,28 @@ public class ClientRunnable implements Runnable {
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Incorrect request"), msg.getSender());
                     break;
             }
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+
+        }
+    }
+
+    private void logger(Message msg) {
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+            if (LOGGER.getLevel() == Level.OFF){
+                Logger.getRootLogger().setLevel(Level.INFO);
+            } else {
+                Logger.getRootLogger().setLevel(Level.OFF);
+            }
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+
+        }
+    }
+
+    private void pcontrol(Message msg) {
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+            Prattle.PARENT_CONTROL = !Prattle.PARENT_CONTROL;
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
