@@ -542,18 +542,19 @@ public class SQLDB {
 
     /**
      * stroes the messages for each user
-     *
      * @param from user who sent the message
-     * @param to   user who received the message
+     * @param to user who received the message
      * @param text message sene from one user to other
+     * @param senderIP ip address of sender
+     * @param receiverIP ip address of receiver
      * @return true from user exists and sql operation is successful
      */
-    public boolean storeMessageIndividual(String from, String to, String text) {
+    public boolean storeMessageIndividual(String from, String to, String text, String senderIP, String receiverIP) {
         int userID = getUserID(from);
 //        PreparedStatement pStatement = null;
         boolean flag = false;
         try {
-            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast, senderIP, receiverIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
                 pStatement.setInt(1, userID);
                 pStatement.setString(2, to);
@@ -561,6 +562,8 @@ public class SQLDB {
                 pStatement.setBoolean(4, false);
                 pStatement.setString(5, text);
                 pStatement.setBoolean(6, false);
+                pStatement.setString(7,senderIP);
+                pStatement.setString(8,receiverIP);
                 int msgCount = pStatement.executeUpdate();
                 flag = (msgCount > 0);
             }
@@ -573,17 +576,18 @@ public class SQLDB {
 
     /**
      * stores the messages for a group
-     *
-     * @param from  user who sent the message
+     * @param from user who sent the message
      * @param group group to which the message is sent
-     * @param text  the messages sent by the user/users
+     * @param text the messages sent by the user/users
+     * @param senderIP ip address of sender
+     * @param receiverIP ip address of receiver
      * @return true if users/groups exists and sql operation is successful
      */
-    public boolean storeMessageGroup(String from, String group, String text) {
+    public boolean storeMessageGroup(String from, String group, String text, String senderIP, String receiverIP) {
         int userID = getUserID(from);
         boolean flag = false;
         try {
-            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast, senderIP, receiverIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
                 pStatement.setInt(1, userID);
                 pStatement.setString(2, group);
@@ -591,6 +595,8 @@ public class SQLDB {
                 pStatement.setBoolean(4, true);
                 pStatement.setString(5, text);
                 pStatement.setBoolean(6, false);
+                pStatement.setString(7,senderIP);
+                pStatement.setString(8,receiverIP);
                 int msgCount = pStatement.executeUpdate();
                 flag = (msgCount > 0);
             }
@@ -603,16 +609,17 @@ public class SQLDB {
 
     /**
      * stores the broadcast messages
-     *
      * @param from user who sent the message
      * @param text message sent by the user
+     * @param senderIP ip address of sender
+     * @param receiverIP ip address of receiver
      * @return true if the user exists and sql operation is successful
      */
-    public boolean storeMessageBroadcast(String from, String text) {
+    public boolean storeMessageBroadcast(String from, String text, String senderIP, String receiverIP) {
         int userID = getUserID(from);
         boolean flag = false;
         try {
-            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO message_details (fromUser, toUser, IsMedia, IsGroupMsg, message, IsBroadcast, senderIP, receiverIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
                 pStatement.setInt(1, userID);
                 pStatement.setString(2, "BROADCAST");
@@ -620,6 +627,8 @@ public class SQLDB {
                 pStatement.setBoolean(4, false);
                 pStatement.setString(5, text);
                 pStatement.setBoolean(6, true);
+                pStatement.setString(7,senderIP);
+                pStatement.setString(8,receiverIP);
                 int msgCount = pStatement.executeUpdate();
                 flag = (msgCount > 0);
             }
@@ -1456,6 +1465,53 @@ public class SQLDB {
             LOGGER.info("Caught SQL Exception:" + e.toString());
         }
 
+        return userInformation;
+    }
+
+    /**
+     * This method updates the IP address of a user
+     * @param username
+     * @return true if IP updation works successfully, false otherwise
+     */
+    public boolean setIP(String username) {
+        boolean flag = false;
+        try {
+            if (checkUser(username)) {
+                String sqlCreateUser = "UPDATE users SET IP=? WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setString(1, username);
+                    int userCount = pStatement.executeUpdate();
+                    flag = (userCount > 0);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
+     * Method which gets the IP address of a user
+     * @param username
+     * @return the IP address from the user table
+     */
+    public String getIP(String username) {
+        String userInformation = null;
+        try {
+            if (checkUser(username)) {
+                String sqlCreateUser = "SELECT * FROM users WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setString(1, username);
+                    try (ResultSet userSet = pStatement.executeQuery()) {
+                        while (userSet.next()) {
+                            userInformation = userSet.getString("IP");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
         return userInformation;
     }
 
