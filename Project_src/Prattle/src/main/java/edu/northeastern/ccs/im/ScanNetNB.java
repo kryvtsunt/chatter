@@ -1,6 +1,8 @@
 package edu.northeastern.ccs.im;
 
 import edu.northeastern.ccs.im.server.Prattle;
+import org.apache.log4j.Level;
+
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -12,8 +14,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static edu.northeastern.ccs.im.server.Prattle.LOGGER;
+
+
+
+
 
 /**
  * This class is similar to the java.util.Scanner class, but this class's
@@ -29,8 +35,6 @@ import java.util.logging.Logger;
  * @version 1.3
  */
 public class ScanNetNB {
-
-	private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
 	private static final int BUFFER_SIZE = 64 * 1024;
 

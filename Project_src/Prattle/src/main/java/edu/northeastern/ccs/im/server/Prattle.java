@@ -16,7 +16,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Logger;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.ParentControl;
@@ -38,7 +39,7 @@ import edu.northeastern.ccs.im.ParentControl;
 public abstract class Prattle {
 
     /* Logger */
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
 
     /* Amount of time we should wait for a signal to arrive. */

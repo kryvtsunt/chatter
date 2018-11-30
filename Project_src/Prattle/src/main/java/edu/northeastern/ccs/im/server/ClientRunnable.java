@@ -12,11 +12,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
 
 import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
+
+import static edu.northeastern.ccs.im.server.Prattle.LOGGER;
 
 
 /**
@@ -36,8 +37,6 @@ import edu.northeastern.ccs.im.ScanNetNB;
  */
 public class ClientRunnable implements Runnable {
 
-    /* Logger */
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class);
 
     /**
      * Number of milliseconds that special responses are delayed before being sent.
@@ -686,9 +685,12 @@ public class ClientRunnable implements Runnable {
 
     private void logger(Message msg) {
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-            if (LOGGER.getLevel() == Level.OFF) {
+            System.out.println("logger");
+            if (LOGGER.getRootLogger().getLevel() == Level.OFF) {
+                System.out.println("off");
                 LOGGER.getRootLogger().setLevel(Level.INFO);
             } else {
+                System.out.println("on");
                 LOGGER.getRootLogger().setLevel(Level.OFF);
             }
         } else {
