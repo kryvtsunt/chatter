@@ -1,5 +1,7 @@
 package edu.northeastern.ccs.im;
 
+import edu.northeastern.ccs.im.server.FileDB;
+
 import java.io.*;
 import java.util.Arrays;
 
@@ -9,14 +11,16 @@ public class ParentControl {
      */
     private String[] list_bad_words;
 
+    private static ParentControl _instance;
+
     /**
      * Method to read the data from the text file and create a list of bad words
      */
-    public ParentControl() {
+    private ParentControl() {
         try {
-//            File file = new File("badwords.txt");
-//            FileInputStream in = new FileInputStream(file);
-            InputStream in = ParentControl.class.getClassLoader().getResourceAsStream("badwords.txt");
+            File file = new File("badwords.txt");
+            FileInputStream in = new FileInputStream(file);
+//            InputStream in = ParentControl.class.getClassLoader().getResourceAsStream("badwords.txt");
             StringBuilder content = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line = reader.readLine();
@@ -28,6 +32,13 @@ public class ParentControl {
         } catch (final IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static ParentControl getInstance() {
+        if (_instance == null) {
+            _instance = new ParentControl();
+        }
+        return _instance;
     }
 
     /**

@@ -465,7 +465,7 @@ public class Message {
     }
 
     public void controlText() {
-        this.msgText = Prattle.CONTROL.filterBadWords(msgText);
+        this.msgText = ParentControl.getInstance().filterBadWords(msgText);
         System.out.println(this.msgText);
     }
 

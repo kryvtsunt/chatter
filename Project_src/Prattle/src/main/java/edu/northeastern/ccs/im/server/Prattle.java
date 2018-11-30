@@ -60,7 +60,6 @@ public abstract class Prattle {
 
     static boolean PARENT_CONTROL = false;
 
-    public static ParentControl CONTROL;
 
 
     /* All of the static initialization occurs in this "method" */
@@ -130,7 +129,6 @@ public abstract class Prattle {
      */
     @SuppressWarnings("all")
     public static void main(String[] args) throws IOException {
-        CONTROL = new ParentControl();
         // Connect to the socket on the appropriate port to which this server connects.
         serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
