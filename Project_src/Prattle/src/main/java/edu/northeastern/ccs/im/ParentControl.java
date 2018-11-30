@@ -14,8 +14,9 @@ public class ParentControl {
      */
     public ParentControl() {
         try {
-            File file = new File("badwords.txt");
-            FileInputStream in = new FileInputStream(file);
+//            File file = new File("badwords.txt");
+//            FileInputStream in = new FileInputStream(file);
+            InputStream in = ParentControl.class.getClassLoader().getResourceAsStream("badwords.txt");
             StringBuilder content = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line = reader.readLine();

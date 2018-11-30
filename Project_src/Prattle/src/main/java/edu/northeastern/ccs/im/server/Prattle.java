@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import edu.northeastern.ccs.im.Message;
+import edu.northeastern.ccs.im.ParentControl;
 
 /**
  * A network server that communicates with IM clients that connect to it. This
@@ -58,6 +59,9 @@ public abstract class Prattle {
     static final String SERVER_NAME = "PRATTLE";
 
     static boolean PARENT_CONTROL = false;
+
+    public static ParentControl CONTROL;
+
 
     /* All of the static initialization occurs in this "method" */
     static {
@@ -126,6 +130,7 @@ public abstract class Prattle {
      */
     @SuppressWarnings("all")
     public static void main(String[] args) throws IOException {
+        CONTROL = new ParentControl();
         // Connect to the socket on the appropriate port to which this server connects.
         serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);

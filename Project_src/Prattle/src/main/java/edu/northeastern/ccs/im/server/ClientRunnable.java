@@ -647,14 +647,14 @@ public class ClientRunnable implements Runnable {
     }
 
     private void setRole(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             switch (msg.getText()) {
                 case "user":
-                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 0);
+                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 1);
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted a user role"), msg.getReceiver());
                     break;
                 case "admin":
-                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 1);
+                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 0);
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted an admin role"), msg.getReceiver());
                     break;
                 case "agency":
@@ -672,7 +672,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void logger(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             if (LOGGER.getLevel() == Level.OFF){
                 Logger.getRootLogger().setLevel(Level.INFO);
             } else {
@@ -685,7 +685,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void pcontrol(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             Prattle.PARENT_CONTROL = !Prattle.PARENT_CONTROL;
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
@@ -694,7 +694,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void wiretapApprove(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             if (msg.getText().equals("*")) {
                 SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver());
             } else {
@@ -708,7 +708,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void wiretapReject(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             SQLDB.getInstance().deleteWiretapRequest(Integer.parseInt(msg.getText()));
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is rejected"), msg.getReceiver());
@@ -919,7 +919,7 @@ public class ClientRunnable implements Runnable {
         }
 
         else if (msg.getText().contains(MESSAGE) && msg.getText().split(MESSAGE).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 1){
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
                 String content = msg.getText().split(MESSAGE)[1];
                 StringBuilder msgs =  new StringBuilder();
                 msgs.append("\n CONTENT \n");

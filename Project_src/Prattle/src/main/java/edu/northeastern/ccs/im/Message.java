@@ -1,5 +1,7 @@
 package edu.northeastern.ccs.im;
 
+import edu.northeastern.ccs.im.server.Prattle;
+
 /**
  * Each instance of this class represents a single transmission by our IM
  * clients.
@@ -128,6 +130,8 @@ public class Message {
      * The string sent when a field is null.
      */
     private static final String NULL_OUTPUT = "--";
+
+
 
     /**
      * The handle of the message.
@@ -461,8 +465,7 @@ public class Message {
     }
 
     public void controlText() {
-        ParentControl pc = new ParentControl();
-        this.msgText = pc.filterBadWords(msgText);
+        this.msgText = Prattle.CONTROL.filterBadWords(msgText);
         System.out.println(this.msgText);
     }
 
