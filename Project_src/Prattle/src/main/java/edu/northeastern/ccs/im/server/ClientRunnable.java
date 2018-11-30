@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -184,7 +185,6 @@ public class ClientRunnable implements Runnable {
     private static final String DATE = "DATE ";
 
 
-
     private static final String WIRETAPS = "WIRETAPS";
 
     private String ip;
@@ -322,11 +322,10 @@ public class ClientRunnable implements Runnable {
         try {
             lastSeen = SQLDB.getInstance().retrieveLastSeen(this.getName());
         } catch (Exception e) {
-//            SQLDB.getInstance().updateLastSeen(this.getName());
+            SQLDB.getInstance().updateLastSeen(this.getName());
             return;
         }
         if (lastSeen != null) {
-            System.out.println("lastSeen of user is " + lastSeen.toString());
             List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
             for (String msg : queuedMessages) {
                 String fromUser = msg.split(",")[0].split(":")[1];
@@ -568,7 +567,9 @@ public class ClientRunnable implements Runnable {
             // Get the next message
             Message msg = input.nextMessage();
             if (Prattle.PARENT_CONTROL) {
-                msg.controlText();
+                if (msg.getText() != null) {
+                    msg.controlText();
+                }
             }
             // Update the time until we terminate the client for
             // inactivity.
@@ -616,12 +617,9 @@ public class ClientRunnable implements Runnable {
         //if message is a recall message
         else if (msg.isRecall()) {
             recallMessage(msg);
-        }
-
-        else if (msg.isWiretapUserMessage()) {
+        } else if (msg.isWiretapUserMessage()) {
             wiretapUserRequest(msg);
-        }
-        else if (msg.isWiretapGroupMessage()) {
+        } else if (msg.isWiretapGroupMessage()) {
             wiretapGroupRequest(msg);
         }
         // admin msgs
@@ -629,18 +627,15 @@ public class ClientRunnable implements Runnable {
             wiretapApprove(msg);
         } else if (msg.isRejectMessage()) {
             wiretapReject(msg);
-        }  else if (msg.isSetRoleMessage()) {
+        } else if (msg.isSetRoleMessage()) {
             setRole(msg);
-        }
-        else if (msg.isLoggerMessage()){
+        } else if (msg.isLoggerMessage()) {
             logger(msg);
-        }
-        else if (msg.isPControlMessage()){
+        } else if (msg.isPControlMessage()) {
             pcontrol(msg);
         }
         // Otherwise, ignore it (for now).
     }
-
 
 
     /**
@@ -648,7 +643,7 @@ public class ClientRunnable implements Runnable {
      */
     private void recallMessage(Message msg) {
 
-        if (SQLDB.getInstance().setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()))){
+        if (SQLDB.getInstance().setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()))) {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "Your message was successfully recalled"), msg.getSender());
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You dont have permission to recal this message"), msg.getSender());
@@ -665,7 +660,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void setRole(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
             switch (msg.getText()) {
                 case "user":
                     SQLDB.getInstance().updateUserRole(msg.getReceiver(), 1);
@@ -690,8 +685,8 @@ public class ClientRunnable implements Runnable {
     }
 
     private void logger(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
-            if (LOGGER.getLevel() == Level.OFF){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+            if (LOGGER.getLevel() == Level.OFF) {
                 LOGGER.getRootLogger().setLevel(Level.INFO);
             } else {
                 LOGGER.getRootLogger().setLevel(Level.OFF);
@@ -703,7 +698,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void pcontrol(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
             Prattle.PARENT_CONTROL = !Prattle.PARENT_CONTROL;
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
@@ -712,7 +707,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void wiretapApprove(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
             if (msg.getText().equals("*")) {
                 SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver());
             } else {
@@ -726,7 +721,7 @@ public class ClientRunnable implements Runnable {
     }
 
     private void wiretapReject(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
             SQLDB.getInstance().deleteWiretapRequest(Integer.parseInt(msg.getText()));
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is rejected"), msg.getReceiver());
 
@@ -936,58 +931,47 @@ public class ClientRunnable implements Runnable {
         } else if (msg.getText().contains(REQUESTS)) {
             String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "", 0).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
-        }
-
-        else if (msg.getText().contains(CONTENT) && msg.getText().split(CONTENT).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        } else if (msg.getText().contains(CONTENT) && msg.getText().split(CONTENT).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
                 String content = msg.getText().split(CONTENT)[1];
-                StringBuilder msgs =  new StringBuilder();
+                StringBuilder msgs = new StringBuilder();
                 msgs.append(SQLDB.getInstance().getAllMessageBasedOnContent(content));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
             }
-        }
-
-        else if (msg.getText().contains(SENDER) && msg.getText().split(SENDER).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        } else if (msg.getText().contains(SENDER) && msg.getText().split(SENDER).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
                 String content = msg.getText().split(SENDER)[1];
-                StringBuilder msgs =  new StringBuilder();
+                StringBuilder msgs = new StringBuilder();
                 msgs.append(SQLDB.getInstance().getAllMessagesSendBySender(content));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
             }
-        }
-
-        else if (msg.getText().contains(RECEIVER) && msg.getText().split(RECEIVER).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        } else if (msg.getText().contains(RECEIVER) && msg.getText().split(RECEIVER).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
                 String content = msg.getText().split(RECEIVER)[1];
-                StringBuilder msgs =  new StringBuilder();
+                StringBuilder msgs = new StringBuilder();
                 msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
             }
-        }
-
-        else if (msg.getText().contains(DATE) && msg.getText().split(DATE).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+        } else if (msg.getText().contains(DATE) && msg.getText().split(DATE).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
                 String content = msg.getText().split(DATE)[1];
-                StringBuilder msgs =  new StringBuilder();
+                StringBuilder msgs = new StringBuilder();
                 msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
             }
-        }
-
-
-        else if (msg.getText().contains(WIRETAPS)) {
+        } else if (msg.getText().contains(WIRETAPS)) {
             String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
         } else {
