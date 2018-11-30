@@ -14,7 +14,6 @@ public class SQLDB {
     final static String DB_NAME = "team105";
     final static String DB_USERNAME = "team105";
     final static String DB_PASWD = "Team-105";
-
     final static int USER_ROLE_NORMAL_ID = 1;
     final static int USER_ROLE_AGENCY_ID = 2;
     final static int USER_ROLE_ADMIN_ID = 0;
