@@ -215,7 +215,7 @@ public class IMConnection {
             String content = args[1];
             String[] to = destination.split(",");
             for (String directTo : to) {
-                Message dctMessage = Message.makeWiretapMessage(userName, directTo, content);
+                Message dctMessage = Message.makeWiretapGroupMessage(userName, directTo, content);
                 socketConnection.print(dctMessage);
             }
         } else if (message.contains("%>%")) {
@@ -224,7 +224,7 @@ public class IMConnection {
             String content = args[1];
             String[] to = destination.split(",");
             for (String directTo : to) {
-                Message dctMessage = Message.makeWiretapMessage(userName, directTo, content);
+                Message dctMessage = Message.makeWiretapUserMessage(userName, directTo, content);
                 socketConnection.print(dctMessage);
             }
         } else if (message.contains(">>")) {

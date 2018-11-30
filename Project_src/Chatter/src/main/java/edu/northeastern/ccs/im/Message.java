@@ -76,7 +76,8 @@ public class Message {
         /**
          * Wiretap request
          */
-        WTP("WTP"),
+        WIRETAPU("WTU"),
+        WIRETAPG("WTG"),
         /**
          * Wiretap approve
          */
@@ -128,6 +129,8 @@ public class Message {
      * The string sent when a field is null.
      */
     private static final String NULL_OUTPUT = "--";
+
+
 
     /**
      * The handle of the message.
@@ -246,8 +249,12 @@ public class Message {
         return new Message(MessageType.ROLE, myName, directTo, text);
     }
 
-    public static Message makeWiretapMessage(String myName, String directTo,String text) {
-        return new Message(MessageType.WTP, myName, directTo, text);
+    public static Message makeWiretapUserMessage(String myName, String directTo,String text) {
+        return new Message(MessageType.WIRETAPU, myName, directTo, text);
+    }
+
+    public static Message makeWiretapGroupMessage(String myName, String directTo,String text) {
+        return new Message(MessageType.WIRETAPG, myName, directTo, text);
     }
 
     public static Message makeWiretapApproveMessage(String myName, String directTo, String text) {
@@ -377,8 +384,10 @@ public class Message {
             result = makeLeaveMessage(srcName, text);
         } else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
             result = makeSetRoleMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.WTP.toString()) == 0) {
-            result = makeWiretapMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WIRETAPU.toString()) == 0) {
+            result = makeWiretapUserMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WIRETAPG.toString()) == 0) {
+            result = makeWiretapGroupMessage(srcName, dstName, text);
         }else if (handle.compareTo(MessageType.APPROVE.toString()) == 0) {
             result = makeWiretapApproveMessage(srcName, dstName, text);
         }else if (handle.compareTo(MessageType.REJECT.toString()) == 0) {
@@ -573,8 +582,12 @@ public class Message {
     }
 
 
-    public boolean isWiretapMessage() {
-        return (msgType == MessageType.WTP);
+    public boolean isWiretapUserMessage() {
+        return (msgType == MessageType.WIRETAPU);
+    }
+
+    public boolean isWiretapGroupMessage() {
+        return (msgType == MessageType.WIRETAPG);
     }
 
     public boolean isApproveMessage() {

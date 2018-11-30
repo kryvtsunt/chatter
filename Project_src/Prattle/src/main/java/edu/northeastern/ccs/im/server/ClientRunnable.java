@@ -36,7 +36,7 @@ import edu.northeastern.ccs.im.ScanNetNB;
 public class ClientRunnable implements Runnable {
 
     /* Logger */
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Prattle.class);
 
     /**
      * Number of milliseconds that special responses are delayed before being sent.
@@ -608,10 +608,15 @@ public class ClientRunnable implements Runnable {
         else if (msg.isRecall()) {
             recallMessage(msg);
         }
+
+        else if (msg.isWiretapUserMessage()) {
+            wiretapUserRequest(msg);
+        }
+        else if (msg.isWiretapGroupMessage()) {
+            wiretapGroupRequest(msg);
+        }
         // admin msgs
-        else if (msg.isWiretapMessage()) {
-            wiretapRequest(msg);
-        } else if (msg.isApproveMessage()) {
+        else if (msg.isApproveMessage()) {
             wiretapApprove(msg);
         } else if (msg.isRejectMessage()) {
             wiretapReject(msg);
@@ -642,8 +647,12 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    private void wiretapRequest(Message msg) {
+    private void wiretapUserRequest(Message msg) {
         SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
+    }
+
+    private void wiretapGroupRequest(Message msg) {
+        SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 1, Integer.parseInt(msg.getText()));
     }
 
     private void setRole(Message msg) {
@@ -674,9 +683,9 @@ public class ClientRunnable implements Runnable {
     private void logger(Message msg) {
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             if (LOGGER.getLevel() == Level.OFF){
-                Logger.getRootLogger().setLevel(Level.INFO);
+                LOGGER.getRootLogger().setLevel(Level.INFO);
             } else {
-                Logger.getRootLogger().setLevel(Level.OFF);
+                LOGGER.getRootLogger().setLevel(Level.OFF);
             }
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
@@ -710,7 +719,6 @@ public class ClientRunnable implements Runnable {
     private void wiretapReject(Message msg) {
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
             SQLDB.getInstance().deleteWiretapRequest(Integer.parseInt(msg.getText()));
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is rejected"), msg.getReceiver());
 
         } else {
@@ -929,7 +937,11 @@ public class ClientRunnable implements Runnable {
                 msgs.append("\n RECEIVER \n");
                 msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content).toString());
                 msgs.append("\n TIMESTAMP \n");
-                msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)).toString());
+                try {
+                    msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)).toString());
+                } catch (Exception e){
+
+                }
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
