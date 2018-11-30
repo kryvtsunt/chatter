@@ -187,8 +187,7 @@ public class ClientRunnable implements Runnable {
 
     private static final String WIRETAPS = "WIRETAPS";
 
-    private static final String OFF = "OFF";
-    private static final String ON = "ON";
+    private String ip;
 
 
     /**
@@ -222,6 +221,8 @@ public class ClientRunnable implements Runnable {
         terminateInactivity
                 .setTimeInMillis(terminateInactivity.getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
         terminate = false;
+
+        ip = socket.getRemoteAddress().toString();
     }
 
     /**
@@ -280,12 +281,14 @@ public class ClientRunnable implements Runnable {
             SQLDB db = SQLDB.getInstance();
             if (!db.checkUser(getName())) {
                 SQLDB.getInstance().create(getUserId(), getName(), password);
+                this.ip = SQLDB.getInstance().getIP(getName());
                 validated = true;
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
                 return;
             }
 
             if (db.validateCredentials(getName(), password)) {
+                this.ip = SQLDB.getInstance().getIP(getName());
                 validated = true;
                 String lastSeen = "";
                 try {
@@ -741,20 +744,21 @@ public class ClientRunnable implements Runnable {
      * @param msg message sent from one user to other
      */
     private void directMessage(Message msg) {
+        SQLDB db = SQLDB.getInstance();
+
         // Get list of agencies wiretapping sender and receiver
         List<String> agencyList = new ArrayList<>();
         if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
+            agencyList.addAll(db.getAgencyList(msg.getSender(), 0, 0));
         }
         if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getReceiver(), 0)) {
-            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 0, 0));
+            agencyList.addAll(db.getAgencyList(msg.getReceiver(), 0, 0));
         }
         for (String agency : agencyList) {
-            System.out.println(agency);
-            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+            db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.getIP(msg.getSender()), db.getIP(agency));
             Prattle.directMessage(msg, agency);
         }
-        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.getIP(msg.getSender()), db.getIP(msg.getReceiver()));
         // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
 
@@ -770,16 +774,16 @@ public class ClientRunnable implements Runnable {
         String group = msg.getReceiver();
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
             List<String> users = db.retrieveGroupMembers(group);
-            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
+            db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(), db.getIP(msg.getSender()), null);
 
             // check if the group is being wire tapped
             if (SQLDB.getInstance().isUserOrGroupWiretapped(group, 1)) {
-                users.addAll(SQLDB.getInstance().getAgencyList(group, 1, 0));
+                users.addAll(db.getAgencyList(group, 1, 0));
             }
 
             // check if the sender is being wire tapped
             if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-                users.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
+                users.addAll(db.getAgencyList(msg.getSender(), 0, 0));
             }
             for (String user : users) {
                 Prattle.directMessage(msg, user);
@@ -796,12 +800,14 @@ public class ClientRunnable implements Runnable {
         terminate = true;
     }
 
+
     /**
      * Validate if the message is legal, check for special messages and show the message sent/received by the user/server
      *
      * @param msg Messages that needs to be displayed
      */
     private void display(Message msg) {
+        SQLDB db = SQLDB.getInstance();
         // Check if the message is legal formatted
         if (messageChecks(msg)) {
             // Check for our "special messages"
@@ -812,7 +818,7 @@ public class ClientRunnable implements Runnable {
                     initialized = false;
                     Prattle.broadcastMessage(Message.makeQuitMessage(name));
                 } else {
-                    SQLDB.getInstance().storeMessageBroadcast(getName(), msg.getText());
+                    db.storeMessageBroadcast(getName(), msg.getText(), db.getIP(msg.getSender()), null);
                     Prattle.broadcastMessage(msg);
                 }
             }
