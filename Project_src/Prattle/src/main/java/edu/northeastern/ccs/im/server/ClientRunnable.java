@@ -549,6 +549,7 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // Get the next message
             Message msg = input.nextMessage();
+            msg.controlText();
             // Update the time until we terminate the client for
             // inactivity.
             terminateInactivity.setTimeInMillis(

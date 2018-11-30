@@ -436,6 +436,12 @@ public class Message {
         return msgText;
     }
 
+    public void controlText() {
+        ParentControl pc = new ParentControl();
+        this.msgText = pc.filterBadWords(msgText);
+        System.out.println(this.msgText);
+    }
+
     /**
      * Determine if this message is an acknowledgement message.
      *

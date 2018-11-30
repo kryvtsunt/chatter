@@ -1,12 +1,9 @@
 package edu.northeastern.ccs.im;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 
-class ParentControl {
+public class ParentControl {
     /**
      * List containing the bad words
      */
@@ -15,9 +12,10 @@ class ParentControl {
     /**
      * Method to read the data from the text file and create a list of bad words
      */
-    ParentControl() {
+    public ParentControl() {
         try {
-            InputStream in = getClass().getResourceAsStream("bad_words.txt");
+            File file = new File("badwords.txt");
+            FileInputStream in = new FileInputStream(file);
             StringBuilder content = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String line = reader.readLine();
@@ -37,7 +35,7 @@ class ParentControl {
      * @param message string which is entered by the user
      * @return a filtered message with stars replacing the bad words
      */
-    String filterBadWords(final String message) {
+    public String filterBadWords(final String message) {
         StringBuffer StringBuffer = new StringBuffer();
         String[] words = message.split("\\s");
         for (String word : words) {
