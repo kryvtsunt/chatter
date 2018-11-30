@@ -178,7 +178,13 @@ public class ClientRunnable implements Runnable {
 
     private static final String REQUESTS = "REQUESTS";
 
-    private static final String MESSAGE = "MESSAGE ";
+    private static final String SENDER = "SENDER ";
+    private static final String RECEIVER = "RECEIVER ";
+    private static final String CONTENT = "CONTENT ";
+    private static final String DATE = "DATE ";
+
+
+
     private static final String WIRETAPS = "WIRETAPS";
 
     private static final String OFF = "OFF";
@@ -926,22 +932,47 @@ public class ClientRunnable implements Runnable {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
         }
 
-        else if (msg.getText().contains(MESSAGE) && msg.getText().split(MESSAGE).length == 2) {
+        else if (msg.getText().contains(CONTENT) && msg.getText().split(CONTENT).length == 2) {
             if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
-                String content = msg.getText().split(MESSAGE)[1];
+                String content = msg.getText().split(CONTENT)[1];
                 StringBuilder msgs =  new StringBuilder();
-                msgs.append("\n CONTENT \n");
-                msgs.append(SQLDB.getInstance().getAllMessageBasedOnContent(content).toString());
-                msgs.append("\n SENDER \n");
-                msgs.append(SQLDB.getInstance().getAllMessagesSendBySender(content).toString());
-                msgs.append("\n RECEIVER \n");
-                msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content).toString());
-                msgs.append("\n TIMESTAMP \n");
-                try {
-                    msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)).toString());
-                } catch (Exception e){
+                msgs.append(SQLDB.getInstance().getAllMessageBasedOnContent(content));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
-                }
+            }
+        }
+
+        else if (msg.getText().contains(SENDER) && msg.getText().split(SENDER).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+                String content = msg.getText().split(SENDER)[1];
+                StringBuilder msgs =  new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessagesSendBySender(content));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+
+            }
+        }
+
+        else if (msg.getText().contains(RECEIVER) && msg.getText().split(RECEIVER).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+                String content = msg.getText().split(RECEIVER)[1];
+                StringBuilder msgs =  new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+
+            }
+        }
+
+        else if (msg.getText().contains(DATE) && msg.getText().split(DATE).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0){
+                String content = msg.getText().split(DATE)[1];
+                StringBuilder msgs =  new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
