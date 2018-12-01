@@ -153,14 +153,9 @@ class ClientRunnableTest {
         for (int i = 0; i < msgs.size(); i++) {
             try {
                 client2.run();
-            } catch (ClosedSelectorException e){
+            } catch (Exception e){
 
             }
-        }
-        try {
-            client2.run();
-        } catch (ClosedSelectorException e) {
-            assertNull(e.getMessage());
         }
 
         serverSocket.close();
