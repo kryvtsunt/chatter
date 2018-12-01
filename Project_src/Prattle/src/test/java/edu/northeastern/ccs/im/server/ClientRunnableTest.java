@@ -44,26 +44,6 @@ class ClientRunnableTest {
         socketChannel.connect(socketAddr);
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeLoginMessage("username"));
-        msgs.add(Message.makeBroadcastMessage("username", "password"));
-        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
-        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
-        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
-        msgs.add(Message.makeBroadcastMessage("username", "password"));
-        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
-        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
-        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
-        msgs.add(Message.makeBroadcastMessage("username", "password"));
-        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
-        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
-        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
-        msgs.add(Message.makeBroadcastMessage("username", "password"));
         msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
         msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
         msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
@@ -86,6 +66,7 @@ class ClientRunnableTest {
         assertFalse(client.isInitialized());
         assertEquals(0, client.getUserId());
         assertTrue(client.getWaitingList().isEmpty());
+        client.login("username", "password");
         try{
             for (int i = 0; i < msgs.size(); i++) {
                 client.run();
@@ -102,7 +83,6 @@ class ClientRunnableTest {
 
     @Test
     void testOldClient() throws IOException {
-//        this.testNewClient();
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port2));
@@ -118,8 +98,6 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeLoginMessage("username22"));
-        msgs.add(Message.makeBroadcastMessage("username22", "username22"));
         msgs.add(Message.makeBroadcastMessage("username22", "broadcast text"));
         msgs.add(Message.makeDirectMessage("username22", "receiverUser", "Hello"));
         msgs.add(Message.makeSetRoleMessage("username22", "opa", "admin"));
@@ -152,6 +130,7 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
+        client2.login("username22", "username22");
         try{
             for (int i = 0; i < msgs.size(); i++) {
                 client2.run();
@@ -180,8 +159,6 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeLoginMessage("agencyOne"));
-        msgs.add(Message.makeBroadcastMessage("agencyOne", "pass"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "SENDER tim"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "RECEIVER tim"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "CONTENT hi"));
@@ -194,30 +171,6 @@ class ClientRunnableTest {
         msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "admin"));
         msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "user"));
         msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "god"));
-        msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
-        msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
-        msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
-        msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
-        msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
-        msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
-        msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "SENDER tim"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "RECEIVER tim"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "CONTENT hi"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "DATE 2018-11-30"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "REQUESTS"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
-
-        msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "*"));
-        msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "0"));
-        msgs.add(Message.makeWiretapRejectMessage("agencyOne", "agencyOne", "3"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "agency"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "admin"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "user"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "god"));
-        msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
-        msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
         msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
         msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
@@ -242,6 +195,8 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
+        client2.login("agencyOne", "pass");
+
         try{
             for (int i = 0; i < msgs.size(); i++) {
                 client2.run();
@@ -272,8 +227,6 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeLoginMessage("admin"));
-        msgs.add(Message.makeBroadcastMessage("admin", "admin"));
         msgs.add(Message.makeBroadcastMessage("admin", "ass"));
         msgs.add(Message.makeRetrieveMessage("admin", "SENDER tim"));
         msgs.add(Message.makeRetrieveMessage("admin", "RECEIVER tim"));
@@ -287,26 +240,10 @@ class ClientRunnableTest {
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "admin"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "user"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "god"));
-        msgs.add(Message.makeBroadcastMessage("admin", "ass"));
-        msgs.add(Message.makeRetrieveMessage("admin", "SENDER tim"));
-        msgs.add(Message.makeRetrieveMessage("admin", "RECEIVER tim"));
-        msgs.add(Message.makeRetrieveMessage("admin", "CONTENT hi"));
-        msgs.add(Message.makeRetrieveMessage("admin", "DATE 2018-11-30"));
-        msgs.add(Message.makeRetrieveMessage("admin", "REQUESTS"));
-        msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "*"));
-        msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "0"));
-        msgs.add(Message.makeWiretapRejectMessage("admin", "agencyOne", "3"));
-        msgs.add(Message.makeSetRoleMessage("admin", "opa", "agency"));
-        msgs.add(Message.makeSetRoleMessage("admin", "opa", "admin"));
-        msgs.add(Message.makeSetRoleMessage("admin", "opa", "user"));
-        msgs.add(Message.makeSetRoleMessage("admin", "opa", "god"));
+        msgs.add(Message.makeLoggerMessage("admin"));
+        msgs.add(Message.makeDirectMessage("admin", "tim", "ass"));
         msgs.add(Message.makePControlMessage("admin", "tim"));
         msgs.add(Message.makeLoggerMessage("admin"));
-        msgs.add(Message.makeBroadcastMessage("admin", "ass"));
-        msgs.add(Message.makeBroadcastMessage("admin", "ass"));
-        msgs.add(Message.makePControlMessage("admin", "tim"));
-        msgs.add(Message.makeLoggerMessage("admin"));
-        msgs.add(Message.makeQuitMessage("admin"));
 
         for (Message msg : msgs) {
             printer2.print(msg);
@@ -320,6 +257,7 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
+        client2.login("admin", "admin");
         try{
         for (int i = 0; i < msgs.size(); i++) {
                 client2.run();

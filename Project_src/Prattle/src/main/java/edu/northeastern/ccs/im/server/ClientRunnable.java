@@ -249,16 +249,20 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            if (setUserName(msg.getSender())) {
-                // Update the time until we terminate this client due to inactivity.
-                terminateInactivity.setTimeInMillis(
-                        new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
-                // Set that the client is initialized.
-                initialized = true;
+            initialize(msg);
+        }
+    }
 
-            } else {
-                initialized = false;
-            }
+    private void initialize(Message msg) {
+        if (setUserName(msg.getSender())) {
+            // Update the time until we terminate this client due to inactivity.
+            terminateInactivity.setTimeInMillis(
+                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
+            // Set that the client is initialized.
+            initialized = true;
+
+        } else {
+            initialized = false;
         }
     }
 
@@ -270,31 +274,41 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            password = msg.getText();
-            SQLDB db = SQLDB.getInstance();
-            if (!db.checkUser(getName())) {
-                SQLDB.getInstance().create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
-                validated = true;
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
-                return;
-            }
-
-            if (db.validateCredentials(getName(), password)) {
-                validated = true;
-                int role = db.getUserRole(this.getName());
-                if (role == 0) {
-                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
-                } else if (role == 1) {
-                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. "), getName());
-                } else if (role == 2) {
-                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
-                }
-                sendAllQueuedMessages();
-
-            } else {
-                validated = false;
-            }
+            validate(msg);
         }
+    }
+
+    private void validate(Message msg) {
+        password = msg.getText();
+        SQLDB db = SQLDB.getInstance();
+        if (!db.checkUser(getName())) {
+            SQLDB.getInstance().create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
+            validated = true;
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+            return;
+        }
+
+        if (db.validateCredentials(getName(), password)) {
+            validated = true;
+            int role = db.getUserRole(this.getName());
+            if (role == 0) {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
+            } else if (role == 1) {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. "), getName());
+            } else if (role == 2) {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
+            }
+            sendAllQueuedMessages();
+
+        } else {
+            validated = false;
+        }
+    }
+
+    public void login(String username, String password){
+        this.name = username;
+        this.initialize(Message.makeLoginMessage(username));
+        this.validate(Message.makeBroadcastMessage(username, password));
     }
 
 
