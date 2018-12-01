@@ -31,7 +31,7 @@ class ClientRunnableTest {
     private static final int port3 = 4560;
     private static final int port4 = 4562;
 
-
+    @Test
     void testNewClient() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
@@ -98,9 +98,8 @@ class ClientRunnableTest {
 
 
 //    // tests new user CRUD operations
-    @Test
     void testOldClient() throws IOException {
-        this.testNewClient();
+//        this.testNewClient();
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port2));
@@ -296,6 +295,10 @@ class ClientRunnableTest {
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "admin"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "user"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "god"));
+        msgs.add(Message.makePControlMessage("admin"));
+        msgs.add(Message.makeLoggerMessage("admin"));
+        msgs.add(Message.makeBroadcastMessage("admin", "ass"));
+        msgs.add(Message.makeBroadcastMessage("admin", "ass"));
         msgs.add(Message.makePControlMessage("admin"));
         msgs.add(Message.makeLoggerMessage("admin"));
         msgs.add(Message.makeQuitMessage("admin"));
