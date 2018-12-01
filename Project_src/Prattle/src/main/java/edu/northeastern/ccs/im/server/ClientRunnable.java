@@ -302,7 +302,7 @@ public class ClientRunnable implements Runnable {
                 } else if (role == 2) {
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
                 }
-                sendAllQueuedMessages();
+//                sendAllQueuedMessages();
 
             } else {
                 validated = false;

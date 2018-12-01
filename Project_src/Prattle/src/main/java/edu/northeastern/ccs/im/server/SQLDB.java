@@ -162,15 +162,17 @@ public class SQLDB {
      * @param password string entered by the user for their password
      * @return true if the details entered are in a legal format and when they stored in the Database
      */
-    public boolean create(int userId, String username, String password) {
+    public boolean create(int userId, String username, String password, String ip, int control) {
         boolean flag = false;
         try {
             if (!checkUser(username)) {
-                String sqlCreateUser = "INSERT INTO users (userId, username, paswd) VALUES (?, ?, ?)";
+                String sqlCreateUser = "INSERT INTO users (userId, username, paswd, ip, control) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
                     pStatement.setInt(1, userId);
                     pStatement.setString(2, username);
                     pStatement.setString(3, encryptPassword(password));
+                    pStatement.setString(4, ip);
+                    pStatement.setInt(5, control);
                     int userCount = pStatement.executeUpdate();
                     flag = (userCount > 0);
                 }
@@ -231,6 +233,7 @@ public class SQLDB {
         }
         return flag;
     }
+
 
     /**
      * deletes a user from the Database
@@ -1177,6 +1180,7 @@ public class SQLDB {
 
         try {
             if (getUserRole(requestingUser) != USER_ROLE_AGENCY_ID) return insertedRowID;
+            if(checkWiretapRequest(requestingUser, userOrGroupName, isGroup)) return -1;
             int requestingUserId = getUserID(requestingUser);
             int wireTapCandidate = (isGroup == 1) ? getGroupID(userOrGroupName) : getUserID(userOrGroupName);
             if (wireTapCandidate == -1) return insertedRowID;
@@ -1468,18 +1472,51 @@ public class SQLDB {
         return userInformation;
     }
 
+    public boolean checkWiretapRequest(String requestingUser, String userOrGroupName, int isGroup) {
+        boolean flag = false;
+        int wireTapCandidate = getUserID(userOrGroupName);
+        String sqlCheckWiretapRequet = "";
+        try {
+            int requestingUserId = getUserID(requestingUser);
+            if (isGroup == 1) {
+                wireTapCandidate = getGroupID(userOrGroupName);
+            }
+            sqlCheckWiretapRequet = "SELECT COUNT(*)"
+                    + " FROM wiretapRequests w WHERE userRequestingId=? AND userVictimId=? AND isGroup=?"
+                    + " AND CURDATE() <= DATE_ADD(w.creationTime, INTERVAL w.requestDurationDays DAY)";
+
+            try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckWiretapRequet)) {
+                pStatement.setInt(1, requestingUserId);
+                pStatement.setInt(2, wireTapCandidate);
+                pStatement.setInt(3, isGroup);
+                try (ResultSet requestSet = pStatement.executeQuery()) {
+                    while (requestSet.next()) {
+                        flag = requestSet.getInt(1) > 0;
+                    }
+                }
+
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+
+        return flag;
+    }
+
+
     /**
      * This method updates the IP address of a user
      * @param username
      * @return true if IP updation works successfully, false otherwise
      */
-    public boolean setIP(String username) {
+    public boolean setIP(String username, String ipAddress) {
         boolean flag = false;
         try {
             if (checkUser(username)) {
                 String sqlCreateUser = "UPDATE users SET IP=? WHERE username=?";
                 try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
-                    pStatement.setString(1, username);
+                    pStatement.setString(1, ipAddress);
+                    pStatement.setString(2, username);
                     int userCount = pStatement.executeUpdate();
                     flag = (userCount > 0);
                 }
@@ -1514,5 +1551,55 @@ public class SQLDB {
         }
         return userInformation;
     }
+
+    /**
+     * Method to set parent control on a user
+     * @param username user on whom the parent control is turned on
+     * @param i value 0 or 1 to turn on and off respectively
+     * @return true if the SQL operation is successful
+     */
+    public boolean setControl(String username, int i) {
+        boolean flag = false;
+        try {
+            if (checkUser(username)) {
+                String sqlCreateUser = "UPDATE users SET control=? WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setInt(1, i);
+                    pStatement.setString(2, username);
+                    int userCount = pStatement.executeUpdate();
+                    flag = (userCount > 0);
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return flag;
+    }
+
+    /**
+     * Method to get the parent control from the DB
+     * @param username person whose data is being retrieved
+     * @return the value of the column for the user requested
+     */
+    public int getControl(String username) {
+        int userInformation = 0;
+        try {
+            if (checkUser(username)) {
+                String sqlCreateUser = "SELECT * FROM users WHERE username=?";
+                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
+                    pStatement.setString(1, username);
+                    try (ResultSet userSet = pStatement.executeQuery()) {
+                        while (userSet.next()) {
+                            userInformation = userSet.getInt("control");
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            LOGGER.info("Caught SQL Exception:" + e.toString());
+        }
+        return userInformation;
+    }
+
 
 }
