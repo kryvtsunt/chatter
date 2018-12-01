@@ -1,32 +1,16 @@
 package edu.northeastern.ccs.im.server;
 
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.northeastern.ccs.im.Message;
-import edu.northeastern.ccs.im.PrintNetNB;
-
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.nio.channels.ClosedSelectorException;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.nio.channels.spi.SelectorProvider;
+
 import java.sql.SQLException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -114,7 +98,7 @@ class SQLDBTest {
         db.reset();
         db.retrieveAllGroups();
         db.storeMessageIndividual("nonw","nonow","aonso","","");
-        db.retrieveGroup("none");
+        db.retrieveGroupMembers("none");
         db.getUserID("none");
         db.storeMessageGroup("nonw","nonw","non","","");
         db.storeMessageGroup("none","mo","sa","","");
@@ -343,7 +327,7 @@ class SQLDBTest {
     @Test
     void retrieveGroup(){
         sqldb.createGroup("sqldbCreateGroupTest");
-        assertEquals(true,sqldb.retrieveGroup("sqldbCreateGroupTest").size() == 0);
+        assertEquals(true,sqldb.retrieveGroupMembers("sqldbCreateGroupTest").size() == 0);
         sqldb.deleteGroup("sqldbCreateGroupTest");
     }
 
@@ -351,7 +335,6 @@ class SQLDBTest {
     void checkIP(){
         sqldb.create(1051,"key3","key3","",0);
         assertTrue(sqldb.setIP("key3",""));
-        assertNotNull(sqldb.getIP("key3"));
         sqldb.delete("key3");
     }
 

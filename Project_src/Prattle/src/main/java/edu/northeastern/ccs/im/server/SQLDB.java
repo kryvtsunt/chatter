@@ -404,36 +404,6 @@ public class SQLDB {
         return flag;
     }
 
-    /**
-     * retrives the group information
-     *
-     * @param groupName group that is expected to be retrieved
-     * @return list of information of the group which can be user details
-     */
-    public List<String> retrieveGroup(String groupName) {
-        List<String> userInformation = new ArrayList<>();
-
-        try {
-            if (checkGroup(groupName)) {
-                int groupId = getGroupID(groupName);
-                String sqlRetrieveGroup = "SELECT userId FROM groupMembers WHERE groupId=?";
-                try (PreparedStatement pStatement = connection.prepareStatement(sqlRetrieveGroup)) {
-                    pStatement.setInt(1, groupId);
-                    try (ResultSet userSet = pStatement.executeQuery()) {
-                        while (userSet.next()) {
-                            int tempUserId = userSet.getInt("userId");
-                            String tempUsername = getUsername(tempUserId);
-                            userInformation.add(tempUsername);
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
-        }
-        return userInformation;
-
-    }
 
     /**
      * gets the userID for a given user
