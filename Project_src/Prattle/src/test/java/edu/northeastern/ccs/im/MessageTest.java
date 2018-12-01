@@ -35,7 +35,7 @@ class MessageTest {
         assertEquals("NAK 2 -- 2 -- 2 --", message5.toString());
 
         assertEquals("LOG 3 abc 2 -- 2 --", Message.makeLoggerMessage("abc").toString());
-        assertEquals("PCL 3 abc 2 tim 2 --", Message.makePControlMessage("abc", "tim").toString());
+        assertEquals("PCL 3 abc 3 tim 2 --", Message.makePControlMessage("abc", "tim").toString());
         assertEquals("RCL 3 abc 2 -- 2 hi", Message.makeRecallMessage("abc","hi").toString());
         assertEquals("RLE 3 abc 3 def 2 hi", Message.makeSetRoleMessage("abc","def","hi").toString());
         assertEquals("WTU 3 abc 3 def 2 hi", Message.makeWiretapUserMessage("abc","def","hi").toString());
