@@ -984,6 +984,7 @@ public class ClientRunnable implements Runnable {
             }
         } else if (msg.getText().contains(WIRETAPS)) {
             String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
+            msgs += SQLDB.getInstance().getWiretappedUsers(this.getName(), 1).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Incorect Request"), getName());
