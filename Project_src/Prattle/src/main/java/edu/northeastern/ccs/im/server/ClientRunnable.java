@@ -311,7 +311,6 @@ public class ClientRunnable implements Runnable {
     }
 
     /**
-     * SPRINT 3(PREM)
      * send all queued messages from all senders to respective user
      */
     private void sendAllQueuedMessages() {

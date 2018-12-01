@@ -140,7 +140,7 @@ public class Message {
     private MessageType msgType;
 
     /**
-     * The first argument used in the message. This will be the sender's identifier.
+     * The first argument used in the message. This will be the sender's identi fier.
      */
     private String msgSender;
 

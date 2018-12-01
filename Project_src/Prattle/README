@@ -21,19 +21,40 @@ CRUD functionality:
 -DELETE (deletes currently logged in user)
 -JOIN group (adds current user to the group. creates group if there is no one)
 -LEAVE group (removes current user from the group. deletes group if it is empty)
+-RECALL <id> (recall certain message by the message id)
 
 -RETRIEVE PASSWORD(tells current user's password)
 -RETRIEVE EPASSWORD(tells current user's encrypted password)
 -RETRIEVE GROUPS (displays the name of all existing groups)
 -RETRIEVE GROUP group (displays the users that are part of the group) *only if you are part of the group*
--RETRIEVE MESSAGES (displays all messages sent by the user ordered by time)
+-RETRIEVE SEND_MESSAGES (displays all messages sent by the user ordered by time)
+-RETRIEVE RECEIVE_MESSAGES (displays direct message received by the user ordered by time)
 -RETRIEVE GROUP_MESSAGES group(displays all messages for a particular group) *only if you are part of the group*
 -RETRIEVE USERS (all users in the database)
 -RETRIEVE ONLINE (only online users)
+-RETRIEVE ROLE (role of the current user)
 
+for admin:
 
-For the last sprint DB was implemented simply as a text file db.txt.
-For this sprint remote MySQL database is used.
+-RETRIEVE SEND <username> (retrieve all messages sent by the username)
+-RETRIEVE RECEIVE <username> (retrieve all messages retrieved by the username)
+-RETRIEVE CONTENT <content>(retrieve message by the content)
+-RETRIEVE DATE <yyyy-mm-dd> (retrieve messages by the date)
+-RETRIEVE REQUESTS (retrieve all wiretap requests)
+-LOGGER (toggle the logger on/off)
+-PARENT_CONTROL (toogle the parent control on/off)
+-<username> ROLE <role> (set the role of the user: 0-admin, 1-user, 2-agency)
+-<agency> APPROVE <id> (approve certain wiretap request)
+-<agency> APPROVE * (approve all wiretap requests for the agency)
+-<agency> REJECT <id> (reject certain wiretap request)
+
+for agency:
+-RETRIEVE WIRETAPS (Retrieve all wiretaps for current agency)
+- <username>%>%<n> (wiretap user for n days)
+- <groupname>%>>%<n> (wiretap group for n days)
+
+For the first sprint DB was implemented simply as a text file db.txt.
+Starting second sprint remote MySQL database is used.
 
 
 THE IP address OF THE PRATTLE AT AWS is 100.26.75.93.
