@@ -309,7 +309,7 @@ class SQLDBTest {
         assertEquals(true, sqldb.getWiretappedUsers("agencyUserTest", 0).size() > 0);
 
         /* Statements to get coverage */
-        sqldb.retrieveGroup("friends");
+        sqldb.retrieveGroupMembers("friends");
         sqldb.getAgencyList("friends", 1, 1);
         sqldb.deleteWiretapRequest(requestRowID);
         sqldb.getGroupName(100);
