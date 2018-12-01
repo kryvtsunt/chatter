@@ -20,6 +20,5 @@ public class SlackMessage {
         request.setEntity(entity);
 
         HttpResponse response = httpClient.execute(request);
-        System.out.println(response.getStatusLine().getStatusCode());
     }
 }

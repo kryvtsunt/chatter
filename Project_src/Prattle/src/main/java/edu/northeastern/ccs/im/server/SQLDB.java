@@ -1527,30 +1527,6 @@ public class SQLDB {
         return flag;
     }
 
-    /**
-     * Method which gets the IP address of a user
-     * @param username
-     * @return the IP address from the user table
-     */
-    public String getIP(String username) {
-        String userInformation = null;
-        try {
-            if (checkUser(username)) {
-                String sqlCreateUser = "SELECT * FROM users WHERE username=?";
-                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
-                    pStatement.setString(1, username);
-                    try (ResultSet userSet = pStatement.executeQuery()) {
-                        while (userSet.next()) {
-                            userInformation = userSet.getString("IP");
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
-        }
-        return userInformation;
-    }
 
     /**
      * Method to set parent control on a user

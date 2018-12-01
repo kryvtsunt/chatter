@@ -1,25 +1,24 @@
 package edu.northeastern.ccs.im;
 
-import edu.northeastern.ccs.im.server.FileDB;
 
 import java.io.*;
 import java.util.Arrays;
+
+import static edu.northeastern.ccs.im.server.ClientRunnable.LOGGER;
 
 public class ParentControl {
     /**
      * List containing the bad words
      */
-    private String[] list_bad_words;
+    private String[] words;
 
-    private static ParentControl _instance;
+    private static ParentControl instance;
 
     /**
      * Method to read the data from the text file and create a list of bad words
      */
     private ParentControl() {
         try {
-//            File file = new File("badwords.txt");
-//            FileInputStream in = new FileInputStream(file);
             InputStream in = ParentControl.class.getClassLoader().getResourceAsStream("badwords.txt");
             StringBuilder content = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -28,17 +27,18 @@ public class ParentControl {
                 content.append(line).append(System.lineSeparator());
                 line = reader.readLine();
             }
-            list_bad_words = content.toString().replaceAll("\\r", "").split("\n");
+            words = content.toString().replaceAll("\\r", "").split("\n");
         } catch (final IOException e) {
-            e.printStackTrace();
+            LOGGER.info("parent control fails to read from the file");
+
         }
     }
 
     public static ParentControl getInstance() {
-        if (_instance == null) {
-            _instance = new ParentControl();
+        if (instance == null) {
+            instance = new ParentControl();
         }
-        return _instance;
+        return instance;
     }
 
     /**
@@ -48,14 +48,14 @@ public class ParentControl {
      * @return a filtered message with stars replacing the bad words
      */
     public String filterBadWords(final String message) {
-        StringBuffer StringBuffer = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         String[] words = message.split("\\s");
         for (String word : words) {
             String cuss = word.toLowerCase().replaceAll("\\W+", "");
-            checkPatterns(word, cuss, StringBuffer);
-            StringBuffer.append(' ');
+            checkPatterns(word, cuss, sb);
+            sb.append(' ');
         }
-        return StringBuffer.substring(0, StringBuffer.length() - 1);
+        return sb.substring(0, sb.length() - 1);
     }
 
     /**
@@ -63,18 +63,18 @@ public class ParentControl {
      *
      * @param word          the word detected in the message
      * @param cuss          the word matched to the cuss word dictionary
-     * @param StringBuffer StringBuffer for concatenating the message
+     * @param sb StringBuffer for concatenating the message
      */
-    private void checkPatterns(final String word, final String cuss, final StringBuffer StringBuffer) {
-        for (String pattern : list_bad_words) {
+    private void checkPatterns(final String word, final String cuss, final StringBuilder sb) {
+        for (String pattern : words) {
             if (cuss.matches(pattern)) {
                 char[] stars = new char[cuss.length()];
                 Arrays.fill(stars, '*');
                 String rep = new String(stars);
-                StringBuffer.append(word.replaceAll("\\w+", rep));
+                sb.append(word.replaceAll("\\w+", rep));
                 return;
             }
         }
-        StringBuffer.append(word);
+        sb.append(word);
     }
 }

@@ -1,6 +1,5 @@
 package edu.northeastern.ccs.im;
 
-import edu.northeastern.ccs.im.server.Prattle;
 import org.apache.log4j.Level;
 
 

@@ -1,6 +1,5 @@
 package edu.northeastern.ccs.im;
 
-import edu.northeastern.ccs.im.server.Prattle;
 
 /**
  * Each instance of this class represents a single transmission by our IM
@@ -358,6 +357,7 @@ public class Message {
      * @return Instance of Message (or its subclasses) representing the handle,
      * name, & text.
      */
+    @SuppressWarnings("all")
     protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
         Message result = null;
         if (handle.compareTo(MessageType.QUIT.toString()) == 0) {
@@ -473,7 +473,6 @@ public class Message {
 
     public void controlText() {
         this.msgText = ParentControl.getInstance().filterBadWords(msgText);
-        System.out.println(this.msgText);
     }
 
     public void setText(String text) {
