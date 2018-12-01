@@ -284,7 +284,7 @@ public class ClientRunnable implements Runnable {
             password = msg.getText();
             SQLDB db = SQLDB.getInstance();
             if (!db.checkUser(getName())) {
-                SQLDB.getInstance().create(getUserId(), getName(), password);
+                SQLDB.getInstance().create(getUserId(), getName(), password,socket.socket().getInetAddress().toString(), 0);
                 this.ip = SQLDB.getInstance().getIP(getName());
                 validated = true;
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
@@ -302,13 +302,14 @@ public class ClientRunnable implements Runnable {
                 } else if (role == 2) {
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
                 }
-//                sendAllQueuedMessages();
+                sendAllQueuedMessages();
 
             } else {
                 validated = false;
             }
         }
     }
+
 
     /**
      * send all queued messages from all senders to respective user
@@ -739,20 +740,21 @@ public class ClientRunnable implements Runnable {
      */
     private void directMessage(Message msg) {
         SQLDB db = SQLDB.getInstance();
-
         // Get list of agencies wiretapping sender and receiver
-        List<String> agencyList = new ArrayList<>();
+        Set<String> agencyList = new HashSet<>();
         if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-            agencyList.addAll(db.getAgencyList(msg.getSender(), 0, 0));
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
         }
         if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getReceiver(), 0)) {
-            agencyList.addAll(db.getAgencyList(msg.getReceiver(), 0, 0));
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 0, 0));
         }
         for (String agency : agencyList) {
-            db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.getIP(msg.getSender()), db.getIP(agency));
+            String wiretapMessageAppender = "[ >> "+msg.getReceiver()+" ] " + msg.getText();
+            msg.setText(wiretapMessageAppender);
+            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.getIP(msg.getSender()), db.getIP(agency));
             Prattle.directMessage(msg, agency);
         }
-        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.getIP(msg.getSender()), db.getIP(msg.getReceiver()));
+        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(),db.getIP(msg.getSender()), db.getIP(msg.getReceiver()));
         // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
 
@@ -766,21 +768,30 @@ public class ClientRunnable implements Runnable {
     private void groupMessage(Message msg) {
         SQLDB db = SQLDB.getInstance();
         String group = msg.getReceiver();
+
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
             List<String> users = db.retrieveGroupMembers(group);
-            db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(), db.getIP(msg.getSender()), null);
+            Set<String> agencyList = new HashSet<>();
+            db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(),db.getIP(msg.getSender()), null);
 
             // check if the group is being wire tapped
             if (SQLDB.getInstance().isUserOrGroupWiretapped(group, 1)) {
-                users.addAll(db.getAgencyList(group, 1, 0));
+                agencyList.addAll(SQLDB.getInstance().getAgencyList(group, 1, 0));
             }
 
             // check if the sender is being wire tapped
             if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-                users.addAll(db.getAgencyList(msg.getSender(), 0, 0));
+                agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
             }
             for (String user : users) {
                 Prattle.directMessage(msg, user);
+            }
+            for(String agency : agencyList) {
+                String wiretapMessageAppender = "[ >> "+msg.getReceiver()+" ] " + msg.getText();
+                msg.setText(wiretapMessageAppender);
+                db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.getIP(msg.getSender()), db.getIP(msg.getReceiver()));
+
+                Prattle.directMessage(msg, agency);
             }
         }
     }

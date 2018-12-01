@@ -476,6 +476,10 @@ public class Message {
         System.out.println(this.msgText);
     }
 
+    public void setText(String text) {
+        msgText = text;
+    }
+
     /**
      * Determine if this message is an acknowledgement message.
      *
