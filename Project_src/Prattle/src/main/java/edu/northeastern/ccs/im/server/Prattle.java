@@ -17,10 +17,11 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.ParentControl;
+
+import static edu.northeastern.ccs.im.server.ClientRunnable.LOGGER;
 
 /**
  * A network server that communicates with IM clients that connect to it. This
@@ -37,9 +38,6 @@ import edu.northeastern.ccs.im.ParentControl;
  * @version 1.3
  */
 public abstract class Prattle {
-
-    /* Logger */
-    public static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
 
     /* Amount of time we should wait for a signal to arrive. */
@@ -59,7 +57,7 @@ public abstract class Prattle {
 
     static final String SERVER_NAME = "PRATTLE";
 
-    static boolean PARENT_CONTROL = false;
+
 
 
 

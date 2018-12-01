@@ -15,7 +15,7 @@ import java.nio.charset.CharsetDecoder;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static edu.northeastern.ccs.im.server.Prattle.LOGGER;
+import static edu.northeastern.ccs.im.server.ClientRunnable.LOGGER;
 
 
 

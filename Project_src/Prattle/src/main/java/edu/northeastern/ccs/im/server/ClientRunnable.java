@@ -16,8 +16,7 @@ import org.apache.log4j.Level;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
-
-import static edu.northeastern.ccs.im.server.Prattle.LOGGER;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -36,6 +35,12 @@ import static edu.northeastern.ccs.im.server.Prattle.LOGGER;
  * @version 1.3
  */
 public class ClientRunnable implements Runnable {
+
+    /* Logger */
+    public static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+
+
+    static boolean PARENT_CONTROL = false;
 
 
     /**
@@ -289,13 +294,6 @@ public class ClientRunnable implements Runnable {
             if (db.validateCredentials(getName(), password)) {
                 this.ip = SQLDB.getInstance().getIP(getName());
                 validated = true;
-                String lastSeen = "";
-                try {
-                    lastSeen = db.retrieveLastSeen(this.getName()).toString();
-                } catch (Exception e) {
-                    db.updateLastSeen(this.getName());
-                }
-                List<String> msgs = db.getAllQueuedMessagesForUser(this.getName(), db.retrieveLastSeen(this.getName()));
                 int role = db.getUserRole(this.getName());
                 if (role == 0) {
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
@@ -565,7 +563,7 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // Get the next message
             Message msg = input.nextMessage();
-            if (Prattle.PARENT_CONTROL) {
+            if (PARENT_CONTROL) {
                 if (msg.getText() != null) {
                     msg.controlText();
                 }
@@ -701,7 +699,7 @@ public class ClientRunnable implements Runnable {
 
     private void pcontrol(Message msg) {
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-            Prattle.PARENT_CONTROL = !Prattle.PARENT_CONTROL;
+            PARENT_CONTROL = !PARENT_CONTROL;
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
