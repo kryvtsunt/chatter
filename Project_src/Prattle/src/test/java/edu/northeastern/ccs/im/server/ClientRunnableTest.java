@@ -100,7 +100,7 @@ class ClientRunnableTest {
 //    // tests new user CRUD operations
     @Test
     void testOldClient() throws IOException {
-        this.testNewClient();
+//        this.testNewClient();
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
         serverSocket.socket().bind(new InetSocketAddress(port2));

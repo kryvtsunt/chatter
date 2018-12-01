@@ -316,7 +316,7 @@ public class IMConnection {
         }else {
             Message bctMessage = Message.makeBroadcastMessage(userName, message);
             socketConnection.print(bctMessage);
-            
+
         }
 
     }
