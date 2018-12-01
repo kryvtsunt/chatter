@@ -51,6 +51,24 @@ class ClientRunnableTest {
         msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
         msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
         msgs.add(Message.makeBroadcastMessage("username", "Hello"));
+        msgs.add(Message.makeBroadcastMessage("username", "password"));
+        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
+        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
+        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
+        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
+        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
+        msgs.add(Message.makeBroadcastMessage("username", "password"));
+        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
+        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
+        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
+        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
+        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
+        msgs.add(Message.makeBroadcastMessage("username", "password"));
+        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
+        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
+        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
+        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
+        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
 
         for (Message msg : msgs) {
             printer.print(msg);

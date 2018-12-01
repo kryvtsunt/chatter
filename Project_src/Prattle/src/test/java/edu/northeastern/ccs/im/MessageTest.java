@@ -39,7 +39,7 @@ class MessageTest {
         assertEquals("RCL 3 abc 2 -- 2 hi", Message.makeRecallMessage("abc","hi").toString());
         assertEquals("RLE 3 abc 3 def 2 hi", Message.makeSetRoleMessage("abc","def","hi").toString());
         assertEquals("WTU 3 abc 3 def 2 hi", Message.makeWiretapUserMessage("abc","def","hi").toString());
-        assertEquals("WTU 3 abc 3 def 2 hi", Message.makeWiretapGroupMessage("abc","def","hi").toString());
+        assertEquals("WTG 3 abc 3 def 2 hi", Message.makeWiretapGroupMessage("abc","def","hi").toString());
 
         assertEquals("APR 3 abc 3 def 2 hi", Message.makeWiretapApproveMessage("abc","def","hi").toString());
         assertEquals("RJT 3 abp 3 def 2 hi", Message.makeWiretapRejectMessage("abp","def","hi").toString());
