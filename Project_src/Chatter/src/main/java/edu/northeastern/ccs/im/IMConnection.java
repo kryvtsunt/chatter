@@ -310,9 +310,12 @@ public class IMConnection {
             Message lgMessage = Message.makeLoggerMessage(userName);
             socketConnection.print(lgMessage);
         }
-        else if (message.equals("PARENT_CONTROL")) {
-            Message pcMessage = Message.makePControlMessage(userName);
-            socketConnection.print(pcMessage);
+        else if (message.equals("PARENT_CONTROL ")) {
+            String[] args = message.split("PARENT_CONTROL ");
+            String content = args[1];
+            Message pMessage = Message.makeRetrieveMessage(userName, content);
+            socketConnection.print(pMessage);
+
         }else {
             Message bctMessage = Message.makeBroadcastMessage(userName, message);
             socketConnection.print(bctMessage);

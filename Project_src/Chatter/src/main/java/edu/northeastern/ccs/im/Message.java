@@ -1,5 +1,7 @@
 package edu.northeastern.ccs.im;
 
+import edu.northeastern.ccs.im.server.Prattle;
+
 /**
  * Each instance of this class represents a single transmission by our IM
  * clients.
@@ -138,7 +140,7 @@ public class Message {
     private MessageType msgType;
 
     /**
-     * The first argument used in the message. This will be the sender's identifier.
+     * The first argument used in the message. This will be the sender's identi fier.
      */
     private String msgSender;
 
@@ -220,8 +222,8 @@ public class Message {
         return new Message(MessageType.LOGGER, myName, null, null);
     }
 
-    public static Message makePControlMessage(String myName) {
-        return new Message(MessageType.PCONTROL, myName, null, null);
+    public static Message makePControlMessage(String myName, String directTo) {
+        return new Message(MessageType.PCONTROL, myName, directTo, null);
     }
 
     /**
@@ -397,7 +399,7 @@ public class Message {
         } else if (handle.compareTo(MessageType.LOGGER.toString()) == 0) {
             result = makeLoggerMessage(srcName);
         } else if (handle.compareTo(MessageType.PCONTROL.toString()) == 0) {
-            result = makePControlMessage(srcName);
+            result = makePControlMessage(srcName, dstName);
         }
         return result;
     }
@@ -469,6 +471,9 @@ public class Message {
         return msgText;
     }
 
+    public void setText(String text) {
+        msgText = text;
+    }
 
     /**
      * Determine if this message is an acknowledgement message.

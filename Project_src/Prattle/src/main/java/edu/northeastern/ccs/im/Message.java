@@ -222,8 +222,8 @@ public class Message {
         return new Message(MessageType.LOGGER, myName, null, null);
     }
 
-    public static Message makePControlMessage(String myName) {
-        return new Message(MessageType.PCONTROL, myName, null, null);
+    public static Message makePControlMessage(String myName, String directTo) {
+        return new Message(MessageType.PCONTROL, myName, directTo, null);
     }
 
     /**
@@ -399,7 +399,7 @@ public class Message {
         } else if (handle.compareTo(MessageType.LOGGER.toString()) == 0) {
             result = makeLoggerMessage(srcName);
         } else if (handle.compareTo(MessageType.PCONTROL.toString()) == 0) {
-            result = makePControlMessage(srcName);
+            result = makePControlMessage(srcName, dstName);
         }
         return result;
     }

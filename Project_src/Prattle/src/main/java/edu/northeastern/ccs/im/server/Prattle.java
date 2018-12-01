@@ -74,10 +74,16 @@ public abstract class Prattle {
      * @param message Message that the client sent.
      */
     public static void broadcastMessage(Message message) {
+        SQLDB db = SQLDB.getInstance();
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized()) {
+                if (db.getControl(message.getSender()) == 1 || db.getControl(message.getReceiver()) == 1)  {
+                    if (message.getText() != null) {
+                        message.controlText();
+                    }
+                }
                 tt.enqueueMessage(message);
             }
         }
@@ -92,10 +98,16 @@ public abstract class Prattle {
      *
      */
     public static void directMessage(Message message, String client) {
+        SQLDB db = SQLDB.getInstance();
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized() && tt.getName().equals(client)) {
+                if (db.getControl(message.getSender()) == 1 || db.getControl(message.getReceiver()) == 1)  {
+                    if (message.getText() != null) {
+                        message.controlText();
+                    }
+                }
                 tt.enqueueMessage(message);
             }
         }

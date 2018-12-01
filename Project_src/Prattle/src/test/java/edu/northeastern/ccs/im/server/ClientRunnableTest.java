@@ -31,7 +31,7 @@ class ClientRunnableTest {
     private static final int port3 = 4560;
     private static final int port4 = 4562;
 
-
+    @Test
     void testNewClient() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
@@ -100,7 +100,7 @@ class ClientRunnableTest {
     }
 
 
-//    // tests new user CRUD operations
+    @Test
     void testOldClient() throws IOException {
 //        this.testNewClient();
         ServerSocketChannel serverSocket = ServerSocketChannel.open();

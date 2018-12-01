@@ -24,9 +24,9 @@ class ParentControlTest {
 
     @Test
     void filterBadWords() {
-//        ParentControl pc = ParentControl.getInstance();
-//        assertEquals("***", pc.filterBadWords("ass"));
-//        pc.getInstance();
+        ParentControl pc = ParentControl.getInstance();
+        assertEquals("***", pc.filterBadWords("ass"));
+        pc.getInstance();
 
     }
 

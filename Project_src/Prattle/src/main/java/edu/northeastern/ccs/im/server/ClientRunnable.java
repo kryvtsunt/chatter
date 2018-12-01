@@ -700,7 +700,13 @@ public class ClientRunnable implements Runnable {
 
     private void pcontrol(Message msg) {
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-            PARENT_CONTROL = !PARENT_CONTROL;
+            int control = SQLDB.getInstance().getControl(msg.getReceiver());
+            if (control == 1){
+                control = 0;
+            } else {
+                control = 1;
+            }
+            SQLDB.getInstance().setControl(msg.getReceiver(), control);
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
 
