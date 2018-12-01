@@ -473,6 +473,7 @@ public class ClientRunnable implements Runnable {
         terminateInactive();
     }
 
+
     /**
      * Method that is responsible for an active communication between the server and a validated user.
      */
