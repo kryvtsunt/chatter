@@ -59,9 +59,9 @@ class SQLDBTest {
 
     @Test
     void create() {
-        assertFalse(sqldb.create(105,"mockuser2","newpp"));
+        assertFalse(sqldb.create(105,"mockuser2","newpp","",0));
         sqldb.delete("mockUser1");
-        assertTrue(sqldb.create(106,"mockUser1","newPass"));
+        assertTrue(sqldb.create(106,"mockUser1","newPass","",1));
 
     }
 
@@ -101,7 +101,7 @@ class SQLDBTest {
         db.getGroupID("random");
         db.checkGroup("none");
         db.createGroup("none");
-        db.create(11,"none","none");
+        db.create(11,"none","none","",0);
         db.deleteGroupMember("none","none");
         db.delete("none");
         db.deleteGroup("none");
@@ -113,11 +113,11 @@ class SQLDBTest {
         db.addGroupMember("none","nonoe");
         db.reset();
         db.retrieveAllGroups();
-        db.storeMessageIndividual("nonw","nonow","aonso", null, null);
+        db.storeMessageIndividual("nonw","nonow","aonso","","");
         db.retrieveGroup("none");
         db.getUserID("none");
-        db.storeMessageGroup("nonw","nonw","non", null, null);
-        db.storeMessageGroup("none","mo","sa", null, null);
+        db.storeMessageGroup("nonw","nonw","non","","");
+        db.storeMessageGroup("none","mo","sa","","");
         db.getAllMessagesForUser("no", "fromUser");
         db.getAllMessagesForGroup("no","ni");
         db.retrieveGroupMembers("noin");
@@ -195,7 +195,7 @@ class SQLDBTest {
 
     @Test
     void storeMessageIndividual() throws IOException {
-        assertTrue(sqldb.storeMessageIndividual("mockUser","Mikey","Hey", null, null));
+        assertTrue(sqldb.storeMessageIndividual("mockUser","Mikey","Hey","",""));
 
     }
 
@@ -203,13 +203,13 @@ class SQLDBTest {
     void storeMessageGroup() {
         sqldb.createGroup("mockGroup");
 
-        assertTrue(sqldb.storeMessageGroup("Mikey","mockGroup","grouptext", null, null));
+        assertTrue(sqldb.storeMessageGroup("Mikey","mockGroup","grouptext","",""));
         sqldb.deleteGroup("mockGroup");
     }
 
     @Test
     void storeMessageBroadcast() {
-        assertTrue(sqldb.storeMessageBroadcast("Mikey","test", null, null));
+        assertTrue(sqldb.storeMessageBroadcast("Mikey","test","",""));
     }
 
     @Test
@@ -292,13 +292,13 @@ class SQLDBTest {
         sqldb.delete("agencyUserTest");
         sqldb.delete("normalUserTest1");
 
-        sqldb.create(220, "adminUserTest", "pass");
+        sqldb.create(220, "adminUserTest", "pass","",0);
         sqldb.updateUserRole("adminUserTest", 0);
 
-        sqldb.create(221, "agencyUserTest", "pass");
+        sqldb.create(221, "agencyUserTest", "pass","",0);
         sqldb.updateUserRole("agencyUserTest", 2);
 
-        sqldb.create(222, "normalUserTest1", "pass");
+        sqldb.create(222, "normalUserTest1", "pass","",0);
 
         sqldb.isUserOrGroupWiretapped("normalUserTest1", 0);
         assertEquals(1,sqldb.getUserRole("normalUserTest1"));
@@ -307,6 +307,7 @@ class SQLDBTest {
         assertEquals(true, sqldb.requestWiretap("normalUserTest1", "normalUserTest2", 0, 5) == -1);
         int requestRowID = sqldb.requestWiretap("agencyUserTest", "normalUserTest1", 0, 7);
         sqldb.requestWiretap("agencyUserTest", "normalUserTest2", 0, 7);
+//    	assertEquals(true, sqldb.checkWiretapRequest("agencyUserTest", "normalUserTest1", 0));
 
 
 
@@ -344,6 +345,22 @@ class SQLDBTest {
         sqldb.createGroup("sqldbCreateGroupTest");
         assertEquals(true,sqldb.retrieveGroup("sqldbCreateGroupTest").size() == 0);
         sqldb.deleteGroup("sqldbCreateGroupTest");
+    }
+
+    @Test
+    void checkIP(){
+        sqldb.create(1051,"key3","key3","",0);
+        assertTrue(sqldb.setIP("key3",""));
+        assertNotNull(sqldb.getIP("key3"));
+        sqldb.delete("key3");
+    }
+
+    @Test
+    void checkControl(){
+        sqldb.create(1051, "key3","key3","",1);
+        assertTrue(sqldb.setControl("key3",1));
+        assertEquals(1, sqldb.getControl("key3"));
+        sqldb.delete("key3");
     }
 
 }
