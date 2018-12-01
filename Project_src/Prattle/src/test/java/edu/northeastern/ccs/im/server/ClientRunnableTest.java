@@ -300,11 +300,11 @@ class ClientRunnableTest {
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "admin"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "user"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "god"));
-        msgs.add(Message.makePControlMessage("admin"));
+        msgs.add(Message.makePControlMessage("admin", "tim"));
         msgs.add(Message.makeLoggerMessage("admin"));
         msgs.add(Message.makeBroadcastMessage("admin", "ass"));
         msgs.add(Message.makeBroadcastMessage("admin", "ass"));
-        msgs.add(Message.makePControlMessage("admin"));
+        msgs.add(Message.makePControlMessage("admin", "tim"));
         msgs.add(Message.makeLoggerMessage("admin"));
         msgs.add(Message.makeQuitMessage("admin"));
 

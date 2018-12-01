@@ -310,10 +310,10 @@ public class IMConnection {
             Message lgMessage = Message.makeLoggerMessage(userName);
             socketConnection.print(lgMessage);
         }
-        else if (message.equals("PARENT_CONTROL ")) {
+        else if (message.contains("PARENT_CONTROL ")) {
             String[] args = message.split("PARENT_CONTROL ");
             String content = args[1];
-            Message pMessage = Message.makeRetrieveMessage(userName, content);
+            Message pMessage = Message.makePControlMessage(userName, content);
             socketConnection.print(pMessage);
 
         }else {
