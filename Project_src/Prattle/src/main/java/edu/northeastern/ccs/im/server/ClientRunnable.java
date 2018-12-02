@@ -321,10 +321,11 @@ public class ClientRunnable implements Runnable {
     private void sendAllQueuedMessages() {
         Timestamp lastSeen = null;
         try {
-            lastSeen = SQLDB.getInstance().retrieveLastSeen(this.getName());
+            lastSeen = SQLDB.getInstance().retrieveLastSeen(getName());
         } catch (Exception e) {
-            SQLDB.getInstance().updateLastSeen(this.getName());
-            return;
+            if(SQLDB.getInstance().updateLastSeen(getName())) {
+                return;
+            }
         }
         if (lastSeen != null) {
             List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
