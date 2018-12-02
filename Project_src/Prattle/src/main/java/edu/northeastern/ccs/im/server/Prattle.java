@@ -79,9 +79,7 @@ public abstract class Prattle {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized()) {
                 if (db.getControl(message.getSender()) == 1 || db.getControl(message.getReceiver()) == 1)  {
-                    if (message.getText() != null) {
                         message.controlText();
-                    }
                 }
                 tt.enqueueMessage(message);
             }
@@ -103,9 +101,7 @@ public abstract class Prattle {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized() && tt.getName().equals(client)) {
                 if (db.getControl(message.getSender()) == 1 || db.getControl(message.getReceiver()) == 1)  {
-                    if (message.getText() != null) {
                         message.controlText();
-                    }
                 }
                 tt.enqueueMessage(message);
             }

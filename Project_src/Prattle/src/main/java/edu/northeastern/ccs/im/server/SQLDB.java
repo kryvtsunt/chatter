@@ -124,26 +124,7 @@ public class SQLDB {
         return userInformation;
     }
 
-    public String retrieveIp(String username) {
-        String userInformation = null;
-        try {
-            if (checkUser(username)) {
-                String sqlCreateUser = "SELECT * FROM users WHERE username=?";
-                try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
-                    pStatement.setString(1, username);
-                    try (ResultSet userSet = pStatement.executeQuery()) {
-                        while (userSet.next()) {
-                            userInformation = userSet.getString("IP");
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
-        }
 
-        return userInformation;
-    }
 
 
     /**

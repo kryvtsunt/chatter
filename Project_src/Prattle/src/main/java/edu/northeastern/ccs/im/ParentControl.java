@@ -49,8 +49,8 @@ public class ParentControl {
      */
     public String filterBadWords(final String message) {
         StringBuilder sb = new StringBuilder();
-        String[] words = message.split("\\s");
-        for (String word : words) {
+        String[] ws = message.split("\\s");
+        for (String word : ws) {
             String cuss = word.toLowerCase().replaceAll("\\W+", "");
             checkPatterns(word, cuss, sb);
             sb.append(' ');

@@ -18,7 +18,5 @@ public class SlackMessage {
         HttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost request = new HttpPost(url);
         request.setEntity(entity);
-
-        HttpResponse response = httpClient.execute(request);
     }
 }
