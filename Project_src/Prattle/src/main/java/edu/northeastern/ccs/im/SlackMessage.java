@@ -1,10 +1,7 @@
 package edu.northeastern.ccs.im;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.*;
-import java.io.IOException;
 
 public class SlackMessage {
     public void slackMessage(String msg) {
