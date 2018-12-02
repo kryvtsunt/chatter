@@ -99,8 +99,6 @@ public class Message {
         LOGGER("LOG");
 
 
-
-
         /**
          * Store the short name of this message type.
          */

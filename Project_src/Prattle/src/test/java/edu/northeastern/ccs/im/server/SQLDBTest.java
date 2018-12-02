@@ -315,7 +315,6 @@ class SQLDBTest {
         sqldb.getGroupName(100);
         sqldb.getLastMessageID("normalUserTest1");
         sqldb.retrieveLastSeen("normalUserTest1");
-        sqldb.updateLastSeen("normalUserTest1");
         sqldb.getAllQueuedMessagesForUser("normalUserTest1", sqldb.retrieveLastSeen("normalUserTest1"));
         sqldb.getLastMessageID("normalUserTest1");
         sqldb.setRecallFlagMessage("normalUserTest1", 998);
@@ -345,5 +344,4 @@ class SQLDBTest {
         assertEquals(1, sqldb.getControl("key3"));
         sqldb.delete("key3");
     }
-
 }

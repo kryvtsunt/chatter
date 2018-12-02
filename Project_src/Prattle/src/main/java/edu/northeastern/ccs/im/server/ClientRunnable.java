@@ -12,6 +12,7 @@ import org.apache.log4j.Level;
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 
@@ -681,11 +682,12 @@ public class ClientRunnable implements Runnable {
     }
 
     private void logger(Message msg) {
+        Level level = Logger.getRootLogger().getLevel();
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-            if (Logger.getRootLogger().getLevel() == Level.OFF) {
-                Logger.getRootLogger().setLevel(Level.INFO);
-            } else {
+            if (level == Level.DEBUG) {
                 Logger.getRootLogger().setLevel(Level.OFF);
+            } else if(level == Level.OFF) {
+                Logger.getRootLogger().setLevel(Level.DEBUG);
             }
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
@@ -753,10 +755,10 @@ public class ClientRunnable implements Runnable {
         for (String agency : agencyList) {
             String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
             msg.setText(wiretapMessageAppender);
-            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender()), db.retrieve(agency));
+            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieveIp(msg.getSender()), db.retrieveIp(agency));
             Prattle.directMessage(msg, agency);
         }
-        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender()), db.retrieve(msg.getReceiver()));
+        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieveIp(msg.getSender()), db.retrieveIp(msg.getReceiver()));
         // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
 
@@ -791,7 +793,7 @@ public class ClientRunnable implements Runnable {
             for (String agency : agencyList) {
                 String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
                 msg.setText(wiretapMessageAppender);
-                db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender()), db.retrieve(msg.getReceiver()));
+                db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieveIp(msg.getSender()), db.retrieveIp(msg.getReceiver()));
 
                 Prattle.directMessage(msg, agency);
             }
@@ -1010,9 +1012,10 @@ public class ClientRunnable implements Runnable {
     public void terminateClient() {
         try {
             // Once the communication is done, close this connection.
-            SQLDB.getInstance().updateLastSeen(this.getName());
-            input.close();
-            socket.close();
+            if(SQLDB.getInstance().updateLastSeen(this.getName())) {
+                input.close();
+                socket.close();
+            }
         } catch (IOException e) {
             LOGGER.info("unable to terminate");
 
