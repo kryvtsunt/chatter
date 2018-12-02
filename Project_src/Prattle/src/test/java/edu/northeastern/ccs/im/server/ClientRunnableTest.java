@@ -90,7 +90,7 @@ class ClientRunnableTest {
         socketChannel.connect(socketAddr);
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeQuitMessage("username33"));
+        msgs.add(Message.makeQuitMessage("username333"));
         for (Message msg : msgs) {
             printer.print(msg);
         }
@@ -107,18 +107,13 @@ class ClientRunnableTest {
         assertFalse(client.isInitialized());
         assertEquals(0, client.getUserId());
         assertTrue(client.getWaitingList().isEmpty());
-        client.login("username33", "username33");
+        client.login("username333", "username333");
         try{
             for (int i = 0; i < msgs.size(); i++) {
                 client.run();
             }
         } catch (Exception e){
         }
-        assertTrue(client.isValidated());
-        assertTrue(client.isInitialized());
-        assertNotEquals(0, client.getUserId());
-        client.enqueueMessage(Message.makeAcknowledgeMessage(client.getName()));
-        assertFalse(client.getWaitingList().isEmpty());
     }
 
 
