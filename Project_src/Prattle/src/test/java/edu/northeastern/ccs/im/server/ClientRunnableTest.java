@@ -35,8 +35,6 @@ class ClientRunnableTest {
     private static final int port7 = 4519;
 
 
-
-
     @Test
     void testNewClient() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
