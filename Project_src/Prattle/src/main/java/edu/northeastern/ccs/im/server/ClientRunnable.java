@@ -184,6 +184,9 @@ public class ClientRunnable implements Runnable {
 
     private static final String WIRETAPS = "WIRETAPS";
 
+    private static final String OFF = "OFF";
+    private static final String ON = "ON";
+
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -318,10 +321,11 @@ public class ClientRunnable implements Runnable {
     private void sendAllQueuedMessages() {
         Timestamp lastSeen = null;
         try {
-            lastSeen = SQLDB.getInstance().retrieveLastSeen(this.getName());
+            lastSeen = SQLDB.getInstance().retrieveLastSeen(getName());
         } catch (Exception e) {
-            SQLDB.getInstance().updateLastSeen(this.getName());
-            return;
+            if(SQLDB.getInstance().updateLastSeen(getName())) {
+                return;
+            }
         }
         if (lastSeen != null) {
             List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
@@ -581,6 +585,12 @@ public class ClientRunnable implements Runnable {
      */
     @SuppressWarnings("all")
     private void executeRequest(Message msg) {
+        if(msg.terminate()){
+            terminate();
+        }else{
+            msg.controlText();
+        }
+
         // If the message is a direct message, send it out
         if (msg.isDirectMessage()) {
             directMessage(msg);
@@ -987,7 +997,15 @@ public class ClientRunnable implements Runnable {
             String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
             msgs += SQLDB.getInstance().getWiretappedUsers(this.getName(), 1).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
-        } else {
+        } else if (msg.getText().equals(OFF)) {
+
+
+            LOGGER.getRootLogger().setLevel(Level.OFF);
+        } else if (msg.getText().equals(ON)) {
+
+            LOGGER.getRootLogger().setLevel(Level.INFO);
+
+        }else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Incorect Request"), getName());
         }
     }

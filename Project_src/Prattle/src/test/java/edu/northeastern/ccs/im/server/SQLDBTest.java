@@ -216,7 +216,7 @@ class SQLDBTest {
 
     @Test
     void testLastSeen(){
-        assertFalse(sqldb.updateLastSeen("ag1"));
+        assertTrue(sqldb.updateLastSeen("ag1"));
     }
 
     @Test
