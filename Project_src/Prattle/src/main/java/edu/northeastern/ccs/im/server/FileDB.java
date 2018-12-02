@@ -23,6 +23,8 @@ public class FileDB {
 
     private Map<String, String> users = new HashMap<>();
 
+
+
     private String name = "db.txt";
 
     private FileDB() {
