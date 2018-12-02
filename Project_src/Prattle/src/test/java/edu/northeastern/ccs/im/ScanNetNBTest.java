@@ -27,7 +27,7 @@ class ScanNetNBTest {
         /*
           The port number to listen on.
          */
-        int port = 4510;
+        int port = 4512;
         serverSocket.socket().bind(new InetSocketAddress(port));
         Selector selector = SelectorProvider.provider().openSelector();
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);

@@ -22,7 +22,6 @@ public class ServerConstants {
 
 	private ServerConstants(){
 		throw new IllegalStateException("Utility class");
-
 	}
 
 	/** The port number to listen on. */

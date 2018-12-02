@@ -2,15 +2,17 @@ package edu.northeastern.ccs.im.server;
 
 import java.io.IOException;
 import java.nio.channels.SocketChannel;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.apache.log4j.Level;
 
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -31,7 +33,8 @@ import edu.northeastern.ccs.im.ScanNetNB;
 public class ClientRunnable implements Runnable {
 
     /* Logger */
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
+
 
     /**
      * Number of milliseconds that special responses are delayed before being sent.
@@ -142,7 +145,9 @@ public class ClientRunnable implements Runnable {
     /**
      * Keyword in the user input for CRUD operations. Used to view the users messages
      */
-    private static final String MESSAGES = "MESSAGES";
+    private static final String SEND_MESSAGES = "SEND_MESSAGES";
+
+    private static final String RECEIVE_MESSAGES = "RECEIVE_MESSAGES";
 
     /**
      * Keyword in the user input for CRUD operations. Used to see all the existing groups
@@ -169,6 +174,16 @@ public class ClientRunnable implements Runnable {
      */
     private static final String EPASWD = "EPASSWORD";
 
+    private static final String REQUESTS = "REQUESTS";
+
+    private static final String SENDER = "SENDER ";
+    private static final String RECEIVER = "RECEIVER ";
+    private static final String CONTENT = "CONTENT ";
+    private static final String DATE = "DATE ";
+
+
+    private static final String WIRETAPS = "WIRETAPS";
+
 
     /**
      * Create a new thread with which we will communicate with this single client.
@@ -184,6 +199,7 @@ public class ClientRunnable implements Runnable {
         socket.configureBlocking(false);
         // Create the class we will use to receive input
         input = new ScanNetNB(socket);
+        socket.getRemoteAddress();
         // Create the class we will use to send output
         output = new PrintNetNB(socket);
         // Mark that we are not initialized
@@ -233,16 +249,20 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            if (setUserName(msg.getSender())) {
-                // Update the time until we terminate this client due to inactivity.
-                terminateInactivity.setTimeInMillis(
-                        new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
-                // Set that the client is initialized.
-                initialized = true;
+            initialize(msg);
+        }
+    }
 
-            } else {
-                initialized = false;
-            }
+    private void initialize(Message msg) {
+        if (setUserName(msg.getSender())) {
+            // Update the time until we terminate this client due to inactivity.
+            terminateInactivity.setTimeInMillis(
+                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
+            // Set that the client is initialized.
+            initialized = true;
+
+        } else {
+            initialized = false;
         }
     }
 
@@ -254,23 +274,65 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
-            password = msg.getText();
-            SQLDB db = SQLDB.getInstance();
-            if (!db.checkUser(getName())) {
-                SQLDB.getInstance().create(getUserId(), getName(), password);
-                validated = true;
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
-                return;
-            }
+            validate(msg);
+        }
+    }
 
-            if (db.validateCredentials(getName(), password)) {
-                validated = true;
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in."), getName());
-            } else {
-                validated = false;
+    private void validate(Message msg) {
+        password = msg.getText();
+        SQLDB db = SQLDB.getInstance();
+        if (!db.checkUser(getName())) {
+            SQLDB.getInstance().create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
+            validated = true;
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
+            return;
+        }
+
+        if (db.validateCredentials(getName(), password)) {
+            validated = true;
+            int role = db.getUserRole(this.getName());
+            if (role == 0) {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
+            } else if (role == 1) {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. "), getName());
+            } else if (role == 2) {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
+            }
+            sendAllQueuedMessages();
+
+        } else {
+            validated = false;
+        }
+    }
+
+    public void login(String username, String password){
+        this.name = username;
+        this.initialize(Message.makeLoginMessage(username));
+        this.validate(Message.makeBroadcastMessage(username, password));
+    }
+
+
+    /**
+     * send all queued messages from all senders to respective user
+     */
+    private void sendAllQueuedMessages() {
+        Timestamp lastSeen = null;
+        try {
+            lastSeen = SQLDB.getInstance().retrieveLastSeen(this.getName());
+        } catch (Exception e) {
+            SQLDB.getInstance().updateLastSeen(this.getName());
+            return;
+        }
+        if (lastSeen != null) {
+            List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
+            for (String msg : queuedMessages) {
+                String fromUser = msg.split(",")[0].split(":")[1];
+                String message = msg.split(",")[1].split(":")[1];
+                Prattle.directMessage(Message.makeDirectMessage(fromUser, getName(), message), getName());
             }
         }
     }
+
 
     /**
      * Process one of the special responses
@@ -412,6 +474,7 @@ public class ClientRunnable implements Runnable {
         terminateInactive();
     }
 
+
     /**
      * Method that is responsible for an active communication between the server and a validated user.
      */
@@ -516,6 +579,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param msg Message which we are interested in and that needs to be executed by the server
      */
+    @SuppressWarnings("all")
     private void executeRequest(Message msg) {
         // If the message is a direct message, send it out
         if (msg.isDirectMessage()) {
@@ -545,8 +609,131 @@ public class ClientRunnable implements Runnable {
         } else if (msg.terminate()) {
             terminate();
         }
+        //if message is a recall message
+        else if (msg.isRecall()) {
+            recallMessage(msg);
+        } else if (msg.isWiretapUserMessage()) {
+            wiretapUserRequest(msg);
+        } else if (msg.isWiretapGroupMessage()) {
+            wiretapGroupRequest(msg);
+        }
+        // admin msgs
+        else if (msg.isApproveMessage()) {
+            wiretapApprove(msg);
+        } else if (msg.isRejectMessage()) {
+            wiretapReject(msg);
+        } else if (msg.isSetRoleMessage()) {
+            setRole(msg);
+        } else if (msg.isLoggerMessage()) {
+            logger(msg);
+        } else if (msg.isPControlMessage()) {
+            pcontrol(msg);
+        }
         // Otherwise, ignore it (for now).
     }
+
+
+    /**
+     * method used to update recall status for last message send by user
+     */
+    private void recallMessage(Message msg) {
+
+        if (SQLDB.getInstance().setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()))) {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "Your message was successfully recalled"), msg.getSender());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You dont have permission to recal this message"), msg.getSender());
+
+        }
+    }
+
+    private void wiretapUserRequest(Message msg) {
+        SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
+    }
+
+    private void wiretapGroupRequest(Message msg) {
+        SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 1, Integer.parseInt(msg.getText()));
+    }
+
+    private void setRole(Message msg) {
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+            switch (msg.getText()) {
+                case "user":
+                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 1);
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted a user role"), msg.getReceiver());
+                    break;
+                case "admin":
+                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 0);
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted an admin role"), msg.getReceiver());
+                    break;
+                case "agency":
+                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 2);
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted an agency role"), msg.getReceiver());
+                    break;
+                default:
+                    Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Incorrect request"), msg.getSender());
+                    break;
+            }
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+
+        }
+    }
+
+    private void logger(Message msg) {
+        Level level = Logger.getRootLogger().getLevel();
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+            if (level == Level.DEBUG) {
+                Logger.getRootLogger().setLevel(Level.OFF);
+            } else if(level == Level.OFF) {
+                Logger.getRootLogger().setLevel(Level.DEBUG);
+            }
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify logger status"), msg.getSender());
+
+        }
+    }
+
+    private void pcontrol(Message msg) {
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+            int control = SQLDB.getInstance().getControl(msg.getReceiver());
+            if (control == 1) {
+                control = 0;
+            } else {
+                control = 1;
+            }
+            SQLDB.getInstance().setControl(msg.getReceiver(), control);
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to set parrent controll"), msg.getSender());
+
+        }
+    }
+
+    private void wiretapApprove(Message msg) {
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+            if (msg.getText().equals("*")) {
+                SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver());
+            } else {
+                SQLDB.getInstance().setWireTap(msg.getSender(), Integer.parseInt(msg.getText()));
+            }
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to approve wiretaps"), msg.getSender());
+        }
+
+    }
+
+    private void wiretapReject(Message msg) {
+        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+            SQLDB.getInstance().deleteWiretapRequest(Integer.parseInt(msg.getText()));
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is rejected"), msg.getReceiver());
+
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to reject wiretaps"), msg.getSender());
+
+        }
+
+    }
+
 
     /**
      * For communication between two users
@@ -554,8 +741,25 @@ public class ClientRunnable implements Runnable {
      * @param msg message sent from one user to other
      */
     private void directMessage(Message msg) {
-        SQLDB.getInstance().storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText());
+        SQLDB db = SQLDB.getInstance();
+        // Get list of agencies wiretapping sender and receiver
+        Set<String> agencyList = new HashSet<>();
+        if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
+        }
+        if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getReceiver(), 0)) {
+            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 0, 0));
+        }
+        for (String agency : agencyList) {
+            String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
+            msg.setText(wiretapMessageAppender);
+            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender()), db.retrieve(agency));
+            Prattle.directMessage(msg, agency);
+        }
+        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender()), db.retrieve(msg.getReceiver()));
+        // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
+
     }
 
     /**
@@ -566,11 +770,30 @@ public class ClientRunnable implements Runnable {
     private void groupMessage(Message msg) {
         SQLDB db = SQLDB.getInstance();
         String group = msg.getReceiver();
+
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
-            SQLDB.getInstance().storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText());
             List<String> users = db.retrieveGroupMembers(group);
+            Set<String> agencyList = new HashSet<>();
+            db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender()), null);
+
+            // check if the group is being wire tapped
+            if (SQLDB.getInstance().isUserOrGroupWiretapped(group, 1)) {
+                agencyList.addAll(SQLDB.getInstance().getAgencyList(group, 1, 0));
+            }
+
+            // check if the sender is being wire tapped
+            if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
+                agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
+            }
             for (String user : users) {
                 Prattle.directMessage(msg, user);
+            }
+            for (String agency : agencyList) {
+                String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
+                msg.setText(wiretapMessageAppender);
+                db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender()), db.retrieve(msg.getReceiver()));
+
+                Prattle.directMessage(msg, agency);
             }
         }
     }
@@ -584,12 +807,14 @@ public class ClientRunnable implements Runnable {
         terminate = true;
     }
 
+
     /**
      * Validate if the message is legal, check for special messages and show the message sent/received by the user/server
      *
      * @param msg Messages that needs to be displayed
      */
     private void display(Message msg) {
+        SQLDB db = SQLDB.getInstance();
         // Check if the message is legal formatted
         if (messageChecks(msg)) {
             // Check for our "special messages"
@@ -600,7 +825,7 @@ public class ClientRunnable implements Runnable {
                     initialized = false;
                     Prattle.broadcastMessage(Message.makeQuitMessage(name));
                 } else {
-                    SQLDB.getInstance().storeMessageBroadcast(getName(), msg.getText());
+                    db.storeMessageBroadcast(getName(), msg.getText(), db.retrieve(msg.getSender()), null);
                     Prattle.broadcastMessage(msg);
                 }
             }
@@ -684,8 +909,11 @@ public class ClientRunnable implements Runnable {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
         } else if (msg.getText().equals(PASWD)) {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
-        } else if (msg.getText().equals(MESSAGES)) {
-            String logs = SQLDB.getInstance().getAllMessagesForUser(getName());
+        } else if (msg.getText().equals(SEND_MESSAGES)) {
+            String logs = SQLDB.getInstance().getAllMessagesForUser(getName(), "fromUser");
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
+        } else if (msg.getText().equals(RECEIVE_MESSAGES)) {
+            String logs = SQLDB.getInstance().getAllMessagesForUser(getName(), "toUser");
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
         } else if (msg.getText().contains(GROUP_MESSAGES) && msg.getText().split(GROUP_MESSAGES).length == 2) {
             String group = msg.getText().split(GROUP_MESSAGES)[1];
@@ -712,6 +940,55 @@ public class ClientRunnable implements Runnable {
             } else {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
             }
+        } else if (msg.getText().contains(REQUESTS)) {
+            String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "", 0).toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
+        } else if (msg.getText().contains(CONTENT) && msg.getText().split(CONTENT).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+                String content = msg.getText().split(CONTENT)[1];
+                StringBuilder msgs = new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessageBasedOnContent(content));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for content"), msg.getSender());
+
+            }
+        } else if (msg.getText().contains(SENDER) && msg.getText().split(SENDER).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+                String content = msg.getText().split(SENDER)[1];
+                StringBuilder msgs = new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessagesSendBySender(content));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for sender"), msg.getSender());
+
+            }
+        } else if (msg.getText().contains(RECEIVER) && msg.getText().split(RECEIVER).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+                String content = msg.getText().split(RECEIVER)[1];
+                StringBuilder msgs = new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for receiver"), msg.getSender());
+
+            }
+        } else if (msg.getText().contains(DATE) && msg.getText().split(DATE).length == 2) {
+            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+                String content = msg.getText().split(DATE)[1];
+                StringBuilder msgs = new StringBuilder();
+                msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)));
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for date"), msg.getSender());
+
+            }
+        } else if (msg.getText().contains(WIRETAPS)) {
+            String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
+            msgs += SQLDB.getInstance().getWiretappedUsers(this.getName(), 1).toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Incorect Request"), getName());
         }
     }
 
@@ -733,8 +1010,10 @@ public class ClientRunnable implements Runnable {
     public void terminateClient() {
         try {
             // Once the communication is done, close this connection.
-            input.close();
-            socket.close();
+            if(SQLDB.getInstance().updateLastSeen(this.getName())) {
+                input.close();
+                socket.close();
+            }
         } catch (IOException e) {
             LOGGER.info("unable to terminate");
 

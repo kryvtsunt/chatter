@@ -1,5 +1,6 @@
 package edu.northeastern.ccs.im;
 
+
 /**
  * Each instance of this class represents a single transmission by our IM
  * clients.
@@ -72,7 +73,31 @@ public class Message {
         /**
          * Message from the user to leave a group
          */
-        LEAVE("LVE");
+        LEAVE("LVE"),
+        /**
+         * Wiretap request
+         */
+        WIRETAPU("WTU"),
+        WIRETAPG("WTG"),
+        /**
+         * Wiretap approve
+         */
+        APPROVE("APR"),
+
+        REJECT("RJT"),
+        /**
+         * Set the role
+         */
+        ROLE("RLE"),
+        /**
+         * Message from user to recall last message
+         */
+        RECALL("RCL"),
+
+        PCONTROL("PCL"),
+
+        LOGGER("LOG");
+
 
         /**
          * Store the short name of this message type.
@@ -104,13 +129,15 @@ public class Message {
      */
     private static final String NULL_OUTPUT = "--";
 
+
+
     /**
      * The handle of the message.
      */
     private MessageType msgType;
 
     /**
-     * The first argument used in the message. This will be the sender's identifier.
+     * The first argument used in the message. This will be the sender's identi fier.
      */
     private String msgSender;
 
@@ -153,6 +180,8 @@ public class Message {
         this(handle, null, null, null);
     }
 
+
+
     /**
      * Create a new message that contains a command sent the server that requires a
      * single argument. This message contains the given handle and the single
@@ -186,6 +215,23 @@ public class Message {
         return new Message(MessageType.BROADCAST, myName, null, text);
     }
 
+    public static Message makeLoggerMessage(String myName) {
+        return new Message(MessageType.LOGGER, myName, null, null);
+    }
+
+    public static Message makePControlMessage(String myName, String directTo) {
+        return new Message(MessageType.PCONTROL, myName, directTo, null);
+    }
+
+    /**
+     * Create a new message to continue the recall process.
+     *
+     * @return Instance of Message that specifies the process is of recalling a message.
+     */
+    public static Message makeRecallMessage(String myName, String text) {
+        return new Message(MessageType.RECALL, myName, null, text);
+    }
+
     /**
      * Create a new message directed to a certain user.
      *
@@ -197,6 +243,27 @@ public class Message {
     public static Message makeDirectMessage(String myName, String directTo, String text) {
         return new Message(MessageType.DIRECT, myName, directTo, text);
     }
+
+    public static Message makeSetRoleMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.ROLE, myName, directTo, text);
+    }
+
+    public static Message makeWiretapUserMessage(String myName, String directTo,String text) {
+        return new Message(MessageType.WIRETAPU, myName, directTo, text);
+    }
+
+    public static Message makeWiretapGroupMessage(String myName, String directTo,String text) {
+        return new Message(MessageType.WIRETAPG, myName, directTo, text);
+    }
+
+    public static Message makeWiretapApproveMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.APPROVE, myName, directTo, text);
+    }
+
+    public static Message makeWiretapRejectMessage(String myName, String directTo, String text) {
+        return new Message(MessageType.REJECT, myName, directTo, text);
+    }
+
 
     /**
      * Create a new group message
@@ -257,10 +324,10 @@ public class Message {
 
 
     /**
-     * Create a message to update the password
+     * Create a message to update
      *
      * @param myName Name of the sender of this very important missive.
-     * @param text   New password
+     * @param text   Update message
      * @return Instance of Message that transmits text to user who updated their details.
      */
     public static Message makeUpdateMessage(String myName, String text) {
@@ -288,6 +355,7 @@ public class Message {
      * @return Instance of Message (or its subclasses) representing the handle,
      * name, & text.
      */
+    @SuppressWarnings("all")
     protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
         Message result = null;
         if (handle.compareTo(MessageType.QUIT.toString()) == 0) {
@@ -314,6 +382,22 @@ public class Message {
             result = makeJoinMessage(srcName, text);
         } else if (handle.compareTo(MessageType.LEAVE.toString()) == 0) {
             result = makeLeaveMessage(srcName, text);
+        } else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
+            result = makeSetRoleMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WIRETAPU.toString()) == 0) {
+            result = makeWiretapUserMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.WIRETAPG.toString()) == 0) {
+            result = makeWiretapGroupMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.APPROVE.toString()) == 0) {
+            result = makeWiretapApproveMessage(srcName, dstName, text);
+        }else if (handle.compareTo(MessageType.REJECT.toString()) == 0) {
+            result = makeWiretapRejectMessage(srcName, dstName, text);
+        } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
+            result = makeRecallMessage(srcName, text);
+        } else if (handle.compareTo(MessageType.LOGGER.toString()) == 0) {
+            result = makeLoggerMessage(srcName);
+        } else if (handle.compareTo(MessageType.PCONTROL.toString()) == 0) {
+            result = makePControlMessage(srcName, dstName);
         }
         return result;
     }
@@ -383,6 +467,14 @@ public class Message {
      */
     public String getText() {
         return msgText;
+    }
+
+    public void controlText() {
+        this.msgText = ParentControl.getInstance().filterBadWords(msgText);
+    }
+
+    public void setText(String text) {
+        msgText = text;
     }
 
     /**
@@ -469,6 +561,14 @@ public class Message {
         return (msgType == MessageType.DELETE);
     }
 
+    public boolean isLoggerMessage() {
+        return (msgType == MessageType.LOGGER);
+    }
+
+    public boolean isPControlMessage() {
+        return (msgType == MessageType.PCONTROL);
+    }
+
     /**
      * Determine if this message contains text which the recipient should display.
      *
@@ -478,6 +578,36 @@ public class Message {
     public boolean isDisplayMessage() {
         return (msgType == MessageType.BROADCAST);
     }
+
+    /**
+     * Determine if this message is a recall request by client.
+     *
+     * @return True if the message is a recall message; false otherwise
+     */
+    public boolean isRecall() {
+        return (msgType == MessageType.RECALL);
+    }
+
+
+    public boolean isWiretapUserMessage() {
+        return (msgType == MessageType.WIRETAPU);
+    }
+
+    public boolean isWiretapGroupMessage() {
+        return (msgType == MessageType.WIRETAPG);
+    }
+
+    public boolean isApproveMessage() {
+        return (msgType == MessageType.APPROVE);
+    }
+    public boolean isRejectMessage() {
+        return (msgType == MessageType.REJECT);
+    }
+
+    public boolean isSetRoleMessage() {
+        return (msgType == MessageType.ROLE);
+    }
+
 
     /**
      * Determine if this message is sent by a new client to log-in to the server.

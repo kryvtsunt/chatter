@@ -21,19 +21,76 @@ CRUD functionality:
 -DELETE (deletes currently logged in user)
 -JOIN group (adds current user to the group. creates group if there is no one)
 -LEAVE group (removes current user from the group. deletes group if it is empty)
+-RECALL <id> (recall certain message by the message id)
 
 -RETRIEVE PASSWORD(tells current user's password)
 -RETRIEVE EPASSWORD(tells current user's encrypted password)
 -RETRIEVE GROUPS (displays the name of all existing groups)
 -RETRIEVE GROUP group (displays the users that are part of the group) *only if you are part of the group*
--RETRIEVE MESSAGES (displays all messages sent by the user ordered by time)
+-RETRIEVE SEND_MESSAGES (displays all messages sent by the user ordered by time)
+-RETRIEVE RECEIVE_MESSAGES (displays direct message received by the user ordered by time)
 -RETRIEVE GROUP_MESSAGES group(displays all messages for a particular group) *only if you are part of the group*
 -RETRIEVE USERS (all users in the database)
 -RETRIEVE ONLINE (only online users)
+-RETRIEVE ROLE (role of the current user)
+
+for admin:
+
+-RETRIEVE SENDER <username> (retrieve all messages sent by the username)
+-RETRIEVE RECEIVER <username> (retrieve all messages retrieved by the username)
+-RETRIEVE CONTENT <content>(retrieve message by the content)
+-RETRIEVE DATE <yyyy-mm-dd> (retrieve messages by the date)
+-RETRIEVE REQUESTS (retrieve all wiretap requests)
+-LOGGER (toggle the logger on/off)
+-PARENT_CONTROL (toogle the parent control on/off)
+-<username> ROLE <role> (set the role of the user: 0-admin, 1-user, 2-agency)
+-<agency> APPROVE <id> (approve certain wiretap request)
+-<agency> APPROVE * (approve all wiretap requests for the agency)
+-<agency> REJECT <id> (reject certain wiretap request)
+
+for agency:
+-RETRIEVE WIRETAPS (Retrieve all wiretaps for current agency)
+- [username]%>%[n] (wiretap user for n days)
+- [groupname]%>>%[n] (wiretap group for n days)
 
 
-For the last sprint DB was implemented simply as a text file db.txt.
-For this sprint remote MySQL database is used.
+For Queue message functionality:
+1. Create two new users and logout of one user by typing "/quit" in chatter.
+2.1 Send message from online user to offline user using syntax: [receiverUser]>[your msg], make sure to use ">" without quotes
+2.2 Send message from online user to group using syntax: [groupName]>>[your msg], make sure to use ">>" without quotes
+3. login to offline user and you can see all messages from queue
 
+For wiretap functionality:
+1. create a user which will be given role of agency
+2. login to admin using username:admin and password:admin
+3. set role of created user as agency using syntax: [username] ROLE [admin/user/agency], type "agency" without quotes for giving agency privilages
+4.1 request wiretap for user to admin using syntax: [username]%>%[number of days], make sure to use "%>%" without quotes
+4.2 request wiretap for group to admin using syntax: [groupName]%>>%[number of days], make sure to use "%>>%" without quotes
+5. retrieve received requests for wiretap in admin using syntax: RETRIEVE REQUESTS, it will show all agency request with agency name, agency id
+6. accept wiretap request for agency using syntax: [agencyName] APPROVE [agencyID]
+7. now all messages for user or group which was wiretapped will be received by agency
+
+For recall functionality:
+1.1 login as a user and get list of all user using syntax: RETRIEVE USERS
+1.2 you can get list of online user using syntax: RETRIEVE ONLINE
+2. send message to any user preferable offline one using syntax: [receiverUser]>[your msg], make sure to use ">" without quotes
+3. retrieve all messages send by you using syntax: RETRIEVE SEND_MESSAGES
+4. you can see message ids of all message
+5. to recall any message use syntax: RECALL [msgID]
+6. client who was offline to whom this msg was sent wont get this msg when he logs back in, but msg is stored in database
+
+For CALEA compliance: for every message send we are storing it's sender and receiver ip in database
+
+For parental control functionality:
+1. parent control is in on mode by default, so if you send unaccepted message it will be converted into *** and delivered to respective receiver
+
+For search functionality(only for admin):
+1. search all messages based on sender attribute using syntax: RETRIEVE SENDER [senderName]
+2. search all messages based on receiver attribute using syntax: RETRIEVE RECEIVER [receiverName]
+3. search all messages based on content of message using syntax: RETRIEVE CONTENT [content]
+4. search all messages based on delivery date of message using syntax: RETRIEVE DATE [yyyy-mm-dd]
+
+For the first sprint DB was implemented simply as a text file db.txt.
+Starting second sprint remote MySQL database is used.
 
 THE IP address OF THE PRATTLE AT AWS is 100.26.75.93.

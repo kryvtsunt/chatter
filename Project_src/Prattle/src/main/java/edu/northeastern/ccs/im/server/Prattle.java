@@ -16,9 +16,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
+
 
 import edu.northeastern.ccs.im.Message;
+
+import static edu.northeastern.ccs.im.server.ClientRunnable.LOGGER;
 
 /**
  * A network server that communicates with IM clients that connect to it. This
@@ -35,9 +37,6 @@ import edu.northeastern.ccs.im.Message;
  * @version 1.3
  */
 public abstract class Prattle {
-
-    /* Logger */
-    private static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
 
     /* Amount of time we should wait for a signal to arrive. */
@@ -57,6 +56,10 @@ public abstract class Prattle {
 
     static final String SERVER_NAME = "PRATTLE";
 
+
+
+
+
     /* All of the static initialization occurs in this "method" */
     static {
         // Create the new queue of active threads.
@@ -70,10 +73,14 @@ public abstract class Prattle {
      * @param message Message that the client sent.
      */
     public static void broadcastMessage(Message message) {
+        SQLDB db = SQLDB.getInstance();
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized()) {
+                if (db.getControl(message.getSender()) == 1 || db.getControl(message.getReceiver()) == 1)  {
+                        message.controlText();
+                }
                 tt.enqueueMessage(message);
             }
         }
@@ -88,10 +95,14 @@ public abstract class Prattle {
      *
      */
     public static void directMessage(Message message, String client) {
+        SQLDB db = SQLDB.getInstance();
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
             if (tt.isInitialized() && tt.getName().equals(client)) {
+                if (db.getControl(message.getSender()) == 1 || db.getControl(message.getReceiver()) == 1)  {
+                        message.controlText();
+                }
                 tt.enqueueMessage(message);
             }
         }
