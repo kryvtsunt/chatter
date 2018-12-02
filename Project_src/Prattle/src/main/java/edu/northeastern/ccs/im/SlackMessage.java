@@ -8,6 +8,7 @@ public class SlackMessage {
         String url = "https://hooks.slack.com/services/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";
         String payload="{\"username\": \"webhookbot\", \"text\": \""+ msg +"\", \"icon_emoji\": \":ghost:\"}";
 
+        
         StringEntity entity = new StringEntity(payload,
                 ContentType.APPLICATION_FORM_URLENCODED);
 
