@@ -36,8 +36,8 @@ class SQLDBTest {
 
     @Test
     void retrieve() {
-        assertEquals("0bf44a9634896de88678e56222c1b012", sqldb.retrieve("Mikey"));
-        assertNotEquals("Mikey",sqldb.retrieve("Mikey"));
+        assertEquals("0bf44a9634896de88678e56222c1b012", sqldb.retrieve("Mikey", "paswd"));
+        assertNotEquals("Mikey",sqldb.retrieve("Mikey", "paswd"));
     }
 
 
@@ -72,7 +72,7 @@ class SQLDBTest {
         }
         db.updateLastSeen("aaa");
         db.validateCredentials("sos","sos");
-        db.retrieve("mikey");
+        db.retrieve("mikey", "paswd");
         db.update("mooksa","asdxas");
         db.checkUser("user");
         db.delete("tim");
@@ -81,7 +81,7 @@ class SQLDBTest {
         db.checkGroup("asdf");
         db.getGroupID("asdf");
         db.retrieveAllUsers();
-        db.retrieve("tim");
+        db.retrieve("tim", "paswd");
         db.getGroupID("random");
         db.checkGroup("none");
         db.createGroup("none");
@@ -89,7 +89,7 @@ class SQLDBTest {
         db.deleteGroupMember("none","none");
         db.delete("none");
         db.deleteGroup("none");
-        db.retrieve("nonoe");
+        db.retrieve("nonoe", "paswd");
         db.update("none","pass");
         db.validateCredentials("none","none");
         db.encryptPassword("none");
@@ -303,10 +303,10 @@ class SQLDBTest {
         assertEquals(false, sqldb.getWiretapRequests("agencyUserTest", "agencyUserTest",0).size() > 0);
         assertEquals(true,sqldb.getWiretapRequests("adminUserTest", "agencyUserTest",0).size() > 0);
 
-        assertEquals(false, sqldb.setWireTap("agencyUserTest", requestRowID));
+        assertEquals(false, sqldb.setWireTap("agencyUserTest", null, requestRowID));
 
-        assertEquals(true, sqldb.setWireTap("adminUserTest", requestRowID));
-        sqldb.setWireTap("adminUserTest", "agencyUserTest");
+        assertEquals(true, sqldb.setWireTap("adminUserTest", null, requestRowID));
+        sqldb.setWireTap("adminUserTest", "agencyUserTest", 0);
 
         assertEquals(true, sqldb.getAgencyList("normalUserTest1", 0, 1).size()> 0);
         assertEquals(true, sqldb.getAgencyList("normalUserTest1", 0, 0).size()> 0);

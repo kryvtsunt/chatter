@@ -103,7 +103,7 @@ public class SQLDB {
      * @param username keyword against which the sql operations are carried on
      * @return the user's details stored in the Database
      */
-    public String retrieve(String username) {
+    public String retrieve(String username, String type) {
         String userInformation = null;
         try {
             if (checkUser(username)) {
@@ -112,7 +112,7 @@ public class SQLDB {
                     pStatement.setString(1, username);
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
-                            userInformation = userSet.getString("paswd");
+                            userInformation = userSet.getString(type);
                         }
                     }
                 }
@@ -144,8 +144,6 @@ public class SQLDB {
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
                             lastSeen = userSet.getTimestamp("lastSeen");
-                            //adding time difference between java and mysql time
-                            lastSeen.setTime(lastSeen.getTime() + ((5 * 60 * 60) * 1000));
                         }
                     }
                 }
@@ -1215,48 +1213,6 @@ public class SQLDB {
     }
 
 
-    public boolean setWireTap(String requestingUser, String agencyUsername) {
-        boolean flag = false;
-        try {
-            if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
-            String sqlStatement = "SELECT * FROM wiretapRequests WHERE userRequestingId=? AND isApproved=?";
-            try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
-                pStatement.setInt(1, getUserID(agencyUsername));
-                pStatement.setInt(2, 0);
-                try (ResultSet requestSet = pStatement.executeQuery()) {
-                    while (requestSet.next()) {
-                        if(requestSet.getInt("isGroup") == 1) {
-                            sqlStatement = "INSERT INTO wiretapGroups(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
-                        }
-                        else {
-                            sqlStatement = "INSERT INTO wiretapUsers(userWiretapping, userWiretapped, expireAfterDays) VALUES(?,?,?)";
-                        }
-
-                        try (PreparedStatement subPStatement = connection.prepareStatement(sqlStatement)) {
-                            subPStatement.setInt(1, requestSet.getInt("userRequestingId"));
-                            subPStatement.setInt(2, requestSet.getInt("userVictimId"));
-                            subPStatement.setInt(3,requestSet.getInt("requestDurationDays"));
-                            int wiretapCount = subPStatement.executeUpdate();
-                            flag = (wiretapCount > 0);
-                            if(flag) {
-                                String sqlUpdateRequest = "UPDATE wiretapRequests SET isApproved=? WHERE userRequestingId=? AND isApproved=?";
-                                try (PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateRequest)) {
-                                    updateStatement.setInt(1, 1);
-                                    updateStatement.setInt(2, getUserID(agencyUsername));
-                                    updateStatement.setInt(3,0);
-                                    updateStatement.executeUpdate();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
-        }
-        return flag;
-    }
-
     /**
      * set wiretap on a user or a group
      * @param requestingUser name of the user requesting wiretap
@@ -1265,11 +1221,20 @@ public class SQLDB {
      * @param isSetWiretap 1 if user is requesting to set wire tap, 0 otherwise
      * @return true if the wire tap was successfully set
      */
-    public boolean setWireTap(String requestingUser, int requestId) {
+    public boolean setWireTap(String requestingUser, String agencyName, int id) {
+        int requestId;
+        String sqlStatement = "SELECT * FROM wiretapRequests WHERE userRequestingId=? AND isApproved=?";
+        String sqlUpdateRequest = "UPDATE wiretapRequests SET isApproved=? WHERE userRequestingId=? AND isApproved=?";
+        if (agencyName == null){
+            requestId = id;
+            sqlStatement = "SELECT * FROM wiretapRequests WHERE requestId=? AND isApproved=?";
+            sqlUpdateRequest = "UPDATE wiretapRequests SET isApproved=? WHERE requestId=? AND isApproved=?";
+        } else {
+            requestId = getUserID(agencyName);
+        }
         boolean flag = false;
         try {
             if(getUserRole(requestingUser) != USER_ROLE_ADMIN_ID) return false;
-            String sqlStatement = "SELECT * FROM wiretapRequests WHERE requestId=? AND isApproved=?";
             try (PreparedStatement pStatement = connection.prepareStatement(sqlStatement)) {
                 pStatement.setInt(1, requestId);
                 pStatement.setInt(2, 0);
@@ -1289,16 +1254,14 @@ public class SQLDB {
                             int wiretapCount = subPStatement.executeUpdate();
                             flag = (wiretapCount > 0);
                             if(flag) {
-                                String updateRequestQ = "UPDATE wiretapRequests SET isApproved=? WHERE requestId=? AND isApproved=?";
-                                try (PreparedStatement updateStatement = connection.prepareStatement(updateRequestQ)) {
+                                try (PreparedStatement updateStatement = connection.prepareStatement(sqlUpdateRequest)) {
                                     updateStatement.setInt(1, 1);
                                     updateStatement.setInt(2, requestId);
-                                    updateStatement.setInt(3, 0);
+                                    updateStatement.setInt(3,0);
                                     updateStatement.executeUpdate();
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -1307,7 +1270,6 @@ public class SQLDB {
         }
         return flag;
     }
-
 
 
 
