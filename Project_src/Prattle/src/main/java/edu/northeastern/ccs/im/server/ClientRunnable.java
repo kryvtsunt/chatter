@@ -104,6 +104,8 @@ public class ClientRunnable implements Runnable {
      */
     private String password;
 
+    private String ip;
+
     /**
      * Whether this client has been initialized, set its user name, and is ready to
      * receive messages.
@@ -180,12 +182,9 @@ public class ClientRunnable implements Runnable {
     private static final String RECEIVER = "RECEIVER ";
     private static final String CONTENT = "CONTENT ";
     private static final String DATE = "DATE ";
-
-
     private static final String WIRETAPS = "WIRETAPS";
+    private static final String IP ="IP";
 
-    private static final String OFF = "OFF";
-    private static final String ON = "ON";
 
 
     /**
@@ -219,6 +218,8 @@ public class ClientRunnable implements Runnable {
         terminateInactivity
                 .setTimeInMillis(terminateInactivity.getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
         terminate = false;
+
+        ip = socket.getRemoteAddress().toString();
     }
 
     /**
@@ -286,12 +287,14 @@ public class ClientRunnable implements Runnable {
         SQLDB db = SQLDB.getInstance();
         if (!db.checkUser(getName())) {
             SQLDB.getInstance().create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
+            db.setIP(this.getName(), ip);
             validated = true;
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
             return;
         }
 
         if (db.validateCredentials(getName(), password)) {
+            db.setIP(this.getName(), ip);
             validated = true;
             int role = db.getUserRole(this.getName());
             if (role == 0) {
@@ -587,10 +590,7 @@ public class ClientRunnable implements Runnable {
     private void executeRequest(Message msg) {
         if(msg.terminate()){
             terminate();
-        }else{
-            msg.controlText();
         }
-
         // If the message is a direct message, send it out
         if (msg.isDirectMessage()) {
             directMessage(msg);
@@ -763,10 +763,10 @@ public class ClientRunnable implements Runnable {
         for (String agency : agencyList) {
             String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
             msg.setText(wiretapMessageAppender);
-            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender()), db.retrieve(agency));
+            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender(), IP), db.retrieve(agency, IP));
             Prattle.directMessage(msg, agency);
         }
-        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender()), db.retrieve(msg.getReceiver()));
+        db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender(), IP), db.retrieve(msg.getReceiver(), IP));
         // Send message to original receiver
         Prattle.directMessage(msg, msg.getReceiver());
 
@@ -784,7 +784,7 @@ public class ClientRunnable implements Runnable {
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
             List<String> users = db.retrieveGroupMembers(group);
             Set<String> agencyList = new HashSet<>();
-            db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender()), null);
+            db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender(), IP), null);
 
             // check if the group is being wire tapped
             if (SQLDB.getInstance().isUserOrGroupWiretapped(group, 1)) {
@@ -801,7 +801,7 @@ public class ClientRunnable implements Runnable {
             for (String agency : agencyList) {
                 String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
                 msg.setText(wiretapMessageAppender);
-                db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender()), db.retrieve(msg.getReceiver()));
+                db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender(), IP), db.retrieve(msg.getReceiver(), IP));
 
                 Prattle.directMessage(msg, agency);
             }
@@ -835,7 +835,7 @@ public class ClientRunnable implements Runnable {
                     initialized = false;
                     Prattle.broadcastMessage(Message.makeQuitMessage(name));
                 } else {
-                    db.storeMessageBroadcast(getName(), msg.getText(), db.retrieve(msg.getSender()), null);
+                    db.storeMessageBroadcast(getName(), msg.getText(), db.retrieve(msg.getSender(), IP), null);
                     Prattle.broadcastMessage(msg);
                 }
             }
@@ -915,7 +915,7 @@ public class ClientRunnable implements Runnable {
     @SuppressWarnings("all")
     private void retrieve(Message msg) {
         if (msg.getText().equals(EPASWD)) {
-            String epassword = SQLDB.getInstance().retrieve(getName());
+            String epassword = SQLDB.getInstance().retrieve(getName(), "paswd");
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
         } else if (msg.getText().equals(PASWD)) {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
@@ -997,15 +997,7 @@ public class ClientRunnable implements Runnable {
             String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
             msgs += SQLDB.getInstance().getWiretappedUsers(this.getName(), 1).toString();
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
-        } else if (msg.getText().equals(OFF)) {
-
-
-            LOGGER.getRootLogger().setLevel(Level.OFF);
-        } else if (msg.getText().equals(ON)) {
-
-            LOGGER.getRootLogger().setLevel(Level.INFO);
-
-        }else {
+        } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Incorect Request"), getName());
         }
     }

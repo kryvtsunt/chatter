@@ -103,7 +103,7 @@ public class SQLDB {
      * @param username keyword against which the sql operations are carried on
      * @return the user's details stored in the Database
      */
-    public String retrieve(String username) {
+    public String retrieve(String username, String type) {
         String userInformation = null;
         try {
             if (checkUser(username)) {
@@ -112,7 +112,7 @@ public class SQLDB {
                     pStatement.setString(1, username);
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
-                            userInformation = userSet.getString("paswd");
+                            userInformation = userSet.getString(type);
                         }
                     }
                 }
