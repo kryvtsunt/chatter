@@ -565,7 +565,6 @@ public class ClientRunnable implements Runnable {
         if (input.hasNextMessage()) {
             // Get the next message
             Message msg = input.nextMessage();
-            msg.controlText();
             // Update the time until we terminate the client for
             // inactivity.
             terminateInactivity.setTimeInMillis(
@@ -951,7 +950,7 @@ public class ClientRunnable implements Runnable {
                 msgs.append(SQLDB.getInstance().getAllMessageBasedOnContent(content));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for content"), msg.getSender());
 
             }
         } else if (msg.getText().contains(SENDER) && msg.getText().split(SENDER).length == 2) {
@@ -961,7 +960,7 @@ public class ClientRunnable implements Runnable {
                 msgs.append(SQLDB.getInstance().getAllMessagesSendBySender(content));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for sender"), msg.getSender());
 
             }
         } else if (msg.getText().contains(RECEIVER) && msg.getText().split(RECEIVER).length == 2) {
@@ -971,7 +970,7 @@ public class ClientRunnable implements Runnable {
                 msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for receiver"), msg.getSender());
 
             }
         } else if (msg.getText().contains(DATE) && msg.getText().split(DATE).length == 2) {
@@ -981,7 +980,7 @@ public class ClientRunnable implements Runnable {
                 msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)));
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
             } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to modify user's role"), msg.getSender());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for date"), msg.getSender());
 
             }
         } else if (msg.getText().contains(WIRETAPS)) {

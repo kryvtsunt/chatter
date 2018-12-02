@@ -32,6 +32,8 @@ class ClientRunnableTest {
     private static final int port4 = 4512;
     private static final int port5 = 4511;
     private static final int port6 = 4509;
+    private static final int port7 = 4519;
+
 
 
 
@@ -180,6 +182,7 @@ class ClientRunnableTest {
         serverSocket.close();
     }
 
+
     void testAgency() throws IOException, InterruptedException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
         serverSocket.configureBlocking(false);
@@ -197,13 +200,6 @@ class ClientRunnableTest {
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
-        msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "*"));
-        msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "0"));
-        msgs.add(Message.makeWiretapRejectMessage("agencyOne", "agencyOne", "3"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "agency"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "admin"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "user"));
-        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "god"));
         msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
         msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
@@ -211,9 +207,6 @@ class ClientRunnableTest {
         msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
         msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
-
-
-
 
 
         for (Message msg : msgs) {
@@ -297,6 +290,58 @@ class ClientRunnableTest {
         } catch (Exception e){
         }
 
+    }
+
+
+    @Test
+    void testAgency2() throws IOException, InterruptedException {
+        ServerSocketChannel serverSocket = ServerSocketChannel.open();
+        serverSocket.configureBlocking(false);
+        serverSocket.socket().bind(new InetSocketAddress(port7));
+        Selector selector = SelectorProvider.provider().openSelector();
+        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+
+        SocketChannel socketChannel = SocketChannel.open();
+        SocketAddress socketAddr = new InetSocketAddress("localhost", port7);
+        socketChannel.connect(socketAddr);
+
+        SocketChannel socketChannel2 = SocketChannel.open();
+        socketChannel2.connect(socketAddr);
+
+        List<Message> msgs = new ArrayList<>();
+        PrintNetNB printer2 = new PrintNetNB(socketChannel);
+        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
+        msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
+        msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
+        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
+        msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
+        msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
+        msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
+        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
+
+
+        for (Message msg : msgs) {
+            printer2.print(msg);
+        }
+
+        socketChannel2.close();
+
+        SocketChannel channel2 = serverSocket.accept();
+        ClientRunnable client2 = new ClientRunnable(channel2);
+        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
+                200, TimeUnit.MILLISECONDS);
+        client2.setFuture(clientFuture);
+        client2.login("agencyOne", "pass");
+
+        try{
+            for (int i = 0; i < msgs.size()+10; i++) {
+                client2.run();
+            }
+        } catch (Exception e){
+        }
+
+        serverSocket.close();
     }
 
     // tests new user CRUD operations
