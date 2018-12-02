@@ -227,6 +227,7 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
+        msgs.add(Message.makeLoggerMessage("admin"));
         msgs.add(Message.makeBroadcastMessage("admin", "ass"));
         msgs.add(Message.makeRetrieveMessage("admin", "SENDER tim"));
         msgs.add(Message.makeRetrieveMessage("admin", "RECEIVER tim"));

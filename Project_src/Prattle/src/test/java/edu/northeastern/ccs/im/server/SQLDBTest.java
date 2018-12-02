@@ -118,7 +118,7 @@ class SQLDBTest {
 
         db.isUserOrGroupWiretapped("mikey",1);
         db.requestWiretap("mikey","testGroup1",1,2);
-
+        db.getAllQueuedMessagesForUser("receiverTest",timestamp);
 
 
     }
@@ -212,6 +212,11 @@ class SQLDBTest {
     @Test
     void testAllMessagesSendBySender(){
         assertEquals("hi receiver",sqldb.getAllMessagesSendBySender("senderTest").get(0));
+    }
+
+    @Test
+    void testLastSeen(){
+        assertFalse(sqldb.updateLastSeen("ag1"));
     }
 
     @Test
