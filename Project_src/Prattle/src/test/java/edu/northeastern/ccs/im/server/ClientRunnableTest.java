@@ -29,7 +29,7 @@ class ClientRunnableTest {
     private static final int port = 4518;
     private static final int port2 = 4516;
     private static final int port3 = 4510;
-    private static final int port4 = 4512;
+    private static final int port4 = 4523;
     private static final int port5 = 4511;
     private static final int port6 = 4509;
     private static final int port7 = 4519;
