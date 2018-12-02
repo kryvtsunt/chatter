@@ -44,12 +44,7 @@ class ClientRunnableTest {
         socketChannel.connect(socketAddr);
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeBroadcastMessage("username", "broadcast text"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Hello"));
-        msgs.add(Message.makeDirectMessage("username", "username22", "Poka"));
-        msgs.add(Message.makeGroupMessage("username", "friends", "hifriends"));
-        msgs.add(Message.makeBroadcastMessage("username", "Hello"));
-
+        msgs.add(Message.makeDeleteMessage("username", null));
         for (Message msg : msgs) {
             printer.print(msg);
         }
@@ -100,8 +95,8 @@ class ClientRunnableTest {
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
         msgs.add(Message.makeBroadcastMessage("username22", "broadcast text"));
         msgs.add(Message.makeDirectMessage("username22", "receiverUser", "Hello"));
+        msgs.add(Message.makeGroupMessage("username22", "friends", "Hello"));
         msgs.add(Message.makeSetRoleMessage("username22", "opa", "admin"));
-        msgs.add(Message.makeUpdateMessage("username22", "newPassword"));
         msgs.add(Message.makeRetrieveMessage("username22", "PASSWORD"));
         msgs.add(Message.makeRetrieveMessage("username22", "EPASSWORD"));
         msgs.add(Message.makeRetrieveMessage("username22", "GROUPS"));
@@ -114,11 +109,10 @@ class ClientRunnableTest {
         msgs.add(Message.makeRetrieveMessage("username22", "RECEIVE_MESSAGES"));
         msgs.add(Message.makeRetrieveMessage("username22", "GROUP_MESSAGES test_group"));
         msgs.add(Message.makeLeaveMessage("username22", "test_group"));
+        msgs.add(Message.makeJoinMessage("username22", "test_group"));
         msgs.add(Message.makeRetrieveMessage("username22", "USERS"));
         msgs.add(Message.makeRetrieveMessage("username22", "ONLINE"));
         msgs.add(Message.makeUpdateMessage("username22", "password22"));
-        msgs.add(Message.makeDeleteMessage("username22", "username22"));
-        msgs.add(Message.makeDeleteMessage("username22", null));
         for (Message msg : msgs) {
             printer2.print(msg);
         }
