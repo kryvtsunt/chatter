@@ -30,6 +30,8 @@ class ClientRunnableTest {
     private static final int port2 = 4556;
     private static final int port3 = 4560;
     private static final int port4 = 4562;
+    private static final int port5 = 4568;
+
 
     @Test
     void testNewClient() throws IOException {
@@ -75,6 +77,50 @@ class ClientRunnableTest {
         assertFalse(client.getWaitingList().isEmpty());
     }
 
+    @Test
+    void testOldClient2() throws IOException {
+        ServerSocketChannel serverSocket = ServerSocketChannel.open();
+        serverSocket.configureBlocking(false);
+        serverSocket.socket().bind(new InetSocketAddress(port5));
+        Selector selector = SelectorProvider.provider().openSelector();
+        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+
+        SocketChannel socketChannel = SocketChannel.open();
+        SocketAddress socketAddr = new InetSocketAddress("localhost", port5);
+        socketChannel.connect(socketAddr);
+        List<Message> msgs = new ArrayList<>();
+        PrintNetNB printer = new PrintNetNB(socketChannel);
+        msgs.add(Message.makeQuitMessage("username33"));
+        for (Message msg : msgs) {
+            printer.print(msg);
+        }
+        socketChannel.close();
+
+        SocketChannel channel = serverSocket.accept();
+        ClientRunnable client = new ClientRunnable(channel);
+        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client, 200,
+                200, TimeUnit.MILLISECONDS);
+        client.setFuture(clientFuture);
+
+        assertFalse(client.isValidated());
+        assertFalse(client.isInitialized());
+        assertEquals(0, client.getUserId());
+        assertTrue(client.getWaitingList().isEmpty());
+        client.login("username33", "username33");
+        try{
+            for (int i = 0; i < msgs.size(); i++) {
+                client.run();
+            }
+        } catch (Exception e){
+        }
+        assertTrue(client.isValidated());
+        assertTrue(client.isInitialized());
+        assertNotEquals(0, client.getUserId());
+        client.enqueueMessage(Message.makeAcknowledgeMessage(client.getName()));
+        assertFalse(client.getWaitingList().isEmpty());
+    }
+
 
     @Test
     void testOldClient() throws IOException {
@@ -93,8 +139,9 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeBroadcastMessage("username22", "broadcast text"));
+        msgs.add(Message.makeBroadcastMessage("username22", "Hello"));
         msgs.add(Message.makeDirectMessage("username22", "receiverUser", "Hello"));
+        msgs.add(Message.makeRecallMessage("username22", "0"));
         msgs.add(Message.makeGroupMessage("username22", "friends", "Hello"));
         msgs.add(Message.makeSetRoleMessage("username22", "opa", "admin"));
         msgs.add(Message.makeRetrieveMessage("username22", "PASSWORD"));
@@ -124,7 +171,7 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
-        client2.login("username22", "username22");
+        client2.login("username22", "password22");
         try{
             for (int i = 0; i < msgs.size(); i++) {
                 client2.run();
@@ -135,7 +182,6 @@ class ClientRunnableTest {
 
         serverSocket.close();
     }
-
 
     void testAgency() throws IOException, InterruptedException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
@@ -155,6 +201,7 @@ class ClientRunnableTest {
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
         msgs.add(Message.makeRetrieveMessage("agencyOne", "SENDER tim"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "RECEIVER tim"));
+        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "CONTENT hi"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "DATE 2018-11-30"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "REQUESTS"));
@@ -221,7 +268,6 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeLoggerMessage("admin"));
         msgs.add(Message.makeBroadcastMessage("admin", "ass"));
         msgs.add(Message.makeRetrieveMessage("admin", "SENDER tim"));
         msgs.add(Message.makeRetrieveMessage("admin", "RECEIVER tim"));
@@ -235,10 +281,9 @@ class ClientRunnableTest {
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "admin"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "user"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "god"));
-        msgs.add(Message.makeLoggerMessage("admin"));
+        msgs.add(Message.makeRetrieveMessage("admin", "WIRETAPS"));
         msgs.add(Message.makeDirectMessage("admin", "tim", "ass"));
         msgs.add(Message.makePControlMessage("admin", "tim"));
-        msgs.add(Message.makeLoggerMessage("admin"));
 
         for (Message msg : msgs) {
             printer2.print(msg);
