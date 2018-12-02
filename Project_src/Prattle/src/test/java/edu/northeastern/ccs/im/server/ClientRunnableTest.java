@@ -26,11 +26,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * tests for the class client runnable
  */
 class ClientRunnableTest {
-    private static final int port = 4548;
-    private static final int port2 = 4556;
-    private static final int port3 = 4560;
-    private static final int port4 = 4562;
-    private static final int port5 = 4568;
+    private static final int port = 4518;
+    private static final int port2 = 4516;
+    private static final int port3 = 4510;
+    private static final int port4 = 4512;
+    private static final int port5 = 4511;
+    private static final int port6 = 4509;
+
 
 
     @Test
@@ -65,7 +67,7 @@ class ClientRunnableTest {
         assertTrue(client.getWaitingList().isEmpty());
         client.login("username", "password");
         try{
-            for (int i = 0; i < msgs.size(); i++) {
+            for (int i = 0; i < msgs.size()+10; i++) {
                 client.run();
             }
         } catch (Exception e){
@@ -109,7 +111,7 @@ class ClientRunnableTest {
         assertTrue(client.getWaitingList().isEmpty());
         client.login("username333", "username333");
         try{
-            for (int i = 0; i < msgs.size(); i++) {
+            for (int i = 0; i < msgs.size()+10; i++) {
                 client.run();
             }
         } catch (Exception e){
@@ -168,7 +170,7 @@ class ClientRunnableTest {
         client2.setFuture(clientFuture);
         client2.login("username22", "password22");
         try{
-            for (int i = 0; i < msgs.size(); i++) {
+            for (int i = 0; i < msgs.size()+10; i++) {
                 client2.run();
             }
         } catch (Exception e){
@@ -194,12 +196,7 @@ class ClientRunnableTest {
 
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer2 = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "SENDER tim"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "RECEIVER tim"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "CONTENT hi"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "DATE 2018-11-30"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "REQUESTS"));
         msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "*"));
         msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "0"));
         msgs.add(Message.makeWiretapRejectMessage("agencyOne", "agencyOne", "3"));
@@ -234,7 +231,7 @@ class ClientRunnableTest {
         client2.login("agencyOne", "pass");
 
         try{
-            for (int i = 0; i < msgs.size(); i++) {
+            for (int i = 0; i < msgs.size()+10; i++) {
                 client2.run();
             }
         } catch (Exception e){
@@ -270,6 +267,7 @@ class ClientRunnableTest {
         msgs.add(Message.makeRetrieveMessage("admin", "DATE 2018-11-30"));
         msgs.add(Message.makeRetrieveMessage("admin", "REQUESTS"));
         msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "*"));
+        msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "*"));
         msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "0"));
         msgs.add(Message.makeWiretapRejectMessage("admin", "agencyOne", "3"));
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "agency"));
@@ -278,7 +276,6 @@ class ClientRunnableTest {
         msgs.add(Message.makeSetRoleMessage("admin", "opa", "god"));
         msgs.add(Message.makeRetrieveMessage("admin", "WIRETAPS"));
         msgs.add(Message.makeDirectMessage("admin", "tim", "ass"));
-        msgs.add(Message.makePControlMessage("admin", "tim"));
 
         for (Message msg : msgs) {
             printer2.print(msg);
@@ -294,9 +291,56 @@ class ClientRunnableTest {
         client2.setFuture(clientFuture);
         client2.login("admin", "admin");
         try{
-        for (int i = 0; i < msgs.size(); i++) {
+        for (int i = 0; i < msgs.size()+10; i++) {
                 client2.run();
         }
+        } catch (Exception e){
+        }
+
+    }
+
+    // tests new user CRUD operations
+    @Test
+    void testAdmin2() throws IOException, InterruptedException {
+        ServerSocketChannel serverSocket = ServerSocketChannel.open();
+        serverSocket.configureBlocking(false);
+        serverSocket.socket().bind(new InetSocketAddress(port6));
+        Selector selector = SelectorProvider.provider().openSelector();
+        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+
+        SocketChannel socketChannel = SocketChannel.open();
+        SocketAddress socketAddr = new InetSocketAddress("localhost", port6);
+        socketChannel.connect(socketAddr);
+
+        SocketChannel socketChannel2 = SocketChannel.open();
+        socketChannel2.connect(socketAddr);
+
+        List<Message> msgs = new ArrayList<>();
+        PrintNetNB printer2 = new PrintNetNB(socketChannel);
+        msgs.add(Message.makeLoggerMessage("admin"));
+        msgs.add(Message.makePControlMessage("admin", "qqq"));
+        msgs.add(Message.makeLoggerMessage("admin"));
+        msgs.add(Message.makePControlMessage("admin", "qqq"));
+        msgs.add(Message.makeLoggerMessage("admin"));
+        msgs.add(Message.makePControlMessage("admin", "qqq"));
+
+        for (Message msg : msgs) {
+            printer2.print(msg);
+        }
+
+        socketChannel2.close();
+
+        SocketChannel channel2 = serverSocket.accept();
+        ClientRunnable client2 = new ClientRunnable(channel2);
+        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
+                200, TimeUnit.MILLISECONDS);
+        client2.setFuture(clientFuture);
+        client2.login("admin", "admin");
+        try{
+            for (int i = 0; i < msgs.size()+10; i++) {
+                client2.run();
+            }
         } catch (Exception e){
         }
 
