@@ -5,7 +5,7 @@
     "user":"ec2-user",
     "directory":"/home/ec2-user",
     "JARNAME": "Prattle-0.0.1-SNAPSHOT.jar",
-    "PEM": "prattle-key-pair.pem"
+    "PEM": "newPrattle.pem"
  }
 ]
 }
