@@ -196,6 +196,8 @@ public class ClientRunnable implements Runnable {
      *                     connection
      */
     public ClientRunnable(SocketChannel client) throws IOException {
+    	// initialize SQLDB
+    	SQLDB.getInstance();
         // Set up the SocketChannel over which we will communicate.
         socket = client;
         socket.configureBlocking(false);
