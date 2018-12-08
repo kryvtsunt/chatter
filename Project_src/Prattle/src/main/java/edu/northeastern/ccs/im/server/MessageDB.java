@@ -15,6 +15,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+@SuppressWarnings("all")
 public class MessageDB {
     /**
      * Logger

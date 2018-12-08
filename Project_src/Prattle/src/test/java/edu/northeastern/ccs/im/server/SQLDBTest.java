@@ -178,7 +178,7 @@ class SQLDBTest {
     }
 
     @Test
-    void storeMessageIndividual() throws IOException {
+    void storeMessageIndividual()  {
         assertTrue(sqldb.storeMessageIndividual("mockUser","Mikey","Hey","",""));
 
     }
