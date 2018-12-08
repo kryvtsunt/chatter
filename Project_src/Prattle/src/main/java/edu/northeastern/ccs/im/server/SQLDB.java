@@ -1,6 +1,7 @@
 package edu.northeastern.ccs.im.server;
 
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -17,9 +18,9 @@ public class SQLDB {
     final static int USER_ROLE_NORMAL_ID = 1;
     final static int USER_ROLE_AGENCY_ID = 2;
     final static int USER_ROLE_ADMIN_ID = 0;
-    UserDB userDBObject;
-    GroupDB groupDBObject;
-    MessageDB messageDBObject;
+    static UserDB userDBObject;
+    static GroupDB groupDBObject;
+    static MessageDB messageDBObject;
 
     /**
      * Logger
@@ -29,7 +30,7 @@ public class SQLDB {
     /**
      * Database connection
      */
-    private Connection connection;
+    private static Connection connection;
 
     /**
      * Instance of the Database
@@ -44,9 +45,6 @@ public class SQLDB {
         try {
             connection = DriverManager.
                     getConnection("jdbc:mysql://" + CONNECTION_URL + ":" + DB_PORT + "/" + DB_NAME, DB_USERNAME, DB_PASWD);
-            userDBObject = new UserDB(connection);
-            groupDBObject = new GroupDB(connection);
-            messageDBObject = new MessageDB(connection);
         } catch (SQLException e) {
             LOGGER.info("Connection Failed!:\n" + e.getMessage());
         }
@@ -58,6 +56,9 @@ public class SQLDB {
     public static SQLDB getInstance() {
         if (instance == null) {
             instance = new SQLDB();
+            userDBObject = new UserDB(connection);
+            groupDBObject = new GroupDB(connection);
+            messageDBObject = new MessageDB(connection);
         }
         return instance;
     }
@@ -84,7 +85,7 @@ public class SQLDB {
      * @param username string entered by the user which is used for validating
      * @return true if the user exists in the Database
      */
-    public boolean checkUser(String username) {
+    public boolean checkUser(String username)  {
        return userDBObject.checkUser(username);
     }
 
