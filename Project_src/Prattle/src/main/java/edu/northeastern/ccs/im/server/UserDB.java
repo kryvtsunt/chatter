@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+@SuppressWarnings("all")
 public class UserDB {
 	
 	SQLDB sqlDB;
@@ -177,7 +178,6 @@ public class UserDB {
                     pStatement.setString(2, oldUsername);
                     int userCount = pStatement.executeUpdate();
                     flag = (userCount > 0);
-                    System.out.println("updation flag:" + flag);
                 }
             }
         } catch (Exception e) {
@@ -404,7 +404,8 @@ public class UserDB {
      */
     public List<String> getAgencyList(String userOrGroupName, int isGroup, int isIncludeExpired) {
         List<String> agencyList = new ArrayList<>();
-        String sqlCheckUser = "";
+        String sqlCheckUser = "SELECT w.userWiretapping"
+                + " FROM wiretapUsers w WHERE userWireTapped=?";
 
         try {
             int wireTapCandidate = -1;
@@ -415,8 +416,6 @@ public class UserDB {
             }
             else {
                 wireTapCandidate = getUserID(userOrGroupName);
-                sqlCheckUser = "SELECT w.userWiretapping"
-                        + " FROM wiretapUsers w WHERE userWireTapped=?";
             }
 
             if(isIncludeExpired == 0) {
