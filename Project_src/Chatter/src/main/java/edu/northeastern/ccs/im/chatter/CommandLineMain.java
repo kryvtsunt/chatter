@@ -38,7 +38,7 @@ public class CommandLineMain {
 
 		do {
 			// Prompt the user to type in a username.
-			System.out.println("Input your credentials.");
+			System.out.println("Welcome to the PRATTLE messaging service. What is your name?");
 
 			String username = in.nextLine();
 

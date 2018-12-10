@@ -96,6 +96,8 @@ public class UserDB {
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
                             lastSeen = userSet.getTimestamp("lastSeen");
+                            //adding time difference between java and mysql time
+                            lastSeen.setTime(lastSeen.getTime() + ((5 * 60 * 60) * 1000));
                         }
                     }
                 }

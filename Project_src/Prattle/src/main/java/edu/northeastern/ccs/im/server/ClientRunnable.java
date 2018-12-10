@@ -183,8 +183,7 @@ public class ClientRunnable implements Runnable {
     private static final String CONTENT = "CONTENT ";
     private static final String DATE = "DATE ";
     private static final String WIRETAPS = "WIRETAPS";
-    private static final String ADDRESS ="IP";
-
+    private static final String ADDRESS = "IP";
 
 
     /**
@@ -196,8 +195,8 @@ public class ClientRunnable implements Runnable {
      *                     connection
      */
     public ClientRunnable(SocketChannel client) throws IOException {
-    	// initialize SQLDB
-    	SQLDB.getInstance();
+        // initialize SQLDB
+        SQLDB.getInstance();
         // Set up the SocketChannel over which we will communicate.
         socket = client;
         socket.configureBlocking(false);
@@ -286,34 +285,43 @@ public class ClientRunnable implements Runnable {
 
     private void validate(Message msg) {
         password = msg.getText();
+        name = msg.getSender();
         SQLDB db = SQLDB.getInstance();
-        if (!db.checkUser(getName())) {
+        if (msg.isSignupMessage() && !db.checkUser(getName())) {
             SQLDB.getInstance().create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
             db.setIP(this.getName(), ip);
             validated = true;
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
-            return;
-        }
-
-        if (db.validateCredentials(getName(), password)) {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to sign-in in future."), getName());
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "If you are not familiar with the service we provide, user [HELP] command to get the instructions."), getName());
+        } else if (msg.isSigninMessage() && db.validateCredentials(getName(), password)) {
             db.setIP(this.getName(), ip);
-            validated = true;
             int role = db.getUserRole(this.getName());
             if (role == 0) {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
             } else if (role == 1) {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. "), getName());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You successfully signed-in."), getName());
             } else if (role == 2) {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups."), getName());
             }
+            validated = true;
             sendAllQueuedMessages();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "If you are not familiar with the service we provide, user [HELP] command to get the instructions."), getName());
+
 
         } else {
             validated = false;
+            if (msg.isSignupMessage()){
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Failed. Username is already taken."), getName());
+            } else if (msg.isSigninMessage()){
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Failed. Wrong credentials. Try again."), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You need to sign-in/sign-up first."), getName());
+            }
         }
     }
 
-    public void login(String username, String password){
+
+    public void login(String username, String password) {
         this.name = username;
         this.initialize(Message.makeLoginMessage(username));
         this.validate(Message.makeBroadcastMessage(username, password));
@@ -328,11 +336,12 @@ public class ClientRunnable implements Runnable {
         try {
             lastSeen = SQLDB.getInstance().retrieveLastSeen(getName());
         } catch (Exception e) {
-            if(SQLDB.getInstance().updateLastSeen(getName())) {
+            if (SQLDB.getInstance().updateLastSeen(getName())) {
                 return;
             }
         }
         if (lastSeen != null) {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "We keep track of messages you have received while being offline. All new incoming messages are displayed here."), getName());
             List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
             for (String msg : queuedMessages) {
                 String fromUser = msg.split(",")[0].split(":")[1];
@@ -468,16 +477,16 @@ public class ClientRunnable implements Runnable {
             checkForInitialization();
         } else if (!validated) {
             checkForValidation();
-        } else {
-            try {
-                respond();
-            } finally {
-                // When it is appropriate, terminate the current client.
-                if (terminate) {
-                    terminateClient();
-                }
+        }
+        try {
+            respond();
+        } finally {
+            // When it is appropriate, terminate the current client.
+            if (terminate) {
+                terminateClient();
             }
         }
+
         // Finally, check if this client have been inactive for too long and, when they have, terminate
         // the client.
         terminateInactive();
@@ -590,7 +599,7 @@ public class ClientRunnable implements Runnable {
      */
     @SuppressWarnings("all")
     private void executeRequest(Message msg) {
-        if(msg.terminate()){
+        if (msg.terminate()) {
             terminate();
         }
         // If the message is a direct message, send it out
@@ -640,8 +649,15 @@ public class ClientRunnable implements Runnable {
             logger(msg);
         } else if (msg.isPControlMessage()) {
             pcontrol(msg);
+        } else if (msg.isHelpMessage()) {
+            help(msg);
         }
         // Otherwise, ignore it (for now).
+    }
+
+
+    private void help(Message msg){
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), HELP_MESSAGE), msg.getSender());
     }
 
 
@@ -696,7 +712,7 @@ public class ClientRunnable implements Runnable {
         if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
             if (level == Level.DEBUG) {
                 Logger.getRootLogger().setLevel(Level.OFF);
-            } else if(level == Level.OFF) {
+            } else if (level == Level.OFF) {
                 Logger.getRootLogger().setLevel(Level.DEBUG);
             }
         } else {
@@ -1022,7 +1038,7 @@ public class ClientRunnable implements Runnable {
     public void terminateClient() {
         try {
             // Once the communication is done, close this connection.
-            if(SQLDB.getInstance().updateLastSeen(this.getName())) {
+            if (SQLDB.getInstance().updateLastSeen(this.getName())) {
                 input.close();
                 socket.close();
             }
@@ -1045,4 +1061,50 @@ public class ClientRunnable implements Runnable {
     public Queue<Message> getWaitingList() {
         return new ConcurrentLinkedQueue<>(waitingList);
     }
+
+    private static String HELP_MESSAGE = "When you successfully log in, you can:\n" +
+            "-communicate with the server by typing special messages like \"Hello\"\n" +
+            "-send messages to everyone by simply typing your message.\n" +
+            "-send direct messages by typing user>your_message (where user is the name of the user you want to talk to)\n" +
+            "-send same messages to many users by typing user1,user2,user3>your_message\n" +
+            "-send group messages by typing group>>your_message\n" +
+            "-send files by typing user>file (::text.txt, picture.png, etc. - files from the resources/send folder)\n" +
+            "*when message is received it is saved in the resources/receive folder in the destination user machine\n" +
+            "\n" +
+            "CRUD functionality:\n" +
+            "-UPDATE new_password (updates the password of the current user)\n" +
+            "-DELETE (deletes currently logged in user)\n" +
+            "-JOIN group (adds current user to the group. creates group if there is no one)\n" +
+            "-LEAVE group (removes current user from the group. deletes group if it is empty)\n" +
+            "-RECALL <id> (recall certain message by the message id)\n" +
+            "\n" +
+            "-RETRIEVE PASSWORD(tells current user's password)\n" +
+            "-RETRIEVE EPASSWORD(tells current user's encrypted password)\n" +
+            "-RETRIEVE GROUPS (displays the name of all existing groups)\n" +
+            "-RETRIEVE GROUP group (displays the users that are part of the group) *only if you are part of the group*\n" +
+            "-RETRIEVE SEND_MESSAGES (displays all messages sent by the user ordered by time)\n" +
+            "-RETRIEVE RECEIVE_MESSAGES (displays direct message received by the user ordered by time)\n" +
+            "-RETRIEVE GROUP_MESSAGES group(displays all messages for a particular group) *only if you are part of the group*\n" +
+            "-RETRIEVE USERS (all users in the database)\n" +
+            "-RETRIEVE ONLINE (only online users)\n" +
+            "-RETRIEVE ROLE (role of the current user)\n" +
+            "\n" +
+            "for admin:\n" +
+            "\n" +
+            "-RETRIEVE SENDER <username> (retrieve all messages sent by the username)\n" +
+            "-RETRIEVE RECEIVER <username> (retrieve all messages retrieved by the username)\n" +
+            "-RETRIEVE CONTENT <content>(retrieve message by the content)\n" +
+            "-RETRIEVE DATE <yyyy-mm-dd> (retrieve messages by the date)\n" +
+            "-RETRIEVE REQUESTS (retrieve all wiretap requests)\n" +
+            "-LOGGER (toggle the logger on/off)\n" +
+            "-PARENT_CONTROL (toogle the parent control on/off)\n" +
+            "-<username> ROLE <role> (set the role of the user: 0-admin, 1-user, 2-agency)\n" +
+            "-<agency> APPROVE <id> (approve certain wiretap request)\n" +
+            "-<agency> APPROVE * (approve all wiretap requests for the agency)\n" +
+            "-<agency> REJECT <id> (reject certain wiretap request)\n" +
+            "\n" +
+            "for agency:\n" +
+            "-RETRIEVE WIRETAPS (Retrieve all wiretaps for current agency)\n" +
+            "- [username]%>%[n] (wiretap user for n days)\n" +
+            "- [groupname]%>>%[n] (wiretap group for n days)";
 }
