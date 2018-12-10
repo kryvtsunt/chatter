@@ -117,17 +117,16 @@ public class UserDB {
      * @param password string entered by the user for their password
      * @return true if the details entered are in a legal format and when they stored in the Database
      */
-    public boolean create(int userId, String username, String password, String IP, int control) {
+    public boolean create(int userId, String username, String password, String IP) {
         boolean flag = false;
         try {
             if (!checkUser(username)) {
-                String sqlCreateUser = "INSERT INTO users (userId, username, paswd, IP, control) VALUES (?, ?, ?, ?, ?)";
+                String sqlCreateUser = "INSERT INTO users (userId, username, paswd, IP) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
                     pStatement.setInt(1, userId);
                     pStatement.setString(2, username);
                     pStatement.setString(3, encryptPassword(password));
                     pStatement.setString(4, IP);
-                    pStatement.setInt(5, control);
                     int userCount = pStatement.executeUpdate();
                     flag = (userCount > 0);
                 }

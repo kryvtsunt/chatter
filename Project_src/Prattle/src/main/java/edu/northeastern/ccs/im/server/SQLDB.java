@@ -118,8 +118,8 @@ public class SQLDB {
      * @param password string entered by the user for their password
      * @return true if the details entered are in a legal format and when they stored in the Database
      */
-    public boolean create(int userId, String username, String password, String IP, int control) {
-        return userDBObject.create(userId, username, password, IP, control);
+    public boolean create(int userId, String username, String password, String IP) {
+        return userDBObject.create(userId, username, password, IP);
     }
 
     /**

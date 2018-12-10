@@ -33,6 +33,8 @@ class ClientRunnableTest {
     private static final int port5 = 4511;
     private static final int port6 = 4509;
     private static final int port7 = 4519;
+    private static final int port8 = 4521;
+
 
 
     @Test
@@ -64,19 +66,19 @@ class ClientRunnableTest {
         assertFalse(client.isValidated());
         assertFalse(client.isInitialized());
         assertEquals(0, client.getUserId());
-        assertTrue(client.getWaitingList().isEmpty());
-        client.login("username", "password");
-        try{
-            for (int i = 0; i < msgs.size()+10; i++) {
-                client.run();
-            }
-        } catch (Exception e){
-        }
+        client.signin("username42", "password42");
+        client.signup("username42", "password42");
         assertTrue(client.isValidated());
         assertTrue(client.isInitialized());
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
+                client.run();
+            }
+        } catch (Exception e) {
+        }
+
         assertNotEquals(0, client.getUserId());
         client.enqueueMessage(Message.makeAcknowledgeMessage(client.getName()));
-        assertFalse(client.getWaitingList().isEmpty());
     }
 
     @Test
@@ -108,14 +110,54 @@ class ClientRunnableTest {
         assertFalse(client.isValidated());
         assertFalse(client.isInitialized());
         assertEquals(0, client.getUserId());
-        assertTrue(client.getWaitingList().isEmpty());
-        client.login("username333", "username333");
-        try{
-            for (int i = 0; i < msgs.size()+10; i++) {
+        client.signin("username333", "username333");
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
                 client.run();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
         }
+    }
+
+    @Test
+    void testOldClient3() throws IOException {
+        ServerSocketChannel serverSocket = ServerSocketChannel.open();
+        serverSocket.configureBlocking(false);
+        serverSocket.socket().bind(new InetSocketAddress(port8));
+        Selector selector = SelectorProvider.provider().openSelector();
+        serverSocket.register(selector, SelectionKey.OP_ACCEPT);
+
+        SocketChannel socketChannel = SocketChannel.open();
+        SocketAddress socketAddr = new InetSocketAddress("localhost", port8);
+        socketChannel.connect(socketAddr);
+        List<Message> msgs = new ArrayList<>();
+        PrintNetNB printer = new PrintNetNB(socketChannel);
+        msgs.add(Message.makeLoginMessage("oma"));
+        msgs.add(Message.makeSignupMessage("oma", "omma"));
+        msgs.add(Message.makeSigninMessage("oma", "omma"));
+        for (Message msg : msgs) {
+            printer.print(msg);
+        }
+        socketChannel.close();
+
+        SocketChannel channel = serverSocket.accept();
+        ClientRunnable client = new ClientRunnable(channel);
+        ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client, 200,
+                200, TimeUnit.MILLISECONDS);
+        client.setFuture(clientFuture);
+
+        assertFalse(client.isValidated());
+        assertFalse(client.isInitialized());
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
+                client.run();
+            }
+            Thread.sleep(15001);
+            client.run();
+        } catch (Exception e) {
+        }
+
     }
 
 
@@ -146,6 +188,9 @@ class ClientRunnableTest {
         msgs.add(Message.makeRetrieveMessage("username22", "GROUPS"));
         msgs.add(Message.makeRetrieveMessage("username22", "GROUP test_group"));
         msgs.add(Message.makeRetrieveMessage("username22", "GROUP_MESSAGES test_group"));
+        msgs.add(Message.makeRetrieveMessage("username22", "WRONG_REQUEST"));
+
+        msgs.add(Message.makeBroadcastMessage("username22", "test"));
         msgs.add(Message.makeJoinMessage("username22", "test_group"));
         msgs.add(Message.makeRetrieveMessage("username22", "GROUP test_group"));
         msgs.add(Message.makeGroupMessage("username22", "test_group", "hello"));
@@ -168,12 +213,12 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
-        client2.login("username22", "password22");
-        try{
-            for (int i = 0; i < msgs.size()+10; i++) {
+        client2.signin("username22", "password22");
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
                 client2.run();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
         }
 
 
@@ -219,14 +264,15 @@ class ClientRunnableTest {
         ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
                 200, TimeUnit.MILLISECONDS);
         client2.setFuture(clientFuture);
-        client2.login("agencyOne", "pass");
+        client2.signin("agencyOne", "pass");
 
-        try{
-            for (int i = 0; i < msgs.size()+10; i++) {
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
                 client2.run();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
         }
+
 
         serverSocket.close();
     }
@@ -257,6 +303,7 @@ class ClientRunnableTest {
         msgs.add(Message.makeRetrieveMessage("admin", "CONTENT hi"));
         msgs.add(Message.makeRetrieveMessage("admin", "DATE 2018-11-30"));
         msgs.add(Message.makeRetrieveMessage("admin", "REQUESTS"));
+        msgs.add(Message.makeHelpMessage("admin"));
         msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "*"));
         msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "*"));
         msgs.add(Message.makeWiretapApproveMessage("admin", "agencyOne", "0"));
@@ -275,17 +322,18 @@ class ClientRunnableTest {
         socketChannel2.close();
 
         SocketChannel channel2 = serverSocket.accept();
-        ClientRunnable client2 = new ClientRunnable(channel2);
+        ClientRunnable client = new ClientRunnable(channel2);
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
-        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client, 200,
                 200, TimeUnit.MILLISECONDS);
-        client2.setFuture(clientFuture);
-        client2.login("admin", "admin");
-        try{
-        for (int i = 0; i < msgs.size()+10; i++) {
-                client2.run();
-        }
-        } catch (Exception e){
+        client.setFuture(clientFuture);
+        client.signin("admin", "admin");
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
+                client.run();
+            }
+
+        } catch (Exception e) {
         }
 
     }
@@ -311,11 +359,15 @@ class ClientRunnableTest {
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
         msgs.add(Message.makeWiretapUserMessage("agencyOne", "oma", "5"));
         msgs.add(Message.makeWiretapGroupMessage("agencyOne", "friends", "5"));
+        msgs.add(Message.makeWiretapApproveMessage("agencyOne", "agencyOne", "0"));
+        msgs.add(Message.makeWiretapRejectMessage("agencyOne", "agencyOne", "3"));
+        msgs.add(Message.makeSetRoleMessage("agencyOne", "opa", "god"));
         msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
         msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
         msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
         msgs.add(Message.makeDirectMessage("agencyOne", "admin", "hi"));
-        msgs.add(Message.makeRetrieveMessage("agencyOne", "WIRETAPS"));
+        msgs.add(Message.makeLoggerMessage("agencyOne"));
+        msgs.add(Message.makePControlMessage("agencyOne", "qqq"));
 
 
         for (Message msg : msgs) {
@@ -325,18 +377,18 @@ class ClientRunnableTest {
         socketChannel2.close();
 
         SocketChannel channel2 = serverSocket.accept();
-        ClientRunnable client2 = new ClientRunnable(channel2);
+        ClientRunnable client = new ClientRunnable(channel2);
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
-        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client, 200,
                 200, TimeUnit.MILLISECONDS);
-        client2.setFuture(clientFuture);
-        client2.login("agencyOne", "pass");
+        client.setFuture(clientFuture);
+        client.signin("agencyOne", "pass");
 
-        try{
-            for (int i = 0; i < msgs.size()+10; i++) {
-                client2.run();
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
+                client.run();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
         }
 
         serverSocket.close();
@@ -374,17 +426,17 @@ class ClientRunnableTest {
         socketChannel2.close();
 
         SocketChannel channel2 = serverSocket.accept();
-        ClientRunnable client2 = new ClientRunnable(channel2);
+        ClientRunnable client = new ClientRunnable(channel2);
         ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(20);
-        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client2, 200,
+        ScheduledFuture clientFuture = threadPool.scheduleAtFixedRate(client, 200,
                 200, TimeUnit.MILLISECONDS);
-        client2.setFuture(clientFuture);
-        client2.login("admin", "admin");
-        try{
-            for (int i = 0; i < msgs.size()+10; i++) {
-                client2.run();
+        client.setFuture(clientFuture);
+        client.signin("admin", "admin");
+        try {
+            for (int i = 0; i < msgs.size() + 10; i++) {
+                client.run();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
         }
 
     }

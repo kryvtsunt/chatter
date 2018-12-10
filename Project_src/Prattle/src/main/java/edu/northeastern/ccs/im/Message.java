@@ -375,53 +375,29 @@ public class Message {
     @SuppressWarnings("all")
     protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
         Message result = null;
-        if (handle.compareTo(MessageType.QUIT.toString()) == 0) {
-            result = makeQuitMessage(srcName);
-        } else if (handle.compareTo(MessageType.HELLO.toString()) == 0) {
-            result = makeLoginMessage(srcName);
-        } else if (handle.compareTo(MessageType.BROADCAST.toString()) == 0) {
-            result = makeBroadcastMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.ACKNOWLEDGE.toString()) == 0) {
-            result = makeAcknowledgeMessage(srcName);
-        } else if (handle.compareTo(MessageType.NO_ACKNOWLEDGE.toString()) == 0) {
-            result = makeNoAcknowledgeMessage();
-        } else if (handle.compareTo(MessageType.DIRECT.toString()) == 0) {
-            result = makeDirectMessage(srcName, dstName, text);
-        } else if (handle.compareTo(MessageType.GROUP.toString()) == 0) {
-            result = makeGroupMessage(srcName, dstName, text);
-        } else if (handle.compareTo(MessageType.RETRIEVE.toString()) == 0) {
-            result = makeRetrieveMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.DELETE.toString()) == 0) {
-            result = makeDeleteMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.UPDATE.toString()) == 0) {
-            result = makeUpdateMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.JOIN.toString()) == 0) {
-            result = makeJoinMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.LEAVE.toString()) == 0) {
-            result = makeLeaveMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.ROLE.toString()) == 0) {
-            result = makeSetRoleMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.WIRETAPU.toString()) == 0) {
-            result = makeWiretapUserMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.WIRETAPG.toString()) == 0) {
-            result = makeWiretapGroupMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.APPROVE.toString()) == 0) {
-            result = makeWiretapApproveMessage(srcName, dstName, text);
-        }else if (handle.compareTo(MessageType.REJECT.toString()) == 0) {
-            result = makeWiretapRejectMessage(srcName, dstName, text);
-        } else if (handle.compareTo(MessageType.RECALL.toString()) == 0) {
-            result = makeRecallMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.LOGGER.toString()) == 0) {
-            result = makeLoggerMessage(srcName);
-        } else if (handle.compareTo(MessageType.PCONTROL.toString()) == 0) {
-            result = makePControlMessage(srcName, dstName);
-        } else if (handle.compareTo(MessageType.SIGNIN.toString()) == 0) {
-            result = makeSigninMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.SIGNUP.toString()) == 0) {
-            result = makeSignupMessage(srcName, text);
-        } else if (handle.compareTo(MessageType.HELP.toString()) == 0) {
-            result = makeHelpMessage(srcName);
-        }
+        if (handle.equals(MessageType.QUIT.toString())) result = makeQuitMessage(srcName);
+        else if (handle.equals(MessageType.HELLO.toString())) result = makeLoginMessage(srcName);
+        else if (handle.equals(MessageType.BROADCAST.toString())) result = makeBroadcastMessage(srcName, text);
+        else if (handle.equals(MessageType.ACKNOWLEDGE.toString())) result = makeAcknowledgeMessage(srcName);
+        else if (handle.equals(MessageType.NO_ACKNOWLEDGE.toString())) result = makeNoAcknowledgeMessage();
+        else if (handle.equals(MessageType.DIRECT.toString())) result = makeDirectMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.GROUP.toString())) result = makeGroupMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.RETRIEVE.toString())) result = makeRetrieveMessage(srcName, text);
+        else if (handle.equals(MessageType.DELETE.toString())) result = makeDeleteMessage(srcName, text);
+        else if (handle.equals(MessageType.UPDATE.toString())) result = makeUpdateMessage(srcName, text);
+        else if (handle.equals(MessageType.JOIN.toString())) result = makeJoinMessage(srcName, text);
+        else if (handle.equals(MessageType.LEAVE.toString())) result = makeLeaveMessage(srcName, text);
+        else if (handle.equals(MessageType.ROLE.toString())) result = makeSetRoleMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.WIRETAPU.toString())) result = makeWiretapUserMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.WIRETAPG.toString())) result = makeWiretapGroupMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.APPROVE.toString())) result = makeWiretapApproveMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.REJECT.toString())) result = makeWiretapRejectMessage(srcName, dstName, text);
+        else if (handle.equals(MessageType.RECALL.toString())) result = makeRecallMessage(srcName, text);
+        else if (handle.equals(MessageType.LOGGER.toString())) result = makeLoggerMessage(srcName);
+        else if (handle.equals(MessageType.PCONTROL.toString())) result = makePControlMessage(srcName, dstName);
+        else if (handle.equals(MessageType.SIGNIN.toString())) result = makeSigninMessage(srcName, text);
+        else if (handle.equals(MessageType.SIGNUP.toString())) result = makeSignupMessage(srcName, text);
+        else if (handle.equals(MessageType.HELP.toString())) result = makeHelpMessage(srcName);
         return result;
     }
 
