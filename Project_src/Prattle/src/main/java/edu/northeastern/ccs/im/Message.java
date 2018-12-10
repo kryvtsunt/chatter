@@ -372,7 +372,6 @@ public class Message {
      * @return Instance of Message (or its subclasses) representing the handle,
      * name, & text.
      */
-    @SuppressWarnings("all")
     protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
         Message result = null;
         if (handle.equals(MessageType.QUIT.toString())) result = makeQuitMessage(srcName);

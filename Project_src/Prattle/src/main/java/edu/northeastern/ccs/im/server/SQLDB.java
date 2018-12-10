@@ -6,7 +6,6 @@ import java.util.*;
 import java.util.logging.Logger;
 
 
-//@SuppressWarnings("all")
 public class SQLDB {
     /**
      * Logger
@@ -515,7 +514,7 @@ public class SQLDB {
                 pStatement.setInt(2, wireTapCandidate);
                 pStatement.setInt(3, requestDurationDays);
                 pStatement.setInt(4, isGroup);
-
+                pStatement.executeUpdate();
                 try(ResultSet keySet = pStatement.getGeneratedKeys()) {
                     if (keySet.next()) {
                         insertedRowID = keySet.getInt(1);
