@@ -135,7 +135,6 @@ public class Message {
     private static final String NULL_OUTPUT = "--";
 
 
-
     /**
      * The handle of the message.
      */
@@ -184,7 +183,6 @@ public class Message {
     private Message(MessageType handle) {
         this(handle, null, null, null);
     }
-
 
 
     /**
@@ -265,11 +263,11 @@ public class Message {
         return new Message(MessageType.ROLE, myName, directTo, text);
     }
 
-    public static Message makeWiretapUserMessage(String myName, String directTo,String text) {
+    public static Message makeWiretapUserMessage(String myName, String directTo, String text) {
         return new Message(MessageType.WIRETAPU, myName, directTo, text);
     }
 
-    public static Message makeWiretapGroupMessage(String myName, String directTo,String text) {
+    public static Message makeWiretapGroupMessage(String myName, String directTo, String text) {
         return new Message(MessageType.WIRETAPG, myName, directTo, text);
     }
 
@@ -372,6 +370,7 @@ public class Message {
      * @return Instance of Message (or its subclasses) representing the handle,
      * name, & text.
      */
+    @SuppressWarnings("all")
     protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
         Message result = null;
         if (handle.equals(MessageType.QUIT.toString())) result = makeQuitMessage(srcName);
@@ -606,6 +605,7 @@ public class Message {
     public boolean isApproveMessage() {
         return (msgType == MessageType.APPROVE);
     }
+
     public boolean isRejectMessage() {
         return (msgType == MessageType.REJECT);
     }
@@ -617,7 +617,6 @@ public class Message {
     public boolean isHelpMessage() {
         return (msgType == MessageType.HELP);
     }
-
 
 
     /**

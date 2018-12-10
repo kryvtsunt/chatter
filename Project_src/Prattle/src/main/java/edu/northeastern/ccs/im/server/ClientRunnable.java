@@ -334,7 +334,7 @@ public class ClientRunnable implements Runnable {
         Timestamp lastSeen = db.retrieveLastSeen(getName());
         if (lastSeen != null) {
             List<String> queuedMessages = db.getAllQueuedMessagesForUser(getName(), lastSeen);
-            if (queuedMessages.size() >0){
+            if (!queuedMessages.isEmpty()){
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "We keep track of incoming messages you receive while being offline. Here is the list of all new messages:"), getName());
             }
             for (String msg : queuedMessages) {
@@ -589,6 +589,7 @@ public class ClientRunnable implements Runnable {
      *
      * @param msg Message which we are interested in and that needs to be executed by the server
      */
+    @SuppressWarnings("all")
     private void executeRequest(Message msg) {
         if (msg.terminate()) {
             terminate();
@@ -634,7 +635,7 @@ public class ClientRunnable implements Runnable {
 
 
     private void help(Message msg){
-        String HELP_MESSAGE = "When you successfully log in, you can:\n" +
+        String help = "When you successfully log in, you can:\n" +
                 "-communicate with the server by typing special messages like \"Hello\"\n" +
                 "-send messages to everyone by simply typing your message.\n" +
                 "-send direct messages by typing user>your_message (where user is the name of the user you want to talk to)\n" +
@@ -679,7 +680,7 @@ public class ClientRunnable implements Runnable {
                 "-RETRIEVE WIRETAPS (Retrieve all wiretaps for current agency)\n" +
                 "- [username]%>%[n] (wiretap user for n days)\n" +
                 "- [groupname]%>>%[n] (wiretap group for n days)";
-        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), HELP_MESSAGE), msg.getSender());
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), help), msg.getSender());
     }
 
 
