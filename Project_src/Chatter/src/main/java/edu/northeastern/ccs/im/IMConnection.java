@@ -314,6 +314,7 @@ public class IMConnection {
         else if (message.contains("HELP")){
             Message hpMessage = Message.makeHelpMessage(userName);
             socketConnection.print(hpMessage);
+            
         }
         else if (message.contains("PARENT_CONTROL ")) {
             String[] args = message.split("PARENT_CONTROL ");
