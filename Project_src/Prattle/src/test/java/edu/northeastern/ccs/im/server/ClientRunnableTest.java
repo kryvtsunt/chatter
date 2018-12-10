@@ -153,7 +153,7 @@ class ClientRunnableTest {
             for (int i = 0; i < msgs.size() + 10; i++) {
                 client.run();
             }
-            Thread.sleep(15001);
+            Thread.sleep(120001);
             client.run();
         } catch (Exception e) {
         }

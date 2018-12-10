@@ -10,18 +10,18 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("all")
 public class GroupDB {
-	
-	SQLDB sqlDB;
-	
+
+    SQLDB sqlDB;
+
     /**
      * Logger
      */
     private static final Logger LOGGER = Logger.getLogger(GroupDB.class.getName());
     Connection connection;
-    
+
     public GroupDB(Connection con) {
-    	connection = con;
-    	sqlDB = SQLDB.getInstance();
+        connection = con;
+        sqlDB = SQLDB.getInstance();
     }
 
     /**
@@ -117,7 +117,7 @@ public class GroupDB {
         }
         return flag;
     }
-    
+
     /**
      * Each group is given a unique ID which can be retrieved
      *
@@ -279,7 +279,7 @@ public class GroupDB {
         return flag;
 
     }
-    
+
     /**
      * gets the group name
      *

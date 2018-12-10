@@ -12,18 +12,18 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("all")
 public class UserDB {
-	
-	SQLDB sqlDB;
+
+    SQLDB sqlDB;
     /**
      * Logger
      */
     private static final Logger LOGGER = Logger.getLogger(UserDB.class.getName());
     Connection connection;
     public UserDB(Connection con) {
-    	connection = con;
-    	sqlDB = SQLDB.getInstance();
+        connection = con;
+        sqlDB = SQLDB.getInstance();
     }
-    
+
     /**
      * To validate a user, the user's credentials are compared against the users table in MySQL
      *
@@ -96,8 +96,6 @@ public class UserDB {
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
                             lastSeen = userSet.getTimestamp("lastSeen");
-                            //adding time difference between java and mysql time
-                            lastSeen.setTime(lastSeen.getTime() + ((5 * 60 * 60) * 1000));
                         }
                     }
                 }
@@ -117,16 +115,17 @@ public class UserDB {
      * @param password string entered by the user for their password
      * @return true if the details entered are in a legal format and when they stored in the Database
      */
-    public boolean create(int userId, String username, String password, String IP) {
+    public boolean create(int userId, String username, String password, String IP, int control) {
         boolean flag = false;
         try {
             if (!checkUser(username)) {
-                String sqlCreateUser = "INSERT INTO users (userId, username, paswd, IP) VALUES (?, ?, ?, ?, ?)";
+                String sqlCreateUser = "INSERT INTO users (userId, username, paswd, IP, control) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement pStatement = connection.prepareStatement(sqlCreateUser)) {
                     pStatement.setInt(1, userId);
                     pStatement.setString(2, username);
                     pStatement.setString(3, encryptPassword(password));
                     pStatement.setString(4, IP);
+                    pStatement.setInt(5, control);
                     int userCount = pStatement.executeUpdate();
                     flag = (userCount > 0);
                 }
@@ -262,7 +261,7 @@ public class UserDB {
 
         return hexConversion.toString();
     }
-    
+
     /**
      * gets the userID for a given user
      *
@@ -316,7 +315,7 @@ public class UserDB {
 
         return userInformation;
     }
-    
+
     /**
      * @return list of all users in the DB
      */
@@ -338,7 +337,7 @@ public class UserDB {
         return userInformation;
 
     }
-    
+
     /**
      * check if a user is an agency or not
      *
@@ -363,7 +362,7 @@ public class UserDB {
         }
         return roleId;
     }
-    
+
     /**
      * get wiretapped users
      *
@@ -453,7 +452,7 @@ public class UserDB {
         }
         return flag;
     }
-    
+
     /**
      * This method updates the IP address of a user
      * @param username

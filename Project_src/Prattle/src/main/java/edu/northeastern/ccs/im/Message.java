@@ -591,7 +591,7 @@ public class Message {
      *
      * @return True if the message is a recall message; false otherwise
      */
-    public boolean isRecall() {
+    public boolean isRecallMessage() {
         return (msgType == MessageType.RECALL);
     }
 

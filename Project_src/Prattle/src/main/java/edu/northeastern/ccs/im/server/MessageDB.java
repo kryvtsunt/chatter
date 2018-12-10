@@ -23,12 +23,12 @@ public class MessageDB {
     private static final Logger LOGGER = Logger.getLogger(UserDB.class.getName());
     Connection connection;
     SQLDB sqlDB;
-    
+
     public MessageDB(Connection con) {
-    	connection = con;
-    	sqlDB = SQLDB.getInstance();
+        connection = con;
+        sqlDB = SQLDB.getInstance();
     }
-    
+
     /**
      * stores the messages for each user
      * @param from user who sent the message

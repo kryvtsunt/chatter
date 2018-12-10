@@ -29,11 +29,8 @@ class MessageTest {
 
     @Test
     void testNoAcknowledge() {
-
         Message message = Message.makeNoAcknowledgeMessage();
-        assertFalse(message.isBroadcastMessage());
-        assertFalse(message.isDisplayMessage());
-        assertFalse(message.isInitialization());
+        assertFalse(message.isAcknowledge());
     }
 
 
@@ -44,20 +41,79 @@ class MessageTest {
     }
 
     @Test
-    void test() {
-        assertEquals("LOG 3 abc 2 -- 2 --", Message.makeLoggerMessage("abc").toString());
-        assertEquals("PCL 3 abc 3 tim 2 --", Message.makePControlMessage("abc", "tim").toString());
-        assertEquals("RCL 3 abc 2 -- 2 hi", Message.makeRecallMessage("abc", "hi").toString());
-        assertEquals("RLE 3 abc 3 def 2 hi", Message.makeSetRoleMessage("abc", "def", "hi").toString());
-        assertEquals("WTU 3 abc 3 def 2 hi", Message.makeWiretapUserMessage("abc", "def", "hi").toString());
-        assertEquals("WTG 3 abc 3 def 2 hi", Message.makeWiretapGroupMessage("abc", "def", "hi").toString());
-
-        assertEquals("APR 3 abc 3 def 2 hi", Message.makeWiretapApproveMessage("abc", "def", "hi").toString());
-        assertEquals("RJT 3 abp 3 def 2 hi", Message.makeWiretapRejectMessage("abp", "def", "hi").toString());
-
+    void testLogger() {
+        Message message = Message.makeLoggerMessage("abc");
+        assertTrue(message.isLoggerMessage());
+        assertEquals("LOG 3 abc 2 -- 2 --", message.toString());
     }
 
+    @Test
+    void testControl() {
+        Message message = Message.makePControlMessage("abc", "tim");
+        assertTrue(message.isPControlMessage());
+        assertEquals("PCL 3 abc 3 tim 2 --", message.toString());
+    }
 
+    @Test
+    void testRecall() {
+        Message message = Message.makeRecallMessage("abc", "hi");
+        assertTrue(message.isRecallMessage());
+        assertEquals("RCL 3 abc 2 -- 2 hi", message.toString());
+    }
+
+    @Test
+    void testRole() {
+        Message message = Message.makeSetRoleMessage("abc", "def", "hi");
+        assertTrue(message.isSetRoleMessage());
+        assertEquals("RLE 3 abc 3 def 2 hi", message.toString());
+    }
+
+    @Test
+    void testWiretapRequest() {
+        Message message1 = Message.makeWiretapUserMessage("abc", "def", "hi");
+        Message message2 = Message.makeWiretapGroupMessage("abc", "def", "hi");
+        assertTrue(message1.isWiretapUserMessage());
+        assertTrue(message2.isWiretapGroupMessage());
+        assertEquals("WTU 3 abc 3 def 2 hi", message1.toString());
+        assertEquals("WTG 3 abc 3 def 2 hi", message2.toString());
+    }
+
+    @Test
+    void testWiretapRespond() {
+        Message message1 = Message.makeWiretapApproveMessage("abc", "def", "hi");
+        Message message2 = Message.makeWiretapRejectMessage("abp", "def", "hi");
+        assertTrue(message1.isApproveMessage());
+        assertTrue(message2.isRejectMessage());
+        assertEquals("APR 3 abc 3 def 2 hi", message1.toString());
+        assertEquals("RJT 3 abp 3 def 2 hi", message2.toString());
+    }
+
+    @Test
+    void testSign() {
+        Message message1 = Message.makeSigninMessage("abc", "def");
+        Message message2 = Message.makeSignupMessage("abp", "def");
+        assertTrue(message1.isSigninMessage());
+        assertTrue(message2.isSignupMessage());
+        assertEquals("SIN 3 abc 2 -- 3 def", message1.toString());
+        assertEquals("SUP 3 abp 2 -- 3 def", message2.toString());
+    }
+
+    @Test
+    void testHelp() {
+        Message message = Message.makeHelpMessage("abc");
+        assertTrue(message.isHelpMessage());
+        assertEquals("HLP 3 abc 2 -- 2 --", message.toString());
+    }
+
+    @Test
+    void testGroup() {
+        Message message1 = Message.makeJoinMessage("tim", "group");
+        assertTrue(message1.isJoinMessage());
+        assertFalse(message1.isLeaveMessage());
+        Message message2 = Message.makeLeaveMessage("tim", "group");
+        assertFalse(message2.isJoinMessage());
+        assertTrue(message2.isLeaveMessage());
+    }
 
 
     @Test
@@ -66,31 +122,22 @@ class MessageTest {
         m = Message.makeMessage("ACK", "tim", null, null);
         assertTrue(m.isAcknowledge());
         m = Message.makeMessage("NAK", null, null, null);
-        assertFalse(m.isDisplayMessage());
-        assertEquals("NAK 2 -- 2 -- 2 --", m.toString());
-
+        assertFalse(m.isAcknowledge());
         m= Message.makeMessage("LOG", "abc", "def", "hi");
         assertTrue(m.isLoggerMessage());
-
         m = Message.makeMessage("PCL", "abc", "def", "hi");
         assertTrue(m.isPControlMessage());
-
         m = Message.makeMessage("RCL", "abc", "def", "hi");
-        assertTrue(m.isRecall());
-
+        assertTrue(m.isRecallMessage());
         m = Message.makeMessage("WTU", "abc", "def", "hi");
         assertTrue(m.isWiretapUserMessage());
         assertFalse(m.isWiretapGroupMessage());
-
         m = Message.makeMessage("APR", "abc", "def", "hi");
         assertTrue(m.isApproveMessage());
-
         m = Message.makeMessage("RJT", "abc", "def", "hi");
         assertTrue(m.isRejectMessage());
-
         m = Message.makeMessage("RLE", "abc", "def", "hi");
         assertTrue(m.isSetRoleMessage());
-
     }
 
 

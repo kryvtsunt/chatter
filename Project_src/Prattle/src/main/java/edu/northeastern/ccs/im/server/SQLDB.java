@@ -1,27 +1,13 @@
 package edu.northeastern.ccs.im.server;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
 import java.util.logging.Logger;
 
 
-@SuppressWarnings("all")
+//@SuppressWarnings("all")
 public class SQLDB {
-    final static String CONNECTION_URL = "aaw5ywu4d6dc4k.c7ohnssvtfpy.us-east-1.rds.amazonaws.com";
-    final static String DB_PORT = "3306";
-    final static String DB_NAME = "team105";
-    final static String DB_USERNAME = "team105";
-    final static String DB_PASWD = "Team-105";
-    final static int USER_ROLE_NORMAL_ID = 1;
-    final static int USER_ROLE_AGENCY_ID = 2;
-    final static int USER_ROLE_ADMIN_ID = 0;
-    static UserDB userDBObject;
-    static GroupDB groupDBObject;
-    static MessageDB messageDBObject;
-
     /**
      * Logger
      */
@@ -36,6 +22,21 @@ public class SQLDB {
      * Instance of the Database
      */
     private static SQLDB instance;
+
+    static UserDB userDBObject;
+    static GroupDB groupDBObject;
+    static MessageDB messageDBObject;
+
+    final String CONNECTION_URL = "aaw5ywu4d6dc4k.c7ohnssvtfpy.us-east-1.rds.amazonaws.com";
+    final String DB_PORT = "3306";
+    final String DB_NAME = "team105";
+    final String DB_USERNAME = "team105";
+    final String DB_PASWD = "Team-105";
+    final int USER_ROLE_NORMAL_ID = 1;
+    final int USER_ROLE_AGENCY_ID = 2;
+    final int USER_ROLE_ADMIN_ID = 0;
+
+    final String EXCEPTIONMSG = "Caught SQL Exception:";
 
     /**
      * Constructor which establishes the connection between DB and JDBC
@@ -66,7 +67,7 @@ public class SQLDB {
     /**
      * resets the Database connection
      */
-    public void reset() {
+    public static void reset() {
         instance = null;
     }
 
@@ -86,7 +87,7 @@ public class SQLDB {
      * @return true if the user exists in the Database
      */
     public boolean checkUser(String username)  {
-       return userDBObject.checkUser(username);
+        return userDBObject.checkUser(username);
     }
 
     /**
@@ -96,7 +97,7 @@ public class SQLDB {
      * @return the user's details stored in the Database
      */
     public String retrieve(String username, String type) {
-    	return userDBObject.retrieve(username, type);
+        return userDBObject.retrieve(username, type);
     }
 
     /**
@@ -107,7 +108,7 @@ public class SQLDB {
      * @return the user's lastseen stored in the Database
      */
     public Timestamp retrieveLastSeen(String username) {
-    	return userDBObject.retrieveLastSeen(username);
+        return userDBObject.retrieveLastSeen(username);
     }
 
     /**
@@ -118,8 +119,8 @@ public class SQLDB {
      * @param password string entered by the user for their password
      * @return true if the details entered are in a legal format and when they stored in the Database
      */
-    public boolean create(int userId, String username, String password, String IP) {
-        return userDBObject.create(userId, username, password, IP);
+    public boolean create(int userId, String username, String password, String ipAddress, int control) {
+        return userDBObject.create(userId, username, password, ipAddress, control);
     }
 
     /**
@@ -141,7 +142,7 @@ public class SQLDB {
      * @return true if the sql operation of updating is successful
      */
     public boolean updateLastSeen(String oldUsername) {
-    	return userDBObject.updateLastSeen(oldUsername);
+        return userDBObject.updateLastSeen(oldUsername);
     }
 
 
@@ -163,7 +164,7 @@ public class SQLDB {
      * @return true if the credentials match the Database and the sql operation of matching succeeds
      */
     public boolean validateCredentials(String username, String password) {
-    	return userDBObject.validateCredentials(username, password);
+        return userDBObject.validateCredentials(username, password);
     }
 
     /**
@@ -194,7 +195,7 @@ public class SQLDB {
      * @return true if the sql operation of creating a group with a valid name is successful
      */
     public boolean createGroup(String groupName) {
-    	return groupDBObject.createGroup(groupName);
+        return groupDBObject.createGroup(groupName);
     }
 
     /**
@@ -204,7 +205,7 @@ public class SQLDB {
      * @return true if the groupname exixts and the sql operation of deleting is successful
      */
     public boolean deleteGroup(String groupName) {
-    	return groupDBObject.deleteGroup(groupName);
+        return groupDBObject.deleteGroup(groupName);
 
     }
 
@@ -227,7 +228,7 @@ public class SQLDB {
      * @return the member ID (which is an integer)
      */
     public int getUserID(String username) {
-    	return userDBObject.getUserID(username);
+        return userDBObject.getUserID(username);
     }
 
 
@@ -259,7 +260,7 @@ public class SQLDB {
      * @return true of the group and user exists and sql operation is successful
      */
     public boolean addGroupMember(String groupName, String username) {
-       return groupDBObject.addGroupMember(groupName, username);
+        return groupDBObject.addGroupMember(groupName, username);
     }
 
     /**
@@ -384,7 +385,7 @@ public class SQLDB {
      * @return list of messages which have content as a substring
      */
     public List<String> getAllMessageBasedOnContent(String content) {
-    	return messageDBObject.getAllMessageBasedOnContent(content);
+        return messageDBObject.getAllMessageBasedOnContent(content);
     }
 
     /**
@@ -395,7 +396,7 @@ public class SQLDB {
      * @return list of messages which are delivered to respective user
      */
     public List<String> getAllMessagesReceivedByReceiver(String toUser) {
-    	return messageDBObject.getAllMessagesReceivedByReceiver(toUser);
+        return messageDBObject.getAllMessagesReceivedByReceiver(toUser);
     }
 
     /**
@@ -425,7 +426,7 @@ public class SQLDB {
      * @return list of users in the group
      */
     public List<String> retrieveGroupMembers(String groupName) {
-    	return groupDBObject.retrieveGroupMembers(groupName);
+        return groupDBObject.retrieveGroupMembers(groupName);
     }
 
     /**
@@ -444,7 +445,7 @@ public class SQLDB {
      * @return true if user exists and sql operation is successful
      */
     public boolean deleteGroupMember(String groupName, String username) {
-    	return groupDBObject.deleteGroupMember(groupName, username);
+        return groupDBObject.deleteGroupMember(groupName, username);
     }
 
     /**
@@ -455,7 +456,7 @@ public class SQLDB {
      * @return true if the user exists in the group
      */
     public boolean isGroupMember(String groupName, String userName) {
-       return groupDBObject.isGroupMember(groupName, userName);
+        return groupDBObject.isGroupMember(groupName, userName);
 
     }
 
@@ -493,7 +494,7 @@ public class SQLDB {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
+            LOGGER.info(EXCEPTIONMSG + e.toString());
         }
         return flag;
     }
@@ -514,14 +515,15 @@ public class SQLDB {
                 pStatement.setInt(2, wireTapCandidate);
                 pStatement.setInt(3, requestDurationDays);
                 pStatement.setInt(4, isGroup);
-                int wiretapCount = pStatement.executeUpdate();
-                ResultSet keySet = pStatement.getGeneratedKeys();
-                if (keySet.next()) {
-                    insertedRowID = keySet.getInt(1);
+
+                try(ResultSet keySet = pStatement.getGeneratedKeys()) {
+                    if (keySet.next()) {
+                        insertedRowID = keySet.getInt(1);
+                    }
                 }
             }
         } catch (SQLException e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
+            LOGGER.info(EXCEPTIONMSG + e.toString());
         }
         return insertedRowID;
     }
@@ -542,15 +544,16 @@ public class SQLDB {
                 }
                 pStatement.setInt(2, isApproved);
                 try (ResultSet requestSet = pStatement.executeQuery()) {
+                    String userVictimId = "userVictimId";
                     while (requestSet.next()) {
                         wiretapRequestString = "Agency " + getUsername(requestSet.getInt("userRequestingId")) + " has made a request to wiretap ";
                         if(requestSet.getInt("isGroup") == 1) {
                             wiretapRequestString += "group: ";
-                            wiretapRequestString += getGroupName(requestSet.getInt("userVictimId"));
+                            wiretapRequestString += getGroupName(requestSet.getInt(userVictimId));
                         }
                         else {
                             wiretapRequestString += "user: ";
-                            wiretapRequestString += getUsername(requestSet.getInt("userVictimId"));
+                            wiretapRequestString += getUsername(requestSet.getInt(userVictimId));
                         }
                         wiretapRequestString += " for " + requestSet.getInt("requestDurationDays") + " days.";
 
@@ -559,7 +562,7 @@ public class SQLDB {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
+            LOGGER.info(EXCEPTIONMSG + e.toString());
         }
         return wiretapRequests;
     }
@@ -618,7 +621,7 @@ public class SQLDB {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
+            LOGGER.info(EXCEPTIONMSG + e.toString());
         }
         return flag;
     }
@@ -634,7 +637,7 @@ public class SQLDB {
      * @return a list of users/groups wiretapped by the requestingUser
      */
     public List<String> getWiretappedUsers(String agencyUsername, int isGroup) {
-    	return userDBObject.getWiretappedUsers(agencyUsername, isGroup);
+        return userDBObject.getWiretappedUsers(agencyUsername, isGroup);
     }
 
 
@@ -645,7 +648,7 @@ public class SQLDB {
      * @return a list of users/groups wiretapped by the requestingUser
      */
     public List<String> getAgencyList(String userOrGroupName, int isGroup, int isIncludeExpired) {
-    	return userDBObject.getAgencyList(userOrGroupName, isGroup, isIncludeExpired);
+        return userDBObject.getAgencyList(userOrGroupName, isGroup, isIncludeExpired);
     }
 
     public boolean updateUserRole(String username, int roleId) {
@@ -663,7 +666,7 @@ public class SQLDB {
 
             }
         } catch (Exception e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
+            LOGGER.info(EXCEPTIONMSG + e.toString());
         }
         return flag;
     }
@@ -703,7 +706,7 @@ public class SQLDB {
 
             }
         } catch (Exception e) {
-            LOGGER.info("Caught SQL Exception:" + e.toString());
+            LOGGER.info(EXCEPTIONMSG + e.toString());
         }
 
         return flag;

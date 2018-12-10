@@ -40,9 +40,9 @@ public class ClientRunnable implements Runnable {
 
     /**
      * Number of milliseconds after which we terminate a client due to inactivity.
-     * This is currently equal to 15 sec.
+     * This is currently equal to 2 mins (for testing purposes).
      */
-    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 15000;
+    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 120000;
 
     /**
      * Time at which we should send a response to the (private) messages we were
@@ -281,7 +281,7 @@ public class ClientRunnable implements Runnable {
         password = msg.getText();
         name = msg.getSender();
         if (msg.isSignupMessage() && !db.checkUser(getName())) {
-            db.create(getUserId(), getName(), password, socket.socket().getInetAddress().toString());
+            db.create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
             db.setIP(this.getName(), ip);
             validated = true;
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to sign-in in future."), getName());
@@ -611,7 +611,7 @@ public class ClientRunnable implements Runnable {
             display(msg);
         } else if (msg.terminate()) {
             terminate();
-        } else if (msg.isRecall()) {
+        } else if (msg.isRecallMessage()) {
             recallMessage(msg);
         } else if (msg.isWiretapUserMessage()) {
             wiretapUserRequest(msg);
