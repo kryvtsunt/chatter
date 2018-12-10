@@ -50,7 +50,7 @@ class ClientRunnableTest {
         socketChannel.connect(socketAddr);
         List<Message> msgs = new ArrayList<>();
         PrintNetNB printer = new PrintNetNB(socketChannel);
-        msgs.add(Message.makeDeleteMessage("username", null));
+        msgs.add(Message.makeDeleteMessage("username42", null));
         for (Message msg : msgs) {
             printer.print(msg);
         }
