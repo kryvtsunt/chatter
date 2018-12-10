@@ -237,7 +237,7 @@ public class Message {
     }
 
     public static Message makeHelpMessage(String myName) {
-        return new Message(MessageType.PCONTROL, myName, null, null);
+        return new Message(MessageType.HELP, myName, null, null);
     }
 
     /**

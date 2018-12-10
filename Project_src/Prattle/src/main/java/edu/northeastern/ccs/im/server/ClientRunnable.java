@@ -341,8 +341,10 @@ public class ClientRunnable implements Runnable {
             }
         }
         if (lastSeen != null) {
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "We keep track of messages you have received while being offline. All new incoming messages are displayed here."), getName());
             List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
+            if (queuedMessages.size() >0){
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "We keep track of incoming messages you receive while being offline. Here is the list of all new messages:"), getName());
+            }
             for (String msg : queuedMessages) {
                 String fromUser = msg.split(",")[0].split(":")[1];
                 String message = msg.split(",")[1].split(":")[1];
