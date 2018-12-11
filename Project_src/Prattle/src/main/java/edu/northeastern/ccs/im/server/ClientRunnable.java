@@ -40,7 +40,7 @@ public class ClientRunnable implements Runnable {
 
     /**
      * Number of milliseconds after which we terminate a client due to inactivity.
-     * This is currently equal to 5 mins (for testing purposes).
+     * This is currently equal to 10 mins (for testing purposes).
      */
     private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 600000;
 
@@ -95,6 +95,9 @@ public class ClientRunnable implements Runnable {
      */
     private String password;
 
+    /**
+     * Ip of the client
+     */
     private String ip;
 
     /**
@@ -119,6 +122,9 @@ public class ClientRunnable implements Runnable {
      */
     private ScheduledFuture<ClientRunnable> runnableMe;
 
+    /**
+     * DB connection
+     */
     private SQLDB db;
 
     /**
@@ -141,7 +147,9 @@ public class ClientRunnable implements Runnable {
      * Keyword in the user input for CRUD operations. Used to view the users messages
      */
     private static final String SEND_MESSAGES = "SEND_MESSAGES";
-
+    /**
+     * Keyword in the user input for CRUD operations. Used to view the users messages
+     */
     private static final String RECEIVE_MESSAGES = "RECEIVE_MESSAGES";
 
     /**
@@ -168,15 +176,37 @@ public class ClientRunnable implements Runnable {
      * Keyword in the user input for CRUD operations. Used to see the current user's encrypted password
      */
     private static final String EPASWD = "EPASSWORD";
-
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the wiretap requests
+     */
     private static final String REQUESTS = "REQUESTS";
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the current user's role
+     */
     private static final String ROLE = "ROLE";
-
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by sender
+     */
     private static final String SENDER = "SENDER ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by receiver
+     */
     private static final String RECEIVER = "RECEIVER ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by content
+     */
     private static final String CONTENT = "CONTENT ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by date
+     */
     private static final String DATE = "DATE ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the wiretaps
+     */
     private static final String WIRETAPS = "WIRETAPS";
+    /**
+     * IP constant
+     */
     private static final String ADDRESS = "IP";
 
 
@@ -255,6 +285,10 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * initialize user
+     * @param msg incoming message
+     */
     private void initialize(Message msg) {
         if (setUserName(msg.getSender())) {
             // Set that the client is initialized.
@@ -278,6 +312,10 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * validate user
+     * @param msg incoming msg
+     */
     private void validate(Message msg) {
         password = msg.getText();
         name = msg.getSender();
@@ -313,7 +351,11 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-
+    /**
+     * signin user into the system
+     * @param username validation name
+     * @param password validation password
+     */
     public void signin(String username, String password) {
         this.name = username;
         this.initialize(Message.makeLoginMessage(username));
@@ -321,6 +363,11 @@ public class ClientRunnable implements Runnable {
     }
 
 
+    /**
+     * signup user into the system
+     * @param username validation name
+     * @param password validation password
+     */
     public void signup(String username, String password) {
         this.name = username;
         this.initialize(Message.makeLoginMessage(username));
@@ -634,7 +681,10 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-
+    /**
+     * respond with the help msg
+     * @param msg incoming msg request
+     */
     private void help(Message msg){
         String help = "\nMESSAGING\n" +
                 "\n" +
@@ -700,14 +750,24 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * respond wiretap request
+     * @param msg incoming request
+     */
     private void wiretapUserRequest(Message msg) {
         db.requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
     }
-
+    /**
+     * respond wiretap request
+     * @param msg incoming request
+     */
     private void wiretapGroupRequest(Message msg) {
         db.requestWiretap(msg.getSender(), msg.getReceiver(), 1, Integer.parseInt(msg.getText()));
     }
-
+    /**
+     * respond setRole request
+     * @param msg incoming request
+     */
     private void setRole(Message msg) {
         if (db.getUserRole(this.getName()) == 0) {
             switch (msg.getText()) {
@@ -733,6 +793,10 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * respond logger request
+     * @param msg incoming request
+     */
     private void logger(Message msg) {
         Level level = Logger.getRootLogger().getLevel();
         if (db.getUserRole(this.getName()) == 0) {
@@ -746,7 +810,10 @@ public class ClientRunnable implements Runnable {
 
         }
     }
-
+    /**
+     * respond parent control request
+     * @param msg incoming request
+     */
     private void pcontrol(Message msg) {
         if (db.getUserRole(this.getName()) == 0) {
             int control = db.getControl(msg.getReceiver());
@@ -761,7 +828,10 @@ public class ClientRunnable implements Runnable {
 
         }
     }
-
+    /**
+     * respond wiretap approve request
+     * @param msg incoming request
+     */
     private void wiretapApprove(Message msg) {
         if (db.getUserRole(this.getName()) == 0) {
             if (msg.getText().equals("*")) {
@@ -776,6 +846,10 @@ public class ClientRunnable implements Runnable {
 
     }
 
+    /**
+     * respond wiretap reject request
+     * @param msg incoming request
+     */
     private void wiretapReject(Message msg) {
         if (db.getUserRole(this.getName()) == 0) {
             db.deleteWiretapRequest(Integer.parseInt(msg.getText()));
@@ -953,6 +1027,11 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * complex retrieve request
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean complexRetrieve(String text){
         if (text.contains(GROUP) && text.split(GROUP).length == 2) {
             return retrieveGroup(text);
@@ -971,6 +1050,11 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * retrieve message by date
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean retrieveDate(String text) {
         if (db.getUserRole(this.getName()) == 0) {
             String content = text.split(DATE)[1];
@@ -982,6 +1066,11 @@ public class ClientRunnable implements Runnable {
         return true;
     }
 
+    /**
+     * retrieve messages by receiver
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean retrieveReceiver(String text) {
         if (db.getUserRole(this.getName()) == 0) {
             String content = text.split(RECEIVER)[1];
@@ -993,6 +1082,11 @@ public class ClientRunnable implements Runnable {
         return true;
     }
 
+    /**
+     * retrieve message by sender
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean retrieveSender(String text) {
         if (db.getUserRole(this.getName()) == 0) {
             String content = text.split(SENDER)[1];
@@ -1004,6 +1098,11 @@ public class ClientRunnable implements Runnable {
         return true;
     }
 
+    /**
+     * retrieve message by content
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean retrieveContent(String text) {
         if (db.getUserRole(this.getName()) == 0) {
             String content = text.split(CONTENT)[1];
@@ -1015,6 +1114,12 @@ public class ClientRunnable implements Runnable {
         return true;
     }
 
+    /**
+     *
+     * retrieve all group message for a group
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean retrieveGroupMessages(String text) {
         String group = text.split(GROUP_MESSAGES)[1];
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
@@ -1026,6 +1131,11 @@ public class ClientRunnable implements Runnable {
         return true;
     }
 
+    /**
+     * retrieve group members
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
     private boolean retrieveGroup(String text) {
         String group = text.split(GROUP)[1];
         if (db.checkGroup(group)) {
@@ -1037,6 +1147,11 @@ public class ClientRunnable implements Runnable {
         return true;
     }
 
+    /**
+     * simple retrieve request
+     * @param text request text
+     * @return true if successful, false otherwise
+     */
     private boolean simpleRetrieve(String text) {
         switch (text) {
             case EPASWD:
@@ -1064,12 +1179,20 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveRequests() {
         String result = db.getWiretapRequests(this.getName(), "", 0).toString();
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), getName());
         return true;
     }
 
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retireveRole(){
         int role = db.getUserRole(getName());
         String result;
@@ -1082,44 +1205,64 @@ public class ClientRunnable implements Runnable {
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), getName());
         return true;
     }
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveWiretaps() {
         String msgs = db.getWiretappedUsers(this.getName(), 0).toString();
         msgs += db.getWiretappedUsers(this.getName(), 1).toString();
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
         return true;
     }
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveGroups() {
         String groups = db.retrieveAllGroups().toString();
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
         return true;
     }
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveOnline() {
         String users = Prattle.getOnline().toString();
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
         return true;
     }
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveUsers() {
         String users = db.retrieveAllUsers().toString();
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
         return true;
     }
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveMessages(String type) {
         String logs = db.getAllMessagesForUser(getName(), type);
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
         return true;
     }
-
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean  retrievePaswd() {
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
         return true;
     }
-
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
     private boolean retrieveEpaswd() {
         String epassword = db.retrieve(getName(), "paswd");
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
