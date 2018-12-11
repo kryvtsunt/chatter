@@ -156,8 +156,7 @@ class ClientRunnableTest {
         }
 
     }
-
-
+    
     @Test
     void testOldClient() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
