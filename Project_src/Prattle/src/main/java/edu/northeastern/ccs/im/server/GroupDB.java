@@ -293,7 +293,7 @@ public class GroupDB {
                 pStatement.setInt(1, groupId);
                 try (ResultSet userSet = pStatement.executeQuery()) {
                     while (userSet.next()) {
-                        userInformation = userSet.getString("username");
+                        userInformation = userSet.getString("groupName");
                     }
                 }
             }

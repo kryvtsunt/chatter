@@ -365,8 +365,8 @@ public class UserDB {
     /**
      * get wiretapped users
      *
-     * @param requestingUser name of the user requesting wiretapped users/groups
-     * @param isGroup        true if wire tap request is for group, false otherwise
+     * @param agencyUsername name of the user requesting wiretapped users/groups
+     * @param isGroup        true if wire tap request is for group,false otherwise
      * @return a list of users/groups wiretapped by the requestingUser
      */
     public List<String> getWiretappedUsers(String agencyUsername, int isGroup) {
@@ -394,32 +394,31 @@ public class UserDB {
         return tappedUsersOrGroups;
     }
 
-
     /**
      * set wiretap on a user or a group
-     * @param requestingUser name of the user requesting wiretapped users/groups
+     * @param userOrGroupName name of the user requesting wiretapped users/groups
      * @param isGroup true if wire tap request is for group, false otherwise
      * @return a list of users/groups wiretapped by the requestingUser
      */
     public List<String> getAgencyList(String userOrGroupName, int isGroup, int isIncludeExpired) {
         List<String> agencyList = new ArrayList<>();
-        String sqlCheckUser = "SELECT w.userWiretapping"
-                + " FROM wiretapUsers w WHERE userWireTapped=?";
-
+        String sqlCheckUser;
         try {
             int wireTapCandidate = -1;
-            if (isGroup == 1) {
+            if (isGroup == 1 && isIncludeExpired == 0) {
                 wireTapCandidate = sqlDB.getGroupID(userOrGroupName);
-                sqlCheckUser = "SELECT w.userWiretapping"
-                        + " FROM wiretapGroups w WHERE userWireTapped=?";
-            }
-            else {
+                sqlCheckUser = "SELECT w.userWiretapping FROM wiretapGroups w WHERE userWireTapped=? AND CURDATE() < DATE_ADD(w.creationTime, INTERVAL w.expireAfterDays DAY)";
+            } else if(isGroup == 1) {
+                wireTapCandidate = sqlDB.getGroupID(userOrGroupName);
+                sqlCheckUser = "SELECT w.userWiretapping FROM wiretapGroups w WHERE userWireTapped=?";
+            } else if(isIncludeExpired == 0) {
                 wireTapCandidate = getUserID(userOrGroupName);
+                sqlCheckUser = "SELECT w.userWiretapping FROM wiretapUsers w WHERE userWireTapped=? AND CURDATE() < DATE_ADD(w.creationTime, INTERVAL w.expireAfterDays DAY)";
+            } else {
+                wireTapCandidate = getUserID(userOrGroupName);
+                sqlCheckUser = "SELECT w.userWiretapping FROM wiretapUsers w WHERE userWireTapped=?";
             }
 
-            if(isIncludeExpired == 0) {
-                sqlCheckUser += " AND CURDATE() < DATE_ADD(w.creationTime, INTERVAL w.expireAfterDays DAY)";
-            }
             try (PreparedStatement pStatement = connection.prepareStatement(sqlCheckUser)) {
                 pStatement.setInt(1, wireTapCandidate);
                 try (ResultSet userSet = pStatement.executeQuery()) {

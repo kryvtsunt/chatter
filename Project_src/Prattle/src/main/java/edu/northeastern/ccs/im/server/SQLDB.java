@@ -472,7 +472,7 @@ public class SQLDB {
     /**
      * check if a user is an agency or not
      *
-     * @param userName name of the user who is supposed to be checked
+     * @param userOrGroupName name of the user who is supposed to be checked
      * @return true if the user is agency/has agency privilege
      */
     public boolean isUserOrGroupWiretapped(String userOrGroupName, int isGroup) {
@@ -569,10 +569,9 @@ public class SQLDB {
 
     /**
      * set wiretap on a user or a group
-     * @param requestingUser name of the user requesting wiretap
-     * @param userOrGroupName name or group name on whom the wire tap is supposed to be set
-     * @param isGroup 1 if wire tap request is for group, 0 otherwise
-     * @param isSetWiretap 1 if user is requesting to set wire tap, 0 otherwise
+     * @param requestingUser should be admin user
+     * @param agencyName name of the user requesting wiretap
+     * @param id id of user user requesting wiretap
      * @return true if the wire tap was successfully set
      */
     public boolean setWireTap(String requestingUser, String agencyName, int id) {
@@ -631,7 +630,7 @@ public class SQLDB {
     /**
      * get wiretapped users
      *
-     * @param requestingUser name of the user requesting wiretapped users/groups
+     * @param agencyUsername name of the user requesting wiretapped users/groups
      * @param isGroup        true if wire tap request is for group, false otherwise
      * @return a list of users/groups wiretapped by the requestingUser
      */
@@ -642,7 +641,7 @@ public class SQLDB {
 
     /**
      * set wiretap on a user or a group
-     * @param requestingUser name of the user requesting wiretapped users/groups
+     * @param userOrGroupName name of the user requesting wiretapped users/groups
      * @param isGroup true if wire tap request is for group, false otherwise
      * @return a list of users/groups wiretapped by the requestingUser
      */

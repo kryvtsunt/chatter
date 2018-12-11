@@ -40,9 +40,9 @@ public class ClientRunnable implements Runnable {
 
     /**
      * Number of milliseconds after which we terminate a client due to inactivity.
-     * This is currently equal to 2 mins (for testing purposes).
+     * This is currently equal to 3 mins (for testing purposes).
      */
-    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 120000;
+    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 180000;
 
     /**
      * Time at which we should send a response to the (private) messages we were
@@ -170,6 +170,7 @@ public class ClientRunnable implements Runnable {
     private static final String EPASWD = "EPASSWORD";
 
     private static final String REQUESTS = "REQUESTS";
+    private static final String ROLE = "ROLE";
 
     private static final String SENDER = "SENDER ";
     private static final String RECEIVER = "RECEIVER ";
@@ -1052,6 +1053,8 @@ public class ClientRunnable implements Runnable {
                 return retrieveWiretaps();
             case REQUESTS:
                 return retrieveRequests();
+            case ROLE:
+                return retireveRole();
             default:
                 return false;
         }
@@ -1059,6 +1062,19 @@ public class ClientRunnable implements Runnable {
 
     private boolean retrieveRequests() {
         String result = db.getWiretapRequests(this.getName(), "", 0).toString();
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), getName());
+        return true;
+    }
+
+    private boolean retireveRole(){
+        int role = db.getUserRole(getName());
+        String result;
+        switch(role){
+            case(0): result="admin";break;
+            case(1): result="user";break;
+            case(2): result="agency";break;
+            default: result="user";
+        }
         Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), getName());
         return true;
     }
