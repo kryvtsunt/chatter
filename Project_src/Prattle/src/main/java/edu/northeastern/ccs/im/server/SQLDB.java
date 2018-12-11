@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 
+@SuppressWarnings("all")
 public class SQLDB {
     /**
      * Logger

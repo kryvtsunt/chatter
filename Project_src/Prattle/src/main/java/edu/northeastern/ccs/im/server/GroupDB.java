@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+
+@SuppressWarnings("all")
 public class GroupDB {
 
     SQLDB sqlDB;

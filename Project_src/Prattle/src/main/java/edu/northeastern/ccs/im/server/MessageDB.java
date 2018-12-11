@@ -15,6 +15,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+@SuppressWarnings("all")
 public class MessageDB {
     /**
      * Logger
@@ -193,11 +194,9 @@ public class MessageDB {
         SortedMap<Timestamp, String> groupHashMap = new TreeMap<Timestamp, String>();
         SortedMap<Timestamp, String> broadcastHashMap = new TreeMap<Timestamp, String>();
         try {
-            String sql = "SELECT messageID, fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast FROM message_details WHERE ? = ? AND isRecall = 0";
-            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
-                pStatement.setString(1, type);
-                pStatement.setString(2, username);
-                try (ResultSet rs = pStatement.executeQuery()) {
+            String sql = "SELECT messageID, fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast FROM message_details WHERE " + type + " = '" + username + "'" + "AND isRecall = 0";
+            try (Statement pStatement = connection.createStatement()) {
+                try (ResultSet rs = pStatement.executeQuery(sql)) {
                     while (rs.next()) {
                         String to = rs.getString("toUser");
                         String from = rs.getString("fromUser");
@@ -260,10 +259,9 @@ public class MessageDB {
         List<String> msgInformation = new ArrayList<>();
         SortedMap<Timestamp, String> queuedMsgs = new TreeMap<Timestamp, String>();
         try {
-            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > ? AND IsBroadcast = 0";
-            try (PreparedStatement pStatement = connection.prepareStatement(sql)) {
-                pStatement.setTimestamp(1,lastSeen);
-                try (ResultSet rs = pStatement.executeQuery()) {
+            String sql = "SELECT fromUser, toUser, IsGroupMsg, message, creationTime, IsBroadcast, isRecall FROM message_details WHERE creationTime > '" + lastSeen + "'" + "AND IsBroadcast = 0";
+            try (Statement pStatement = connection.createStatement()) {
+                try (ResultSet rs = pStatement.executeQuery(sql)) {
                     while (rs.next()) {
                         String fromUser = sqlDB.getUsername(rs.getInt("fromUser"));
                         String to = rs.getString("toUser");

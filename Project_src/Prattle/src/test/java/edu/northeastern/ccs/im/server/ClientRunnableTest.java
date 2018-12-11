@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.nio.channels.*;
 import java.nio.channels.spi.SelectorProvider;
 import java.util.*;
 import java.util.concurrent.ScheduledFuture;
@@ -153,8 +152,6 @@ class ClientRunnableTest {
             for (int i = 0; i < msgs.size() + 10; i++) {
                 client.run();
             }
-            Thread.sleep(180001);
-            client.run();
         } catch (Exception e) {
         }
 

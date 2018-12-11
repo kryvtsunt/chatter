@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+@SuppressWarnings("all")
 public class UserDB {
-
-    SQLDB sqlDB;
     /**
      * Logger
      */
     private static final Logger LOGGER = Logger.getLogger(UserDB.class.getName());
+    private SQLDB sqlDB;
     Connection connection;
     public UserDB(Connection con) {
         connection = con;
@@ -95,6 +95,9 @@ public class UserDB {
                     try (ResultSet userSet = pStatement.executeQuery()) {
                         while (userSet.next()) {
                             lastSeen = userSet.getTimestamp("lastSeen");
+                            //adding time difference between java and mysql time
+                            lastSeen.setTime(lastSeen.getTime() + ((5 * 60 * 60) * 1000));
+
                         }
                     }
                 }

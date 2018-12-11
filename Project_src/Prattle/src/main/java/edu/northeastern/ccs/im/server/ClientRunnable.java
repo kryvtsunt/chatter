@@ -40,9 +40,9 @@ public class ClientRunnable implements Runnable {
 
     /**
      * Number of milliseconds after which we terminate a client due to inactivity.
-     * This is currently equal to 3 mins (for testing purposes).
+     * This is currently equal to 5 mins (for testing purposes).
      */
-    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 180000;
+    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 300000;
 
     /**
      * Time at which we should send a response to the (private) messages we were
@@ -636,22 +636,25 @@ public class ClientRunnable implements Runnable {
 
 
     private void help(Message msg){
-        String help = "When you successfully log in, you can:\n" +
+        String help = "\nMESSAGING\n" +
+                "\n" +
                 "-communicate with the server by typing special messages like \"Hello\"\n" +
-                "-send messages to everyone by simply typing your message.\n" +
-                "-send direct messages by typing user>your_message (where user is the name of the user you want to talk to)\n" +
-                "-send same messages to many users by typing user1,user2,user3>your_message\n" +
-                "-send group messages by typing group>>your_message\n" +
-                "-send files by typing user>file (::text.txt, picture.png, etc. - files from the resources/send folder)\n" +
+                "-send messages to everyone (broadcast) by simply typing your message.\n" +
+                "-send direct messages by typing [user]>[your_message] (where user is the name of the user you want to talk to)\n" +
+                "-send same messages to many users by typing [user1],[user2],[user3]>[your_message]\n" +
+                "-send group messages by typing [group]>>[your_message]\n" +
+                "-send files by typing [user]>[file] (::text.txt, picture.png, etc. - files from the resources/send folder)\n" +
                 "*when message is received it is saved in the resources/receive folder in the destination user machine\n" +
                 "\n" +
-                "CRUD functionality:\n" +
+                "\n" +
+                "CRUD functionality\n" +
+                "\n" +
+                "general:\n" +
                 "-UPDATE new_password (updates the password of the current user)\n" +
                 "-DELETE (deletes currently logged in user)\n" +
                 "-JOIN group (adds current user to the group. creates group if there is no one)\n" +
                 "-LEAVE group (removes current user from the group. deletes group if it is empty)\n" +
                 "-RECALL <id> (recall certain message by the message id)\n" +
-                "\n" +
                 "-RETRIEVE PASSWORD(tells current user's password)\n" +
                 "-RETRIEVE EPASSWORD(tells current user's encrypted password)\n" +
                 "-RETRIEVE GROUPS (displays the name of all existing groups)\n" +
@@ -664,14 +667,13 @@ public class ClientRunnable implements Runnable {
                 "-RETRIEVE ROLE (role of the current user)\n" +
                 "\n" +
                 "for admin:\n" +
-                "\n" +
                 "-RETRIEVE SENDER <username> (retrieve all messages sent by the username)\n" +
                 "-RETRIEVE RECEIVER <username> (retrieve all messages retrieved by the username)\n" +
                 "-RETRIEVE CONTENT <content>(retrieve message by the content)\n" +
                 "-RETRIEVE DATE <yyyy-mm-dd> (retrieve messages by the date)\n" +
                 "-RETRIEVE REQUESTS (retrieve all wiretap requests)\n" +
                 "-LOGGER (toggle the logger on/off)\n" +
-                "-PARENT_CONTROL (toogle the parent control on/off)\n" +
+                "-PARENT_CONTROL [username](toogle the parent control on/off for particular user)\n" +
                 "-<username> ROLE <role> (set the role of the user: 0-admin, 1-user, 2-agency)\n" +
                 "-<agency> APPROVE <id> (approve certain wiretap request)\n" +
                 "-<agency> APPROVE * (approve all wiretap requests for the agency)\n" +
@@ -793,6 +795,7 @@ public class ClientRunnable implements Runnable {
      * @param msg message sent from one user to other
      */
     private void directMessage(Message msg) {
+        if (msg.getText() == null || msg.getText().trim().equals("")) return;
         // Get list of agencies wiretapping sender and receiver
         Set<String> agencyList = new HashSet<>();
         if (db.isUserOrGroupWiretapped(msg.getSender(), 0)) {
@@ -819,8 +822,8 @@ public class ClientRunnable implements Runnable {
      * @param msg message sent from the user to a group/groups
      */
     private void groupMessage(Message msg) {
+        if (msg.getText() == null || msg.getText().trim().equals("")) return;
         String group = msg.getReceiver();
-
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
             List<String> users = db.retrieveGroupMembers(group);
             Set<String> agencyList = new HashSet<>();
@@ -866,6 +869,7 @@ public class ClientRunnable implements Runnable {
                     initialized = false;
                     Prattle.broadcastMessage(Message.makeQuitMessage(name));
                 } else {
+                    if (msg.getText() == null || msg.getText().trim().equals("")) return;
                     db.storeMessageBroadcast(getName(), msg.getText(), db.retrieve(msg.getSender(), ADDRESS), null);
                     Prattle.broadcastMessage(msg);
                 }
@@ -1042,7 +1046,7 @@ public class ClientRunnable implements Runnable {
             case SEND_MESSAGES:
                 return retrieveMessages("fromUser");
             case RECEIVE_MESSAGES:
-                return retrieveMessages("toUSer");
+                return retrieveMessages("toUser");
             case USERS:
                 return retrieveUsers();
             case ONLINE:
