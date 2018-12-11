@@ -42,7 +42,7 @@ public class ClientRunnable implements Runnable {
      * Number of milliseconds after which we terminate a client due to inactivity.
      * This is currently equal to 5 mins (for testing purposes).
      */
-    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 60000;
+    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 600000;
 
     /**
      * Time at which we should send a response to the (private) messages we were
