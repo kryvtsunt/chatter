@@ -152,11 +152,14 @@ class ClientRunnableTest {
             for (int i = 0; i < msgs.size() + 10; i++) {
                 client.run();
             }
+            Thread.sleep(60001);
+            client.run();
         } catch (Exception e) {
         }
 
     }
-    
+
+
     @Test
     void testOldClient() throws IOException {
         ServerSocketChannel serverSocket = ServerSocketChannel.open();
