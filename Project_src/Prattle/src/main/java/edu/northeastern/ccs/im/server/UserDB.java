@@ -83,7 +83,7 @@ public class UserDB {
      * Retreive the user's lastseen from the Database
      *
      * @param username keyword against which the sql operations are carried on
-     * @return the user's lastseen stored in the Database
+     * @return the user's lastseen stored in the Db
      */
     public Timestamp retrieveLastSeen(String username) {
         Timestamp lastSeen = null;
