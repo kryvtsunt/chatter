@@ -436,6 +436,12 @@ public class UserDB {
         return agencyList;
     }
 
+    /**
+     * Allows admin to update the user role
+     * @param username
+     * @param roleId
+     * @return true if updation in DB is true, false otherwise
+     */
     public boolean updateUserRole(String username, int roleId) {
         boolean flag = false;
         try {

@@ -259,22 +259,59 @@ public class Message {
         return new Message(MessageType.DIRECT, myName, directTo, text);
     }
 
+    /**
+     * create a messgae when the user role is set
+     * @param myName Name of the sender
+     * @param directTo Name of the destination user
+     * @param text Text of the message being sent
+     * @return Instance of the message sent that is transmitted to the user whose role is being set
+     */
     public static Message makeSetRoleMessage(String myName, String directTo, String text) {
         return new Message(MessageType.ROLE, myName, directTo, text);
     }
 
+    /**
+     * Create a wiretap message
+     * @param myName Name of the sender
+     * @param directTo Name of the destination user
+     * @param text Text of the message being sent
+     * @return Instance of the message sent to the agency
+     */
     public static Message makeWiretapUserMessage(String myName, String directTo, String text) {
         return new Message(MessageType.WIRETAPU, myName, directTo, text);
     }
 
+
+    /**
+     * Create a wiretap message
+     * @param myName Name of the sender
+     * @param directTo Name of the destination group
+     * @param text Text of the message being sent
+     * @return Instance of the message sent to the agency
+     */
     public static Message makeWiretapGroupMessage(String myName, String directTo, String text) {
         return new Message(MessageType.WIRETAPG, myName, directTo, text);
     }
 
+    /**
+     * Create a wiretap approval message
+     * @param myName Name of the sender
+     * @param directTo Name of the destination user
+     * @param text Text of the message being sent
+     * @return Instance of the message sent to the agency who is granted the permission to wiretap users
+     */
     public static Message makeWiretapApproveMessage(String myName, String directTo, String text) {
         return new Message(MessageType.APPROVE, myName, directTo, text);
     }
 
+
+    /**
+     * Create a wiretap rejection message
+     * @param myName Name of the sender
+     * @param directTo Name of the destination user
+     * @param text Text of the message being sent
+     * @return Instance of the message sent to the agency who is denied the permission to wiretap users
+     */
     public static Message makeWiretapRejectMessage(String myName, String directTo, String text) {
         return new Message(MessageType.REJECT, myName, directTo, text);
     }
@@ -466,10 +503,18 @@ public class Message {
         return msgText;
     }
 
+    /**
+     * sets the parent control to a particular user
+     */
     public void controlText() {
         this.msgText = ParentControl.getInstance().filterBadWords(msgText);
     }
 
+
+    /**
+     * Sets the text for wire tap
+     * @param text the text appended to the wireTap message
+     */
     public void setText(String text) {
         msgText = text;
     }
@@ -501,10 +546,22 @@ public class Message {
         return (msgType == MessageType.DIRECT);
     }
 
+
+
+    /**
+     * Determine if this message is a sign in message.
+     *
+     * @return True if the message is a signin message; false otherwise.
+     */
     public boolean isSigninMessage() {
         return (msgType == MessageType.SIGNIN);
     }
 
+    /**
+     * Determine if this message is a sign up message.
+     *
+     * @return True if the message is a sign up message; false otherwise.
+     */
     public boolean isSignupMessage() {
         return (msgType == MessageType.SIGNUP);
     }
@@ -566,10 +623,20 @@ public class Message {
         return (msgType == MessageType.DELETE);
     }
 
+    /**
+     * Determine if this message is a logger message.
+     *
+     * @return True if the message is a logger message; false otherwise.
+     */
     public boolean isLoggerMessage() {
         return (msgType == MessageType.LOGGER);
     }
 
+    /**
+     * Determine if this message is parent control text.
+     *
+     * @return True if the message is a parent control message; false otherwise.
+     */
     public boolean isPControlMessage() {
         return (msgType == MessageType.PCONTROL);
     }
@@ -593,27 +660,60 @@ public class Message {
         return (msgType == MessageType.RECALL);
     }
 
-
+    /**
+     * Determine if this message is a wireTap message for user.
+     *
+     * @return True if the message is a wiretap message for user; false otherwise
+     */
     public boolean isWiretapUserMessage() {
         return (msgType == MessageType.WIRETAPU);
     }
 
+    /**
+     * Determine if this message is a wireTap message for user.
+     *
+     * @return True if the message is a wiretap message for user; false otherwise
+     */
     public boolean isWiretapGroupMessage() {
         return (msgType == MessageType.WIRETAPG);
     }
 
+
+    /**
+     * Determine if this message is an approved wireTap message for user.
+     *
+     * @return True if the message is a approved wiretap message for user; false otherwise
+     */
     public boolean isApproveMessage() {
         return (msgType == MessageType.APPROVE);
     }
 
+
+    /**
+     * Determine if this message is an rejected wireTap message for user.
+     *
+     * @return True if the message is a rejected wiretap message for user; false otherwise
+     */
     public boolean isRejectMessage() {
         return (msgType == MessageType.REJECT);
     }
 
+
+    /**
+     * Determine if this message is an approved wireTap message for user.
+     *
+     * @return True if the message is a approved wiretap message for user; false otherwise
+     */
     public boolean isSetRoleMessage() {
         return (msgType == MessageType.ROLE);
     }
 
+
+    /**
+     * Determine if this message is to set the role of a user.
+     *
+     * @return True if the message is for modifying the user role; false otherwise
+     */
     public boolean isHelpMessage() {
         return (msgType == MessageType.HELP);
     }
