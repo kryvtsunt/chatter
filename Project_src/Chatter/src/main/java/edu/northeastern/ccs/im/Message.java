@@ -22,6 +22,8 @@ public class Message {
          * Message sent by the user attempting to login using a specified username.
          */
         HELLO("HLO"),
+
+        HELP("HLP"),
         /**
          * Message sent by the server acknowledging a successful log in.
          */
@@ -85,6 +87,9 @@ public class Message {
         APPROVE("APR"),
 
         REJECT("RJT"),
+
+        SIGNIN("SIN"),
+        SIGNUP("SUP"),
         /**
          * Set the role
          */
@@ -97,8 +102,6 @@ public class Message {
         PCONTROL("PCL"),
 
         LOGGER("LOG");
-
-
 
 
         /**
@@ -217,12 +220,24 @@ public class Message {
         return new Message(MessageType.BROADCAST, myName, null, text);
     }
 
+    public static Message makeSigninMessage(String myName, String text) {
+        return new Message(MessageType.SIGNIN, myName, null, text);
+    }
+
+    public static Message makeSignupMessage(String myName, String text) {
+        return new Message(MessageType.SIGNUP, myName, null, text);
+    }
+
     public static Message makeLoggerMessage(String myName) {
         return new Message(MessageType.LOGGER, myName, null, null);
     }
 
     public static Message makePControlMessage(String myName, String directTo) {
         return new Message(MessageType.PCONTROL, myName, directTo, null);
+    }
+
+    public static Message makeHelpMessage(String myName) {
+        return new Message(MessageType.HELP, myName, null, null);
     }
 
     /**
@@ -357,6 +372,7 @@ public class Message {
      * @return Instance of Message (or its subclasses) representing the handle,
      * name, & text.
      */
+    @SuppressWarnings("all")
     protected static Message makeMessage(String handle, String srcName, String dstName, String text) {
         Message result = null;
         if (handle.compareTo(MessageType.QUIT.toString()) == 0) {
@@ -399,6 +415,12 @@ public class Message {
             result = makeLoggerMessage(srcName);
         } else if (handle.compareTo(MessageType.PCONTROL.toString()) == 0) {
             result = makePControlMessage(srcName, dstName);
+        } else if (handle.compareTo(MessageType.SIGNIN.toString()) == 0) {
+            result = makeSigninMessage(srcName, text);
+        } else if (handle.compareTo(MessageType.SIGNUP.toString()) == 0) {
+            result = makeSignupMessage(srcName, text);
+        } else if (handle.compareTo(MessageType.HELP.toString()) == 0) {
+            result = makeHelpMessage(srcName);
         }
         return result;
     }
@@ -499,6 +521,14 @@ public class Message {
      */
     public boolean isDirectMessage() {
         return (msgType == MessageType.DIRECT);
+    }
+
+    public boolean isSigninMessage() {
+        return (msgType == MessageType.SIGNIN);
+    }
+
+    public boolean isSignupMessage() {
+        return (msgType == MessageType.SIGNUP);
     }
 
 
@@ -604,6 +634,11 @@ public class Message {
     public boolean isSetRoleMessage() {
         return (msgType == MessageType.ROLE);
     }
+
+    public boolean isHelpMessage() {
+        return (msgType == MessageType.HELP);
+    }
+
 
 
     /**

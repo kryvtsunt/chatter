@@ -22,9 +22,9 @@ class PrattleTest {
         Thread serverThread = new Thread(server);
         serverThread.start();
         Thread.sleep(1500);
-        Message loginmsg = Message.makeLoginMessage("username");
-        Message passwordmsg = Message.makeBroadcastMessage("username", "password");
-        Message msg = Message.makeBroadcastMessage("username", "test");
+        Message loginmsg = Message.makeLoginMessage("oma");
+        Message passwordmsg = Message.makeSigninMessage("oma", "omma");
+        Message msg = Message.makeBroadcastMessage("oma", "test");
         SocketChannel socketChannel = SocketChannel.open();
         SocketAddress socketAddr = new InetSocketAddress("localhost", ServerConstants.PORT);
         socketChannel.connect(socketAddr);
@@ -33,7 +33,7 @@ class PrattleTest {
         printer.print(passwordmsg);
         socketChannel.close();
         Thread.sleep(1000);
-        Prattle.directMessage(msg, "username");
+        Prattle.directMessage(msg, "oma");
         Prattle.broadcastMessage(msg);
         Prattle.getOnline();
         serverThread.interrupt();

@@ -131,6 +131,7 @@ public class IMConnection {
         MessageScanner rms = MessageScanner.getInstance();
         addMessageListener(rms);
         messageScanner = rms;
+        System.out.println("We are glad you are using out messaging service "+ name + "\nPlease sign-up if you are a newcomer or sign-in if you are an old user\nThe format is [SIGN_IN/SIGN_UP] [username] [password]");
         return retVal;
     }
 
@@ -164,7 +165,7 @@ public class IMConnection {
      * Gets an object which can be used to read what the user types in on the
      * keyboard without waiting. The object returned by this method should be used
      * rather than {@link Scanner} since {@code Scanner} will cause a program to
-     * halt if there is no input.
+     * halt if there is noa input.
      *
      * @return Instance of {@link KeyboardScanner} that can be used to read keyboard
      * input for this connection of the server.
@@ -310,13 +311,36 @@ public class IMConnection {
             Message lgMessage = Message.makeLoggerMessage(userName);
             socketConnection.print(lgMessage);
         }
+        else if (message.contains("HELP")){
+            Message hpMessage = Message.makeHelpMessage(userName);
+            socketConnection.print(hpMessage);
+        }
         else if (message.contains("PARENT_CONTROL ")) {
             String[] args = message.split("PARENT_CONTROL ");
             String content = args[1];
             Message pMessage = Message.makePControlMessage(userName, content);
             socketConnection.print(pMessage);
 
-        }else {
+        } else if (message.contains("SIGN")) {
+            String[] args = message.split(" ");
+            if (args.length != 3){
+                return;
+            }
+            String type = args[0];
+            String name = args[1];
+            String password = args[2];
+            Message signMessage;
+            if (type.contains("IN")){
+                signMessage = Message.makeSigninMessage(name, password);
+            } else if (type.contains("UP")){
+                signMessage = Message.makeSignupMessage(name, password);
+            } else {
+                return;
+            }
+            this.userName = name;
+            socketConnection.print(signMessage);
+
+        } else {
             Message bctMessage = Message.makeBroadcastMessage(userName, message);
             socketConnection.print(bctMessage);
 

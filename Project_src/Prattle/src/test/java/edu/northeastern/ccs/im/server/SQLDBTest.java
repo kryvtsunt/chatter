@@ -125,8 +125,12 @@ class SQLDBTest {
 
     @Test
     void delete() {
-//        assertFalse(sqldb.create(107,"deletetest","pass"));
         sqldb.delete("deletetest");
+        sqldb.create(107,"deletetest","pass","",1);
+        assertEquals(true, sqldb.checkUser("deletetest"));
+
+        sqldb.delete("deletetest");
+        assertEquals(false, sqldb.checkUser("deletetest"));
     }
 
     @Test
@@ -136,7 +140,6 @@ class SQLDBTest {
 
     @Test
     void encryptPassword() {
-//        assertTrue(sqldb.e);
         assertNotNull(sqldb.encryptPassword("testPass"));
     }
 
@@ -178,7 +181,7 @@ class SQLDBTest {
     }
 
     @Test
-    void storeMessageIndividual() throws IOException {
+    void storeMessageIndividual()  {
         assertTrue(sqldb.storeMessageIndividual("mockUser","Mikey","Hey","",""));
 
     }
@@ -203,9 +206,6 @@ class SQLDBTest {
 
     @Test
     void getAllMessagesForGroup() {
-//        sqldb.create(111,"105","pass");
-//        sqldb.addGroupMember("retrieveGroup","mockUser");
-
         assertNotNull(sqldb.getAllMessagesForGroup("mockUser","retrieveGroup"));
     }
 
@@ -296,10 +296,7 @@ class SQLDBTest {
         assertEquals(true, sqldb.requestWiretap("normalUserTest1", "normalUserTest2", 0, 5) == -1);
         int requestRowID = sqldb.requestWiretap("agencyUserTest", "normalUserTest1", 0, 7);
         sqldb.requestWiretap("agencyUserTest", "normalUserTest2", 0, 7);
-//    	assertEquals(true, sqldb.checkWiretapRequest("agencyUserTest", "normalUserTest1", 0));
-
-
-
+        assertEquals(true, sqldb.checkWiretapRequest("agencyUserTest", "normalUserTest1", 0));
         assertEquals(false, sqldb.getWiretapRequests("agencyUserTest", "agencyUserTest",0).size() > 0);
         assertEquals(true,sqldb.getWiretapRequests("adminUserTest", "agencyUserTest",0).size() > 0);
 

@@ -6,9 +6,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ScheduledFuture;
-
 import org.apache.log4j.Level;
-
 import edu.northeastern.ccs.im.Message;
 import edu.northeastern.ccs.im.PrintNetNB;
 import edu.northeastern.ccs.im.ScanNetNB;
@@ -35,7 +33,6 @@ public class ClientRunnable implements Runnable {
     /* Logger */
     public static final Logger LOGGER = Logger.getLogger(Prattle.class.getName());
 
-
     /**
      * Number of milliseconds that special responses are delayed before being sent.
      */
@@ -43,15 +40,9 @@ public class ClientRunnable implements Runnable {
 
     /**
      * Number of milliseconds after which we terminate a client due to inactivity.
-     * This is currently equal to 5 hours.
+     * This is currently equal to 10 mins (for testing purposes).
      */
-    private static final long TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS = 18000000;
-
-    /**
-     * Number of milliseconds after which we terminate a client due to inactivity.
-     * This is currently equal to 5 hours.
-     */
-    private static final long TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS = 600000;
+    private static final long TERMINATE_AFTER_INACTIVE_IN_MS = 600000;
 
     /**
      * Time at which we should send a response to the (private) messages we were
@@ -104,6 +95,9 @@ public class ClientRunnable implements Runnable {
      */
     private String password;
 
+    /**
+     * Ip of the client
+     */
     private String ip;
 
     /**
@@ -129,6 +123,11 @@ public class ClientRunnable implements Runnable {
     private ScheduledFuture<ClientRunnable> runnableMe;
 
     /**
+     * DB connection
+     */
+    private SQLDB db;
+
+    /**
      * Collection of messages queued up to be sent to this client.
      */
     private Queue<Message> waitingList;
@@ -148,7 +147,9 @@ public class ClientRunnable implements Runnable {
      * Keyword in the user input for CRUD operations. Used to view the users messages
      */
     private static final String SEND_MESSAGES = "SEND_MESSAGES";
-
+    /**
+     * Keyword in the user input for CRUD operations. Used to view the users messages
+     */
     private static final String RECEIVE_MESSAGES = "RECEIVE_MESSAGES";
 
     /**
@@ -175,16 +176,38 @@ public class ClientRunnable implements Runnable {
      * Keyword in the user input for CRUD operations. Used to see the current user's encrypted password
      */
     private static final String EPASWD = "EPASSWORD";
-
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the wiretap requests
+     */
     private static final String REQUESTS = "REQUESTS";
-
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the current user's role
+     */
+    private static final String ROLE = "ROLE";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by sender
+     */
     private static final String SENDER = "SENDER ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by receiver
+     */
     private static final String RECEIVER = "RECEIVER ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by content
+     */
     private static final String CONTENT = "CONTENT ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to filter message by date
+     */
     private static final String DATE = "DATE ";
+    /**
+     * Keyword in the user input for CRUD operations. Used to see the wiretaps
+     */
     private static final String WIRETAPS = "WIRETAPS";
-    private static final String ADDRESS ="IP";
-
+    /**
+     * IP constant
+     */
+    private static final String ADDRESS = "IP";
 
 
     /**
@@ -196,6 +219,8 @@ public class ClientRunnable implements Runnable {
      *                     connection
      */
     public ClientRunnable(SocketChannel client) throws IOException {
+        // initialize SQLDB
+        db = SQLDB.getInstance();
         // Set up the SocketChannel over which we will communicate.
         socket = client;
         socket.configureBlocking(false);
@@ -216,7 +241,7 @@ public class ClientRunnable implements Runnable {
         // terminate for inactivity.
         terminateInactivity = new GregorianCalendar();
         terminateInactivity
-                .setTimeInMillis(terminateInactivity.getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
+                .setTimeInMillis(terminateInactivity.getTimeInMillis() + TERMINATE_AFTER_INACTIVE_IN_MS);
         terminate = false;
 
         ip = socket.getRemoteAddress().toString();
@@ -252,19 +277,22 @@ public class ClientRunnable implements Runnable {
         // Check if there are any input messages to read
         if (input.hasNextMessage()) {
             // If a message exists, try to use it to initialize the connection
+            // Update the time until we terminate this client due to inactivity.
+            terminateInactivity.setTimeInMillis(
+                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_IN_MS);
             Message msg = input.nextMessage();
             initialize(msg);
         }
     }
 
+    /**
+     * initialize user
+     * @param msg incoming message
+     */
     private void initialize(Message msg) {
         if (setUserName(msg.getSender())) {
-            // Update the time until we terminate this client due to inactivity.
-            terminateInactivity.setTimeInMillis(
-                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_INITIAL_IN_MS);
             // Set that the client is initialized.
             initialized = true;
-
         } else {
             initialized = false;
         }
@@ -276,45 +304,74 @@ public class ClientRunnable implements Runnable {
     private void checkForValidation() {
         // Check if there are any input messages to read
         if (input.hasNextMessage()) {
+            terminateInactivity
+                    .setTimeInMillis(terminateInactivity.getTimeInMillis() + TERMINATE_AFTER_INACTIVE_IN_MS);
             // If a message exists, try to use it to initialize the connection
             Message msg = input.nextMessage();
             validate(msg);
         }
     }
 
+    /**
+     * validate user
+     * @param msg incoming msg
+     */
     private void validate(Message msg) {
         password = msg.getText();
-        SQLDB db = SQLDB.getInstance();
-        if (!db.checkUser(getName())) {
-            SQLDB.getInstance().create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
+        name = msg.getSender();
+        if (msg.isSignupMessage() && !db.checkUser(getName())) {
+            db.create(getUserId(), getName(), password, socket.socket().getInetAddress().toString(), 0);
             db.setIP(this.getName(), ip);
             validated = true;
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to log in in future."), getName());
-            return;
-        }
-
-        if (db.validateCredentials(getName(), password)) {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Nice to meet you " + getName() + "! Remember your credentials to be able to sign-in in future."), getName());
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "If you are not familiar with the service we provide, user [HELP] command to get the instructions."), getName());
+        } else if (msg.isSigninMessage() && db.validateCredentials(getName(), password)) {
             db.setIP(this.getName(), ip);
-            validated = true;
             int role = db.getUserRole(this.getName());
             if (role == 0) {
                 Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an admin. REMEMBER: With Great Power Comes Great Responsibility!"), getName());
             } else if (role == 1) {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You are successfully logged in. "), getName());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Welcome back " + getName() + "! You successfully signed-in."), getName());
             } else if (role == 2) {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups"), getName());
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are an agency. You can wiretap other users and groups."), getName());
             }
+            validated = true;
             sendAllQueuedMessages();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "If you are not familiar with the service we provide, user [HELP] command to get the instructions."), getName());
 
         } else {
             validated = false;
+            if (msg.isSignupMessage()){
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Failed. Username is already taken."), getName());
+            } else if (msg.isSigninMessage()){
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Failed. Wrong credentials. Try again."), getName());
+            } else {
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You need to sign-in/sign-up first."), getName());
+            }
         }
     }
 
-    public void login(String username, String password){
+    /**
+     * signin user into the system
+     * @param username validation name
+     * @param password validation password
+     */
+    public void signin(String username, String password) {
         this.name = username;
         this.initialize(Message.makeLoginMessage(username));
-        this.validate(Message.makeBroadcastMessage(username, password));
+        this.validate(Message.makeSigninMessage(username, password));
+    }
+
+
+    /**
+     * signup user into the system
+     * @param username validation name
+     * @param password validation password
+     */
+    public void signup(String username, String password) {
+        this.name = username;
+        this.initialize(Message.makeLoginMessage(username));
+        this.validate(Message.makeSignupMessage(username, password));
     }
 
 
@@ -322,16 +379,12 @@ public class ClientRunnable implements Runnable {
      * send all queued messages from all senders to respective user
      */
     private void sendAllQueuedMessages() {
-        Timestamp lastSeen = null;
-        try {
-            lastSeen = SQLDB.getInstance().retrieveLastSeen(getName());
-        } catch (Exception e) {
-            if(SQLDB.getInstance().updateLastSeen(getName())) {
-                return;
-            }
-        }
+        Timestamp lastSeen = db.retrieveLastSeen(getName());
         if (lastSeen != null) {
-            List<String> queuedMessages = SQLDB.getInstance().getAllQueuedMessagesForUser(getName(), lastSeen);
+            List<String> queuedMessages = db.getAllQueuedMessagesForUser(getName(), lastSeen);
+            if (!queuedMessages.isEmpty()){
+                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "We keep track of incoming messages you receive while being offline. Here is the list of all new messages:"), getName());
+            }
             for (String msg : queuedMessages) {
                 String fromUser = msg.split(",")[0].split(":")[1];
                 String message = msg.split(",")[1].split(":")[1];
@@ -466,16 +519,16 @@ public class ClientRunnable implements Runnable {
             checkForInitialization();
         } else if (!validated) {
             checkForValidation();
-        } else {
-            try {
-                respond();
-            } finally {
-                // When it is appropriate, terminate the current client.
-                if (terminate) {
-                    terminateClient();
-                }
+        }
+        try {
+            respond();
+        } finally {
+            // When it is appropriate, terminate the current client.
+            if (terminate) {
+                terminateClient();
             }
         }
+
         // Finally, check if this client have been inactive for too long and, when they have, terminate
         // the client.
         terminateInactive();
@@ -525,8 +578,6 @@ public class ClientRunnable implements Runnable {
             if (!processSpecial) {
                 keepAlive = false;
             }
-            // Send out all of the message that have been added to the
-            // queue.
             do {
                 Message msg = waitingList.remove();
                 boolean sentGood = sendMessage(msg);
@@ -570,12 +621,12 @@ public class ClientRunnable implements Runnable {
      */
     private void respondIncoming() {
         if (input.hasNextMessage()) {
+            terminateInactivity.setTimeInMillis(
+                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_IN_MS);
             // Get the next message
             Message msg = input.nextMessage();
             // Update the time until we terminate the client for
             // inactivity.
-            terminateInactivity.setTimeInMillis(
-                    new GregorianCalendar().getTimeInMillis() + TERMINATE_AFTER_INACTIVE_BUT_LOGGEDIN_IN_MS);
             executeRequest(msg);
         }
     }
@@ -588,47 +639,34 @@ public class ClientRunnable implements Runnable {
      */
     @SuppressWarnings("all")
     private void executeRequest(Message msg) {
-        if(msg.terminate()){
+        if (msg.terminate()) {
             terminate();
         }
-        // If the message is a direct message, send it out
         if (msg.isDirectMessage()) {
             directMessage(msg);
         } else if (msg.isGroupMessage()) {
             groupMessage(msg);
-        }
-        // If the message is a RETRIEVE
-        else if (msg.isRetrieveMessage()) {
+        } else if (msg.isRetrieveMessage()) {
             retrieve(msg);
-        }
-        // If the message is a RETRIEVE user
-        else if (msg.isJoinMessage()) {
+        } else if (msg.isJoinMessage()) {
             join(msg);
         } else if (msg.isLeaveMessage()) {
             leave(msg);
-        }
-        // If the message is a DELETE user
-        else if (msg.isDeleteMessage()) {
+        } else if (msg.isDeleteMessage()) {
             delete();
-        }
-        // If the message is a UPDATE user
-        else if (msg.isUpdateMessage()) {
+        } else if (msg.isUpdateMessage()) {
             update(msg);
         } else if (msg.isDisplayMessage()) {
             display(msg);
         } else if (msg.terminate()) {
             terminate();
-        }
-        //if message is a recall message
-        else if (msg.isRecall()) {
+        } else if (msg.isRecallMessage()) {
             recallMessage(msg);
         } else if (msg.isWiretapUserMessage()) {
             wiretapUserRequest(msg);
         } else if (msg.isWiretapGroupMessage()) {
             wiretapGroupRequest(msg);
-        }
-        // admin msgs
-        else if (msg.isApproveMessage()) {
+        } else if (msg.isApproveMessage()) {
             wiretapApprove(msg);
         } else if (msg.isRejectMessage()) {
             wiretapReject(msg);
@@ -638,8 +676,64 @@ public class ClientRunnable implements Runnable {
             logger(msg);
         } else if (msg.isPControlMessage()) {
             pcontrol(msg);
+        } else if (msg.isHelpMessage()) {
+            help(msg);
         }
-        // Otherwise, ignore it (for now).
+    }
+
+    /**
+     * respond with the help msg
+     * @param msg incoming msg request
+     */
+    private void help(Message msg){
+        String help = "\nMESSAGING\n" +
+                "\n" +
+                "-communicate with the server by typing special messages like \"Hello\"\n" +
+                "-send messages to everyone (broadcast) by simply typing your message.\n" +
+                "-send direct messages by typing [user]>[your_message] (where user is the name of the user you want to talk to)\n" +
+                "-send same messages to many users by typing [user1],[user2],[user3]>[your_message]\n" +
+                "-send group messages by typing [group]>>[your_message]\n" +
+                "-send files by typing [user]>[file] (::text.txt, picture.png, etc. - files from the resources/send folder)\n" +
+                "*when message is received it is saved in the resources/receive folder in the destination user machine\n" +
+                "\n" +
+                "\n" +
+                "CRUD functionality\n" +
+                "\n" +
+                "general:\n" +
+                "-UPDATE new_password (updates the password of the current user)\n" +
+                "-DELETE (deletes currently logged in user)\n" +
+                "-JOIN group (adds current user to the group. creates group if there is no one)\n" +
+                "-LEAVE group (removes current user from the group. deletes group if it is empty)\n" +
+                "-RECALL <id> (recall certain message by the message id)\n" +
+                "-RETRIEVE PASSWORD(tells current user's password)\n" +
+                "-RETRIEVE EPASSWORD(tells current user's encrypted password)\n" +
+                "-RETRIEVE GROUPS (displays the name of all existing groups)\n" +
+                "-RETRIEVE GROUP group (displays the users that are part of the group) *only if you are part of the group*\n" +
+                "-RETRIEVE SEND_MESSAGES (displays all messages sent by the user ordered by time)\n" +
+                "-RETRIEVE RECEIVE_MESSAGES (displays direct message received by the user ordered by time)\n" +
+                "-RETRIEVE GROUP_MESSAGES group(displays all messages for a particular group) *only if you are part of the group*\n" +
+                "-RETRIEVE USERS (all users in the database)\n" +
+                "-RETRIEVE ONLINE (only online users)\n" +
+                "-RETRIEVE ROLE (role of the current user)\n" +
+                "\n" +
+                "for admin:\n" +
+                "-RETRIEVE SENDER <username> (retrieve all messages sent by the username)\n" +
+                "-RETRIEVE RECEIVER <username> (retrieve all messages retrieved by the username)\n" +
+                "-RETRIEVE CONTENT <content>(retrieve message by the content)\n" +
+                "-RETRIEVE DATE <yyyy-mm-dd> (retrieve messages by the date)\n" +
+                "-RETRIEVE REQUESTS (retrieve all wiretap requests)\n" +
+                "-LOGGER (toggle the logger on/off)\n" +
+                "-PARENT_CONTROL [username](toogle the parent control on/off for particular user)\n" +
+                "-<username> ROLE <role> (set the role of the user: 0-admin, 1-user, 2-agency)\n" +
+                "-<agency> APPROVE <id> (approve certain wiretap request)\n" +
+                "-<agency> APPROVE * (approve all wiretap requests for the agency)\n" +
+                "-<agency> REJECT <id> (reject certain wiretap request)\n" +
+                "\n" +
+                "for agency:\n" +
+                "-RETRIEVE WIRETAPS (Retrieve all wiretaps for current agency)\n" +
+                "- [username]%>%[n] (wiretap user for n days)\n" +
+                "- [groupname]%>>%[n] (wiretap group for n days)";
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), help), msg.getSender());
     }
 
 
@@ -648,7 +742,7 @@ public class ClientRunnable implements Runnable {
      */
     private void recallMessage(Message msg) {
 
-        if (SQLDB.getInstance().setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()))) {
+        if (db.setRecallFlagMessage(getName(), Integer.parseInt(msg.getText()))) {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "Your message was successfully recalled"), msg.getSender());
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You dont have permission to recal this message"), msg.getSender());
@@ -656,27 +750,37 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * respond wiretap request
+     * @param msg incoming request
+     */
     private void wiretapUserRequest(Message msg) {
-        SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
+        db.requestWiretap(msg.getSender(), msg.getReceiver(), 0, Integer.parseInt(msg.getText()));
     }
-
+    /**
+     * respond wiretap request
+     * @param msg incoming request
+     */
     private void wiretapGroupRequest(Message msg) {
-        SQLDB.getInstance().requestWiretap(msg.getSender(), msg.getReceiver(), 1, Integer.parseInt(msg.getText()));
+        db.requestWiretap(msg.getSender(), msg.getReceiver(), 1, Integer.parseInt(msg.getText()));
     }
-
+    /**
+     * respond setRole request
+     * @param msg incoming request
+     */
     private void setRole(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+        if (db.getUserRole(this.getName()) == 0) {
             switch (msg.getText()) {
                 case "user":
-                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 1);
+                    db.updateUserRole(msg.getReceiver(), 1);
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted a user role"), msg.getReceiver());
                     break;
                 case "admin":
-                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 0);
+                    db.updateUserRole(msg.getReceiver(), 0);
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted an admin role"), msg.getReceiver());
                     break;
                 case "agency":
-                    SQLDB.getInstance().updateUserRole(msg.getReceiver(), 2);
+                    db.updateUserRole(msg.getReceiver(), 2);
                     Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "You've been granted an agency role"), msg.getReceiver());
                     break;
                 default:
@@ -689,12 +793,16 @@ public class ClientRunnable implements Runnable {
         }
     }
 
+    /**
+     * respond logger request
+     * @param msg incoming request
+     */
     private void logger(Message msg) {
         Level level = Logger.getRootLogger().getLevel();
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+        if (db.getUserRole(this.getName()) == 0) {
             if (level == Level.DEBUG) {
                 Logger.getRootLogger().setLevel(Level.OFF);
-            } else if(level == Level.OFF) {
+            } else if (level == Level.OFF) {
                 Logger.getRootLogger().setLevel(Level.DEBUG);
             }
         } else {
@@ -702,28 +810,34 @@ public class ClientRunnable implements Runnable {
 
         }
     }
-
+    /**
+     * respond parent control request
+     * @param msg incoming request
+     */
     private void pcontrol(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-            int control = SQLDB.getInstance().getControl(msg.getReceiver());
+        if (db.getUserRole(this.getName()) == 0) {
+            int control = db.getControl(msg.getReceiver());
             if (control == 1) {
                 control = 0;
             } else {
                 control = 1;
             }
-            SQLDB.getInstance().setControl(msg.getReceiver(), control);
+            db.setControl(msg.getReceiver(), control);
         } else {
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to set parrent controll"), msg.getSender());
 
         }
     }
-
+    /**
+     * respond wiretap approve request
+     * @param msg incoming request
+     */
     private void wiretapApprove(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
+        if (db.getUserRole(this.getName()) == 0) {
             if (msg.getText().equals("*")) {
-                SQLDB.getInstance().setWireTap(msg.getSender(), msg.getReceiver(), 0);
+                db.setWireTap(msg.getSender(), msg.getReceiver(), 0);
             } else {
-                SQLDB.getInstance().setWireTap(msg.getSender(), null, Integer.parseInt(msg.getText()));
+                db.setWireTap(msg.getSender(), null, Integer.parseInt(msg.getText()));
             }
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is approved"), msg.getReceiver());
         } else {
@@ -732,9 +846,13 @@ public class ClientRunnable implements Runnable {
 
     }
 
+    /**
+     * respond wiretap reject request
+     * @param msg incoming request
+     */
     private void wiretapReject(Message msg) {
-        if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-            SQLDB.getInstance().deleteWiretapRequest(Integer.parseInt(msg.getText()));
+        if (db.getUserRole(this.getName()) == 0) {
+            db.deleteWiretapRequest(Integer.parseInt(msg.getText()));
             Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getReceiver(), "Your wiretap request is rejected"), msg.getReceiver());
 
         } else {
@@ -751,19 +869,19 @@ public class ClientRunnable implements Runnable {
      * @param msg message sent from one user to other
      */
     private void directMessage(Message msg) {
-        SQLDB db = SQLDB.getInstance();
+        if (msg.getText() == null || msg.getText().trim().equals("")) return;
         // Get list of agencies wiretapping sender and receiver
         Set<String> agencyList = new HashSet<>();
-        if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
+        if (db.isUserOrGroupWiretapped(msg.getSender(), 0)) {
+            agencyList.addAll(db.getAgencyList(msg.getSender(), 0, 0));
         }
-        if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getReceiver(), 0)) {
-            agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getReceiver(), 0, 0));
+        if (db.isUserOrGroupWiretapped(msg.getReceiver(), 0)) {
+            agencyList.addAll(db.getAgencyList(msg.getReceiver(), 0, 0));
         }
         for (String agency : agencyList) {
             String wiretapMessageAppender = "[ >> " + msg.getReceiver() + " ] " + msg.getText();
             msg.setText(wiretapMessageAppender);
-            SQLDB.getInstance().storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender(), ADDRESS), db.retrieve(agency, ADDRESS));
+            db.storeMessageIndividual(msg.getSender(), agency, msg.getText(), db.retrieve(msg.getSender(), ADDRESS), db.retrieve(agency, ADDRESS));
             Prattle.directMessage(msg, agency);
         }
         db.storeMessageIndividual(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender(), ADDRESS), db.retrieve(msg.getReceiver(), ADDRESS));
@@ -778,22 +896,21 @@ public class ClientRunnable implements Runnable {
      * @param msg message sent from the user to a group/groups
      */
     private void groupMessage(Message msg) {
-        SQLDB db = SQLDB.getInstance();
+        if (msg.getText() == null || msg.getText().trim().equals("")) return;
         String group = msg.getReceiver();
-
         if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
             List<String> users = db.retrieveGroupMembers(group);
             Set<String> agencyList = new HashSet<>();
             db.storeMessageGroup(msg.getSender(), msg.getReceiver(), msg.getText(), db.retrieve(msg.getSender(), ADDRESS), null);
 
             // check if the group is being wire tapped
-            if (SQLDB.getInstance().isUserOrGroupWiretapped(group, 1)) {
-                agencyList.addAll(SQLDB.getInstance().getAgencyList(group, 1, 0));
+            if (db.isUserOrGroupWiretapped(group, 1)) {
+                agencyList.addAll(db.getAgencyList(group, 1, 0));
             }
 
             // check if the sender is being wire tapped
-            if (SQLDB.getInstance().isUserOrGroupWiretapped(msg.getSender(), 0)) {
-                agencyList.addAll(SQLDB.getInstance().getAgencyList(msg.getSender(), 0, 0));
+            if (db.isUserOrGroupWiretapped(msg.getSender(), 0)) {
+                agencyList.addAll(db.getAgencyList(msg.getSender(), 0, 0));
             }
             for (String user : users) {
                 Prattle.directMessage(msg, user);
@@ -808,14 +925,6 @@ public class ClientRunnable implements Runnable {
         }
     }
 
-    /**
-     * terminate a client if they logout
-     */
-    private void terminate() {
-        // Reply with a quit message.
-        enqueueMessage(Message.makeQuitMessage(name));
-        terminate = true;
-    }
 
 
     /**
@@ -824,7 +933,6 @@ public class ClientRunnable implements Runnable {
      * @param msg Messages that needs to be displayed
      */
     private void display(Message msg) {
-        SQLDB db = SQLDB.getInstance();
         // Check if the message is legal formatted
         if (messageChecks(msg)) {
             // Check for our "special messages"
@@ -835,6 +943,7 @@ public class ClientRunnable implements Runnable {
                     initialized = false;
                     Prattle.broadcastMessage(Message.makeQuitMessage(name));
                 } else {
+                    if (msg.getText() == null || msg.getText().trim().equals("")) return;
                     db.storeMessageBroadcast(getName(), msg.getText(), db.retrieve(msg.getSender(), ADDRESS), null);
                     Prattle.broadcastMessage(msg);
                 }
@@ -854,14 +963,14 @@ public class ClientRunnable implements Runnable {
      */
     private void update(Message msg) {
         password = msg.getText();
-        SQLDB.getInstance().update(getName(), msg.getText());
+        db.update(getName(), msg.getText());
     }
 
     /**
      * Delete a user/group profile
      */
     private void delete() {
-        SQLDB.getInstance().delete(getName());
+        db.delete(getName());
         this.terminateClient();
     }
 
@@ -872,7 +981,6 @@ public class ClientRunnable implements Runnable {
      */
     private void leave(Message msg) {
         String group = msg.getText();
-        SQLDB db = SQLDB.getInstance();
         if (db.checkGroup(group)) {
             db.deleteGroupMember(group, getName());
             if (db.retrieveGroupMembers(group).isEmpty()) {
@@ -888,7 +996,6 @@ public class ClientRunnable implements Runnable {
      */
     private void join(Message msg) {
         String group = msg.getText();
-        SQLDB db = SQLDB.getInstance();
         if (!db.checkGroup(group)) {
             db.createGroup(group);
         }
@@ -912,94 +1019,254 @@ public class ClientRunnable implements Runnable {
      *            -RETRIEVE USERS (all users in the database)
      *            -RETRIEVE ONLINE (only online users)
      */
-    @SuppressWarnings("all")
     private void retrieve(Message msg) {
-        if (msg.getText().equals(EPASWD)) {
-            String epassword = SQLDB.getInstance().retrieve(getName(), "paswd");
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
-        } else if (msg.getText().equals(PASWD)) {
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
-        } else if (msg.getText().equals(SEND_MESSAGES)) {
-            String logs = SQLDB.getInstance().getAllMessagesForUser(getName(), "fromUser");
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
-        } else if (msg.getText().equals(RECEIVE_MESSAGES)) {
-            String logs = SQLDB.getInstance().getAllMessagesForUser(getName(), "toUser");
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
-        } else if (msg.getText().contains(GROUP_MESSAGES) && msg.getText().split(GROUP_MESSAGES).length == 2) {
-            String group = msg.getText().split(GROUP_MESSAGES)[1];
-            if (SQLDB.getInstance().checkGroup(group) && SQLDB.getInstance().isGroupMember(group, getName())) {
-                String logs = SQLDB.getInstance().getAllMessagesForGroup(getName(), msg.getText().split(GROUP_MESSAGES)[1]);
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), this.getName());
-            } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You do not have access to the group!"), this.getName());
-            }
-        } else if (msg.getText().equals(USERS)) {
-            String users = SQLDB.getInstance().retrieveAllUsers().toString();
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
-        } else if (msg.getText().equals(ONLINE)) {
-            String users = Prattle.getOnline().toString();
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
-        } else if (msg.getText().equals(GROUPS)) {
-            String groups = SQLDB.getInstance().retrieveAllGroups().toString();
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
-        } else if (msg.getText().contains(GROUP) && msg.getText().split(GROUP).length == 2) {
-            String group = msg.getText().split(GROUP)[1];
-            if (SQLDB.getInstance().checkGroup(group)) {
-                String members = SQLDB.getInstance().retrieveGroupMembers(group).toString();
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), members), getName());
-            } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), this.getName());
-            }
-        } else if (msg.getText().contains(REQUESTS)) {
-            String result = SQLDB.getInstance().getWiretapRequests(this.getName(), "", 0).toString();
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), this.getName());
-        } else if (msg.getText().contains(CONTENT) && msg.getText().split(CONTENT).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-                String content = msg.getText().split(CONTENT)[1];
-                StringBuilder msgs = new StringBuilder();
-                msgs.append(SQLDB.getInstance().getAllMessageBasedOnContent(content));
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
-            } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for content"), msg.getSender());
-
-            }
-        } else if (msg.getText().contains(SENDER) && msg.getText().split(SENDER).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-                String content = msg.getText().split(SENDER)[1];
-                StringBuilder msgs = new StringBuilder();
-                msgs.append(SQLDB.getInstance().getAllMessagesSendBySender(content));
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
-            } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for sender"), msg.getSender());
-
-            }
-        } else if (msg.getText().contains(RECEIVER) && msg.getText().split(RECEIVER).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-                String content = msg.getText().split(RECEIVER)[1];
-                StringBuilder msgs = new StringBuilder();
-                msgs.append(SQLDB.getInstance().getAllMessagesReceivedByReceiver(content));
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
-            } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for receiver"), msg.getSender());
-
-            }
-        } else if (msg.getText().contains(DATE) && msg.getText().split(DATE).length == 2) {
-            if (SQLDB.getInstance().getUserRole(this.getName()) == 0) {
-                String content = msg.getText().split(DATE)[1];
-                StringBuilder msgs = new StringBuilder();
-                msgs.append(SQLDB.getInstance().getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)));
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs.toString()), getName());
-            } else {
-                Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, msg.getSender(), "You are not permitted to search for date"), msg.getSender());
-
-            }
-        } else if (msg.getText().contains(WIRETAPS)) {
-            String msgs = SQLDB.getInstance().getWiretappedUsers(this.getName(), 0).toString();
-            msgs += SQLDB.getInstance().getWiretappedUsers(this.getName(), 1).toString();
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
-        } else {
-            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Incorect Request"), getName());
+        String text = msg.getText();
+        if (!simpleRetrieve(text) &&
+        !complexRetrieve(text)){
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "Incorrect Request"), getName());
         }
+    }
+
+    /**
+     * complex retrieve request
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean complexRetrieve(String text){
+        if (text.contains(GROUP) && text.split(GROUP).length == 2) {
+            return retrieveGroup(text);
+        } else if (text.contains(GROUP_MESSAGES) && text.split(GROUP_MESSAGES).length == 2) {
+            return retrieveGroupMessages(text);
+        }else if (text.contains(CONTENT) && text.split(CONTENT).length == 2) {
+            return retrieveContent(text);
+        }else if (text.contains(SENDER) && text.split(SENDER).length == 2) {
+            return retrieveSender(text);
+        } else if (text.contains(RECEIVER) && text.split(RECEIVER).length == 2) {
+            return retrieveReceiver(text);
+        } else if (text.contains(DATE) && text.split(DATE).length == 2) {
+            return retrieveDate(text);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * retrieve message by date
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean retrieveDate(String text) {
+        if (db.getUserRole(this.getName()) == 0) {
+            String content = text.split(DATE)[1];
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(),
+                    String.valueOf(db.getAllMessagesDeliveredAtSpecificDate(java.sql.Date.valueOf(content)))), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are not permitted to search for date"), getName());
+        }
+        return true;
+    }
+
+    /**
+     * retrieve messages by receiver
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean retrieveReceiver(String text) {
+        if (db.getUserRole(this.getName()) == 0) {
+            String content = text.split(RECEIVER)[1];
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(),
+                    String.valueOf(db.getAllMessagesReceivedByReceiver(content))), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are not permitted to search for receiver"), getName());
+        }
+        return true;
+    }
+
+    /**
+     * retrieve message by sender
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean retrieveSender(String text) {
+        if (db.getUserRole(this.getName()) == 0) {
+            String content = text.split(SENDER)[1];
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(),
+                    String.valueOf(db.getAllMessagesSendBySender(content))), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You are not permitted to search for sender"), getName());
+        }
+        return true;
+    }
+
+    /**
+     * retrieve message by content
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean retrieveContent(String text) {
+        if (db.getUserRole(this.getName()) == 0) {
+            String content = text.split(CONTENT)[1];
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(),
+                    String.valueOf(db.getAllMessageBasedOnContent(content))), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, text, "You are not permitted to search for content"), getName());
+        }
+        return true;
+    }
+
+    /**
+     *
+     * retrieve all group message for a group
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean retrieveGroupMessages(String text) {
+        String group = text.split(GROUP_MESSAGES)[1];
+        if (db.checkGroup(group) && db.isGroupMember(group, getName())) {
+            String logs = db.getAllMessagesForGroup(getName(), text.split(GROUP_MESSAGES)[1]);
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), this.getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "You do not have access to the group!"), getName());
+        }
+        return true;
+    }
+
+    /**
+     * retrieve group members
+     * @param text request text
+     * @return true if successful, flase otherwise
+     */
+    private boolean retrieveGroup(String text) {
+        String group = text.split(GROUP)[1];
+        if (db.checkGroup(group)) {
+            String members = db.retrieveGroupMembers(group).toString();
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), members), getName());
+        } else {
+            Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "The group does not exist!"), getName());
+        }
+        return true;
+    }
+
+    /**
+     * simple retrieve request
+     * @param text request text
+     * @return true if successful, false otherwise
+     */
+    private boolean simpleRetrieve(String text) {
+        switch (text) {
+            case EPASWD:
+                return retrieveEpaswd();
+            case PASWD:
+                return retrievePaswd();
+            case SEND_MESSAGES:
+                return retrieveMessages("fromUser");
+            case RECEIVE_MESSAGES:
+                return retrieveMessages("toUser");
+            case USERS:
+                return retrieveUsers();
+            case ONLINE:
+                return retrieveOnline();
+            case GROUPS:
+                return retrieveGroups();
+            case WIRETAPS:
+                return retrieveWiretaps();
+            case REQUESTS:
+                return retrieveRequests();
+            case ROLE:
+                return retireveRole();
+            default:
+                return false;
+        }
+    }
+
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveRequests() {
+        String result = db.getWiretapRequests(this.getName(), "", 0).toString();
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), getName());
+        return true;
+    }
+
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retireveRole(){
+        int role = db.getUserRole(getName());
+        String result;
+        switch(role){
+            case(0): result="admin";break;
+            case(1): result="user";break;
+            case(2): result="agency";break;
+            default: result="user";
+        }
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), result), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveWiretaps() {
+        String msgs = db.getWiretappedUsers(this.getName(), 0).toString();
+        msgs += db.getWiretappedUsers(this.getName(), 1).toString();
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), msgs), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveGroups() {
+        String groups = db.retrieveAllGroups().toString();
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), groups), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveOnline() {
+        String users = Prattle.getOnline().toString();
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveUsers() {
+        String users = db.retrieveAllUsers().toString();
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), users), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveMessages(String type) {
+        String logs = db.getAllMessagesForUser(getName(), type);
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), logs), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean  retrievePaswd() {
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your password is " + password), getName());
+        return true;
+    }
+    /**
+     *  simple retrieve
+     * @return true if successful, false otherwise
+     */
+    private boolean retrieveEpaswd() {
+        String epassword = db.retrieve(getName(), "paswd");
+        Prattle.directMessage(Message.makeDirectMessage(Prattle.SERVER_NAME, getName(), "your encrypted password is " + epassword), getName());
+        return true;
     }
 
     /**
@@ -1014,13 +1281,22 @@ public class ClientRunnable implements Runnable {
     }
 
     /**
+     * terminate a client if they logout
+     */
+    private void terminate() {
+        // Reply with a quit message.
+        enqueueMessage(Message.makeQuitMessage(name));
+        terminate = true;
+    }
+
+    /**
      * Terminate a client that we wish to remove. This termination could happen at
      * the client's request or due to system need.
      */
     public void terminateClient() {
         try {
             // Once the communication is done, close this connection.
-            if(SQLDB.getInstance().updateLastSeen(this.getName())) {
+            if (db.updateLastSeen(this.getName())) {
                 input.close();
                 socket.close();
             }
@@ -1033,14 +1309,5 @@ public class ClientRunnable implements Runnable {
             // And remove the client from our client pool.
             runnableMe.cancel(false);
         }
-    }
-
-    /**
-     * Method created solely for testing purpose
-     *
-     * @return all the messages enqueued to the server
-     */
-    public Queue<Message> getWaitingList() {
-        return new ConcurrentLinkedQueue<>(waitingList);
     }
 }

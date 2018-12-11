@@ -54,6 +54,8 @@ public abstract class Prattle {
     /* Socket on the appropriate port to which this server connects. */
     private static ServerSocketChannel serverSocket;
 
+    private static SQLDB db = SQLDB.getInstance();
+
     static final String SERVER_NAME = "PRATTLE";
 
 
@@ -73,7 +75,6 @@ public abstract class Prattle {
      * @param message Message that the client sent.
      */
     public static void broadcastMessage(Message message) {
-        SQLDB db = SQLDB.getInstance();
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
@@ -95,7 +96,6 @@ public abstract class Prattle {
      *
      */
     public static void directMessage(Message message, String client) {
-        SQLDB db = SQLDB.getInstance();
         // Loop through all of our active threads
         for (ClientRunnable tt : active) {
             // Do not send the message to any clients that are not ready to receive it.
